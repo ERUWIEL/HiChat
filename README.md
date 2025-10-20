@@ -49,5 +49,9 @@ social y académica de los estudiantes.
 <details>
 <summary> <h2> DIAGRAMA ENTIDAD RELACION Y SQL </h2> </summary>
 
+![MER](./assets/HiChat-MER-v1.png)
+<br>
+![MER](./assets/MySQL-Dgrm-v1.png)
+
 </details>
 
