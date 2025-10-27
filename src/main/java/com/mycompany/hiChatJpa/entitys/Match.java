@@ -10,13 +10,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
+ * clase que modela la tabla de matches
  *
  * @author angel
  */
@@ -24,6 +23,7 @@ import java.util.Objects;
 @Table(name = "matches")
 public class Match implements Serializable {
 
+    //seccion de mapeo
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_match")
@@ -43,22 +43,67 @@ public class Match implements Serializable {
     @OneToOne(mappedBy = "match", cascade = CascadeType.ALL, orphanRemoval = true)
     private Chat chat;
 
-    @PrePersist
-    protected void onCreate() {
-        fechaMatch = LocalDateTime.now();
+    /**
+     * ocnstructor por ausencia de la clase
+     */
+    protected Match() {
     }
 
-    public Match() {
+    /**
+     * constructor builder
+     *
+     * @param builder
+     */
+    private Match(Builder builder) {
+        this.idMatch = builder.idMatch;
+        this.usuarioA = builder.usuarioA;
+        this.usuarioB = builder.usuarioB;
+        this.fechaMatch = builder.fechaMatch;
+        this.chat = builder.chat;
     }
 
-    public Match(Long idMatch, Usuario usuarioA, Usuario usuarioB, LocalDateTime fechaMatch, Chat chat) {
-        this.idMatch = idMatch;
-        this.usuarioA = usuarioA;
-        this.usuarioB = usuarioB;
-        this.fechaMatch = fechaMatch;
-        this.chat = chat;
+    /**
+     * clase interna que permite implementar el patron builder
+     */
+    public static class Builder {
+
+        private Long idMatch;
+        private Usuario usuarioA;
+        private Usuario usuarioB;
+        private LocalDateTime fechaMatch = LocalDateTime.now();
+        private Chat chat;
+
+        public Builder idMatch(Long idMatch) {
+            this.idMatch = idMatch;
+            return this;
+        }
+
+        public Builder usuarioA(Usuario usuarioA) {
+            this.usuarioA = usuarioA;
+            return this;
+        }
+
+        public Builder usuarioB(Usuario usuarioB) {
+            this.usuarioB = usuarioB;
+            return this;
+        }
+
+        public Builder fechaMatch(LocalDateTime fechaMatch) {
+            this.fechaMatch = fechaMatch;
+            return this;
+        }
+
+        public Builder chat(Chat chat) {
+            this.chat = chat;
+            return this;
+        }
+
+        public Match build() {
+            return new Match(this);
+        }
     }
 
+    //getters y setters
     public Long getIdMatch() {
         return idMatch;
     }
@@ -97,48 +142,5 @@ public class Match implements Serializable {
 
     public void setChat(Chat chat) {
         this.chat = chat;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 83 * hash + Objects.hashCode(this.idMatch);
-        hash = 83 * hash + Objects.hashCode(this.usuarioA);
-        hash = 83 * hash + Objects.hashCode(this.usuarioB);
-        hash = 83 * hash + Objects.hashCode(this.fechaMatch);
-        hash = 83 * hash + Objects.hashCode(this.chat);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Match other = (Match) obj;
-        if (!Objects.equals(this.idMatch, other.idMatch)) {
-            return false;
-        }
-        if (!Objects.equals(this.usuarioA, other.usuarioA)) {
-            return false;
-        }
-        if (!Objects.equals(this.usuarioB, other.usuarioB)) {
-            return false;
-        }
-        if (!Objects.equals(this.fechaMatch, other.fechaMatch)) {
-            return false;
-        }
-        return Objects.equals(this.chat, other.chat);
-    }
-
-    @Override
-    public String toString() {
-        return "Match{" + "idMatch=" + idMatch + ", usuarioA=" + usuarioA + ", usuarioB=" + usuarioB + ", fechaMatch=" + fechaMatch + ", chat=" + chat + '}';
     }
 }

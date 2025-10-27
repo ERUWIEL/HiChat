@@ -10,23 +10,23 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
+ * clase que modela las interacciones entre usuarios
  *
  * @author angel
  */
 @Entity
 @Table(name = "interaccion",
-    uniqueConstraints = @UniqueConstraint(columnNames = {"usuario_emisor", "usuario_receptor"})
+        uniqueConstraints = @UniqueConstraint(columnNames = {"usuario_emisor", "usuario_receptor"})
 )
 public class Interaccion implements Serializable {
 
+    // seccion de mapeo
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_interaccion")
@@ -47,22 +47,72 @@ public class Interaccion implements Serializable {
     @Column(name = "fecha_interaccion", nullable = false)
     private LocalDateTime fechaInteraccion;
 
-    @PrePersist
-    protected void onCreate() {
-        fechaInteraccion = LocalDateTime.now();
+    /**
+     * constructor por ausencia
+     */
+    protected Interaccion() {
     }
 
-    public Interaccion() {
+    /**
+     * constructor builder
+     *
+     * @param builder
+     */
+    private Interaccion(Builder builder) {
+        this.idInteraccion = builder.idInteraccion;
+        this.usuarioEmisor = builder.usuarioEmisor;
+        this.usuarioReceptor = builder.usuarioReceptor;
+        this.tipo = builder.tipo;
+        this.fechaInteraccion = builder.fechaInteraccion;
     }
 
-    public Interaccion(Long idInteraccion, Usuario usuarioEmisor, Usuario usuarioReceptor, TipoInteraccion tipo, LocalDateTime fechaInteraccion) {
-        this.idInteraccion = idInteraccion;
-        this.usuarioEmisor = usuarioEmisor;
-        this.usuarioReceptor = usuarioReceptor;
-        this.tipo = tipo;
-        this.fechaInteraccion = fechaInteraccion;
+    /**
+     * clase interna que nos permite implementar el patron builder
+     */
+    public static class Builder {
+
+        private Long idInteraccion;
+        private Usuario usuarioEmisor;
+        private Usuario usuarioReceptor;
+        private TipoInteraccion tipo;
+        private LocalDateTime fechaInteraccion = LocalDateTime.now();
+
+        public Builder idInteraccion(Long idInteraccion) {
+            this.idInteraccion = idInteraccion;
+            return this;
+        }
+
+        public Builder usuarioEmisor(Usuario usuarioEmisor) {
+            this.usuarioEmisor = usuarioEmisor;
+            return this;
+        }
+
+        public Builder usuarioReceptor(Usuario usuarioReceptor) {
+            this.usuarioReceptor = usuarioReceptor;
+            return this;
+        }
+
+        public Builder tipo(TipoInteraccion tipo) {
+            this.tipo = tipo;
+            return this;
+        }
+
+        public Builder fechaInteraccion(LocalDateTime fechaInteraccion) {
+            this.fechaInteraccion = fechaInteraccion;
+            return this;
+        }
+
+        /**
+         * consctructor builder con validaciones
+         *
+         * @return
+         */
+        public Interaccion build() {
+            return new Interaccion(this);
+        }
     }
 
+    //getters y setters
     public Long getIdInteraccion() {
         return idInteraccion;
     }
@@ -101,48 +151,5 @@ public class Interaccion implements Serializable {
 
     public void setFechaInteraccion(LocalDateTime fechaInteraccion) {
         this.fechaInteraccion = fechaInteraccion;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 37 * hash + Objects.hashCode(this.idInteraccion);
-        hash = 37 * hash + Objects.hashCode(this.usuarioEmisor);
-        hash = 37 * hash + Objects.hashCode(this.usuarioReceptor);
-        hash = 37 * hash + Objects.hashCode(this.tipo);
-        hash = 37 * hash + Objects.hashCode(this.fechaInteraccion);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Interaccion other = (Interaccion) obj;
-        if (!Objects.equals(this.idInteraccion, other.idInteraccion)) {
-            return false;
-        }
-        if (!Objects.equals(this.usuarioEmisor, other.usuarioEmisor)) {
-            return false;
-        }
-        if (!Objects.equals(this.usuarioReceptor, other.usuarioReceptor)) {
-            return false;
-        }
-        if (this.tipo != other.tipo) {
-            return false;
-        }
-        return Objects.equals(this.fechaInteraccion, other.fechaInteraccion);
-    }
-
-    @Override
-    public String toString() {
-        return "Interaccion{" + "idInteraccion=" + idInteraccion + ", usuarioEmisor=" + usuarioEmisor + ", usuarioReceptor=" + usuarioReceptor + ", tipo=" + tipo + ", fechaInteraccion=" + fechaInteraccion + '}';
     }
 }
