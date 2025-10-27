@@ -9,17 +9,17 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 /**
+ * clase que modela un pasatiempo
  *
  * @author angel
  */
 @Entity
 @Table(name = "pasatiempo")
 public class Pasatiempo implements Serializable {
-
+    // seccion de mapeo
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_pasatiempo")
@@ -34,15 +34,66 @@ public class Pasatiempo implements Serializable {
     @ManyToMany(mappedBy = "pasatiempos")
     private Set<Usuario> usuarios = new HashSet<>();
 
-    public Pasatiempo() {
+    /**
+     * metodo constructor implementando builder
+     *
+     * @param builder
+     */
+    private Pasatiempo(Builder builder) {
+        this.idPasatiempo = builder.idPasatiempo;
+        this.nombre = builder.nombre;
+        this.descripcion = builder.descripcion;
+        this.usuarios = new HashSet<>(builder.usuarios);
     }
 
-    public Pasatiempo(Long idPasatiempo, String nombre, String descripcion) {
-        this.idPasatiempo = idPasatiempo;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
+    /**
+     * metodo constructor por ausencia
+     */
+    protected Pasatiempo() {
     }
 
+    /**
+     * clase interna que permite crear instancias
+     */
+    public static class Builder {
+        private Long idPasatiempo;
+        private String nombre;
+        private String descripcion;
+        private Set<Usuario> usuarios = new HashSet<>();
+
+        public Builder idPasatiempo(Long idPasatiempo) {
+            this.idPasatiempo = idPasatiempo;
+            return this;
+        }
+
+        public Builder nombre(String nombre) {
+            this.nombre = nombre;
+            return this;
+        }
+
+        public Builder descripcion(String descripcion) {
+            this.descripcion = descripcion;
+            return this;
+        }
+
+        public Builder usuarios(Set<Usuario> usuarios) {
+            if (usuarios != null) {
+                this.usuarios = new HashSet<>(usuarios);
+            }
+            return this;
+        }
+
+        /**
+         * constructor builder con validaciones
+         *
+         * @return
+         */
+        public Pasatiempo build() {
+            return new Pasatiempo(this);
+        }
+    }
+
+    //getters y setters
     public Long getIdPasatiempo() {
         return idPasatiempo;
     }
@@ -73,44 +124,5 @@ public class Pasatiempo implements Serializable {
 
     public void setUsuarios(Set<Usuario> usuarios) {
         this.usuarios = usuarios;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 29 * hash + Objects.hashCode(this.idPasatiempo);
-        hash = 29 * hash + Objects.hashCode(this.nombre);
-        hash = 29 * hash + Objects.hashCode(this.descripcion);
-        hash = 29 * hash + Objects.hashCode(this.usuarios);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Pasatiempo other = (Pasatiempo) obj;
-        if (!Objects.equals(this.nombre, other.nombre)) {
-            return false;
-        }
-        if (!Objects.equals(this.descripcion, other.descripcion)) {
-            return false;
-        }
-        if (!Objects.equals(this.idPasatiempo, other.idPasatiempo)) {
-            return false;
-        }
-        return Objects.equals(this.usuarios, other.usuarios);
-    }
-
-    @Override
-    public String toString() {
-        return "Pasatiempo{" + "idPasatiempo=" + idPasatiempo + ", nombre=" + nombre + ", descripcion=" + descripcion + ", usuarios=" + usuarios + '}';
     }
 }

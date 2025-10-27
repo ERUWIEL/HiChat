@@ -14,10 +14,10 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 /**
+ * clase que modela un chat
  *
  * @author angel
  */
@@ -25,6 +25,7 @@ import java.util.Set;
 @Table(name = "chat")
 public class Chat implements Serializable {
 
+    // seccion de mapeo
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_chat")
@@ -43,15 +44,70 @@ public class Chat implements Serializable {
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Mensaje> mensajes = new HashSet<>();
 
-    public Chat() {
+    /**
+     * metodo constructor privado para el builder
+     *
+     * @param builder
+     */
+    private Chat(Builder builder) {
+        this.idChat = builder.idChat;
+        this.nombre = builder.nombre;
+        this.match = builder.match;
+        this.participantes = builder.participantes;
+        this.mensajes = builder.mensajes;
     }
 
-    public Chat(Long idChat, String nombre, Match match) {
-        this.idChat = idChat;
-        this.nombre = nombre;
-        this.match = match;
+    /**
+     * constructor por ausencia
+     */
+    protected Chat() {
     }
 
+    /**
+     * clas que permite implementar el builder
+     */
+    public static class Builder {
+        private Long idChat;
+        private String nombre;
+        private Match match;
+        private Set<Usuario> participantes = new HashSet<>();
+        private Set<Mensaje> mensajes = new HashSet<>();
+
+        public Builder idChat(Long idChat) {
+            this.idChat = idChat;
+            return this;
+        }
+        
+        public Builder nombre(String nombre) {
+            this.nombre = nombre;
+            return this;
+        }
+
+        public Builder match(Match match) {
+            this.match = match;
+            return this;
+        }
+
+        public Builder participantes(Set<Usuario> participantes) {
+            this.participantes = participantes;
+            return this;
+        }
+
+        public Builder mensajes(Set<Mensaje> mensajes) {
+            this.mensajes = mensajes;
+            return this;
+        }
+
+        /**
+         * constructor builder con validaciones
+         * @return 
+         */
+        public Chat build() {
+            return new Chat(this);
+        }
+    }
+
+    //getters y setters
     public Long getIdChat() {
         return idChat;
     }
@@ -90,48 +146,5 @@ public class Chat implements Serializable {
 
     public void setMensajes(Set<Mensaje> mensajes) {
         this.mensajes = mensajes;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 73 * hash + Objects.hashCode(this.idChat);
-        hash = 73 * hash + Objects.hashCode(this.nombre);
-        hash = 73 * hash + Objects.hashCode(this.match);
-        hash = 73 * hash + Objects.hashCode(this.participantes);
-        hash = 73 * hash + Objects.hashCode(this.mensajes);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Chat other = (Chat) obj;
-        if (!Objects.equals(this.nombre, other.nombre)) {
-            return false;
-        }
-        if (!Objects.equals(this.idChat, other.idChat)) {
-            return false;
-        }
-        if (!Objects.equals(this.match, other.match)) {
-            return false;
-        }
-        if (!Objects.equals(this.participantes, other.participantes)) {
-            return false;
-        }
-        return Objects.equals(this.mensajes, other.mensajes);
-    }
-
-    @Override
-    public String toString() {
-        return "Chat{" + "idChat=" + idChat + ", nombre=" + nombre + ", match=" + match + ", participantes=" + participantes + ", mensajes=" + mensajes + '}';
     }
 }

@@ -10,19 +10,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
- *
+ * clase que modela una foto
  * @author angel
  */
 @Entity
 @Table(name = "foto")
 public class Foto implements Serializable {
-
+    // seccion de mapeo
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column (name = "id_foto")
+    @Column(name = "id_foto")
     private Long idFoto;
 
     @Column(name = "url_foto", nullable = false, length = 255)
@@ -35,16 +34,64 @@ public class Foto implements Serializable {
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 
-    public Foto() {
+    /**
+     * metodo constructor builder
+     *
+     * @param builder
+     */
+    private Foto(Builder builder) {
+        this.idFoto = builder.idFoto;
+        this.urlFoto = builder.urlFoto;
+        this.descripcion = builder.descripcion;
+        this.usuario = builder.usuario;
     }
 
-    public Foto(Long idFoto, String urlFoto, String descripcion, Usuario usuario) {
-        this.idFoto = idFoto;
-        this.urlFoto = urlFoto;
-        this.descripcion = descripcion;
-        this.usuario = usuario;
+    /**
+     * metodo constructor por ausencia
+     */
+    protected Foto() {
     }
 
+    /**
+     * clase interna para implementar builder
+     */
+    public static class Builder {
+        private Long idFoto;
+        private String urlFoto;
+        private String descripcion;
+        private Usuario usuario;
+
+        public Builder idFoto(Long idFoto) {
+            this.idFoto = idFoto;
+            return this;
+        }
+
+        public Builder urlFoto(String urlFoto) {
+            this.urlFoto = urlFoto;
+            return this;
+        }
+
+        public Builder descripcion(String descripcion) {
+            this.descripcion = descripcion;
+            return this;
+        }
+
+        public Builder usuario(Usuario usuario) {
+            this.usuario = usuario;
+            return this;
+        }
+
+        /**
+         * construtor validador
+         *
+         * @return
+         */
+        public Foto build() {
+            return new Foto(this);
+        }
+    }
+
+    //getters y setters
     public Long getIdFoto() {
         return idFoto;
     }
@@ -75,44 +122,5 @@ public class Foto implements Serializable {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 97 * hash + Objects.hashCode(this.idFoto);
-        hash = 97 * hash + Objects.hashCode(this.urlFoto);
-        hash = 97 * hash + Objects.hashCode(this.descripcion);
-        hash = 97 * hash + Objects.hashCode(this.usuario);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Foto other = (Foto) obj;
-        if (!Objects.equals(this.urlFoto, other.urlFoto)) {
-            return false;
-        }
-        if (!Objects.equals(this.descripcion, other.descripcion)) {
-            return false;
-        }
-        if (!Objects.equals(this.idFoto, other.idFoto)) {
-            return false;
-        }
-        return Objects.equals(this.usuario, other.usuario);
-    }
-
-    @Override
-    public String toString() {
-        return "Foto{" + "idFoto=" + idFoto + ", urlFoto=" + urlFoto + ", descripcion=" + descripcion + ", usuario=" + usuario + '}';
     }
 }

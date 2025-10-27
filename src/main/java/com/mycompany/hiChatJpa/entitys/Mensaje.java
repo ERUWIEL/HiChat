@@ -8,13 +8,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
+ * clase que modela un mensaje
  *
  * @author angel
  */
@@ -22,6 +21,7 @@ import java.util.Objects;
 @Table(name = "mensaje")
 public class Mensaje implements Serializable {
 
+    // seccion de mapeo
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_mensaje")
@@ -47,22 +47,89 @@ public class Mensaje implements Serializable {
     @Column(name = "esta_borrado", nullable = false)
     private Boolean estaBorrado = false;
 
-    @PrePersist
-    protected void onCreate() {
-        fechaEnvio = LocalDateTime.now();
+    /**
+     * constructor builder
+     *
+     * @param builder
+     */
+    private Mensaje(Builder builder) {
+        this.idMensaje = builder.idMensaje;
+        this.chat = builder.chat;
+        this.usuarioEmisor = builder.usuarioEmisor;
+        this.contenido = builder.contenido;
+        this.fechaEnvio = builder.fechaEnvio;
+        this.estaVisto = builder.estaVisto;
+        this.estaBorrado = builder.estaBorrado;
     }
 
-    public Mensaje() {
+    /**
+     * constructor por ausencia
+     */
+    protected Mensaje() {
     }
 
-    public Mensaje(Long idMensaje, Chat chat, Usuario propietario, String contenido, LocalDateTime fechaEnvio) {
-        this.idMensaje = idMensaje;
-        this.chat = chat;
-        this.usuarioEmisor = propietario;
-        this.contenido = contenido;
-        this.fechaEnvio = fechaEnvio;
+    /**
+     * clase interna que permite implementar builder
+     */
+    public static class Builder {
+
+        private Long idMensaje;
+        private Chat chat;
+        private Usuario usuarioEmisor;
+        private String contenido;
+        private LocalDateTime fechaEnvio;
+        private Boolean estaVisto = false;
+        private Boolean estaBorrado = false;
+
+        public Builder idMensaje(Long idMensaje){
+            this.idMensaje = idMensaje;
+            return this;
+        }
+        
+        public Builder chat(Chat chat) {
+            this.chat = chat;
+            return this;
+        }
+
+        public Builder usuarioEmisor(Usuario usuarioEmisor) {
+            this.usuarioEmisor = usuarioEmisor;
+            return this;
+        }
+
+        public Builder contenido(String contenido) {
+            this.contenido = contenido;
+            return this;
+        }
+
+        public Builder fechaEnvio(LocalDateTime fechaEnvio) {
+            this.fechaEnvio = fechaEnvio;
+            return this;
+        }
+
+        public Builder estaVisto(Boolean estaVisto) {
+            this.estaVisto = estaVisto;
+            return this;
+        }
+
+        public Builder estaBorrado(Boolean estaBorrado) {
+            this.estaBorrado = estaBorrado;
+            return this;
+        }
+
+        /**
+         * constructor builder con validaciones
+         *
+         * @return
+         */
+        public Mensaje build() {
+            if (fechaEnvio == null) {
+                fechaEnvio = LocalDateTime.now();
+            }
+            return new Mensaje(this);
+        }
     }
 
+    // getters y setters
     public Long getIdMensaje() {
         return idMensaje;
     }
@@ -117,56 +184,5 @@ public class Mensaje implements Serializable {
 
     public void setEstaBorrado(Boolean estaBorrado) {
         this.estaBorrado = estaBorrado;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 67 * hash + Objects.hashCode(this.idMensaje);
-        hash = 67 * hash + Objects.hashCode(this.chat);
-        hash = 67 * hash + Objects.hashCode(this.usuarioEmisor);
-        hash = 67 * hash + Objects.hashCode(this.contenido);
-        hash = 67 * hash + Objects.hashCode(this.fechaEnvio);
-        hash = 67 * hash + Objects.hashCode(this.estaVisto);
-        hash = 67 * hash + Objects.hashCode(this.estaBorrado);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Mensaje other = (Mensaje) obj;
-        if (!Objects.equals(this.contenido, other.contenido)) {
-            return false;
-        }
-        if (!Objects.equals(this.idMensaje, other.idMensaje)) {
-            return false;
-        }
-        if (!Objects.equals(this.chat, other.chat)) {
-            return false;
-        }
-        if (!Objects.equals(this.usuarioEmisor, other.usuarioEmisor)) {
-            return false;
-        }
-        if (!Objects.equals(this.fechaEnvio, other.fechaEnvio)) {
-            return false;
-        }
-        if (!Objects.equals(this.estaVisto, other.estaVisto)) {
-            return false;
-        }
-        return Objects.equals(this.estaBorrado, other.estaBorrado);
-    }
-
-    @Override
-    public String toString() {
-        return "Mensaje{" + "idMensaje=" + idMensaje + ", chat=" + chat + ", propietario=" + usuarioEmisor + ", contenido=" + contenido + ", fechaEnvio=" + fechaEnvio + ", estaVisto=" + estaVisto + ", estaBorrado=" + estaBorrado + '}';
     }
 }

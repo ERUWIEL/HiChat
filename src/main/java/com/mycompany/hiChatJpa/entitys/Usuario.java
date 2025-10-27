@@ -12,16 +12,15 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 /**
+ * clase que modela un usuario
  *
  * @author angel
  */
@@ -29,6 +28,7 @@ import java.util.Set;
 @Table(name = "usuario")
 public class Usuario implements Serializable {
 
+    //seccion de mapeo
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")
@@ -42,9 +42,6 @@ public class Usuario implements Serializable {
 
     @Column(name = "apellido_materno", length = 50)
     private String apellidoMaterno;
-
-    @Column(name = "nombre_completo", length = 150)
-    private String nombreCompleto;
 
     @Column(name = "correo_electronico", nullable = false, unique = true, length = 100)
     private String correoElectronico;
@@ -105,34 +102,147 @@ public class Usuario implements Serializable {
     )
     private Set<Chat> chats = new HashSet<>();
 
-    @PrePersist
-    protected void onCreate() {
-        fechaRegistro = LocalDateTime.now();
-        if (nombreCompleto == null) {
-            nombreCompleto = nombre + " " + apellidoPaterno
-                    + (apellidoMaterno != null ? " " + apellidoMaterno : "");
+    /**
+     * constructor privado para implementar buider
+     *
+     * @param builder
+     */
+    private Usuario(Builder builder) {
+        this.idUsuario = builder.idUsuario;
+        this.nombre = builder.nombre;
+        this.apellidoPaterno = builder.apellidoPaterno;
+        this.apellidoMaterno = builder.apellidoMaterno;
+        this.correoElectronico = builder.correoElectronico;
+        this.contrasena = builder.contrasena;
+        this.carrera = builder.carrera;
+        this.biografia = builder.biografia;
+        this.urlFotoPerfil = builder.urlFotoPerfil;
+        this.genero = builder.genero;
+        this.fechaNacimiento = builder.fechaNacimiento;
+        this.fechaRegistro = builder.fechaRegistro;
+        this.pasatiempos = builder.pasatiempos;
+        this.fotos = builder.fotos;
+        this.interaccionesEnviadas = builder.interaccionesEnviadas;
+        this.interaccionesRecibidas = builder.interaccionesRecibidas;
+        this.bloqueosRealizados = builder.bloqueosRealizados;
+        this.bloqueosRecibidos = builder.bloqueosRecibidos;
+        this.mensajesEnviados = builder.mensajesEnviados;
+        this.chats = builder.chats;
+    }
+
+    /**
+     * constructor por ausencia
+     */
+    protected Usuario() {
+    }
+
+    /**
+     * clase interna que permite usar builder
+     */
+    public static class Builder {
+
+        private Long idUsuario;
+        private String nombre;
+        private String apellidoPaterno;
+        private String apellidoMaterno;
+        private String correoElectronico;
+        private String contrasena;
+        private String carrera;
+        private String biografia;
+        private String urlFotoPerfil;
+        private Genero genero;
+        private LocalDate fechaNacimiento;
+        private LocalDateTime fechaRegistro = LocalDateTime.now();
+        private Set<Pasatiempo> pasatiempos = new HashSet<>();
+        private Set<Foto> fotos = new HashSet<>();
+        private Set<Interaccion> interaccionesEnviadas = new HashSet<>();
+        private Set<Interaccion> interaccionesRecibidas = new HashSet<>();
+        private Set<Bloqueo> bloqueosRealizados = new HashSet<>();
+        private Set<Bloqueo> bloqueosRecibidos = new HashSet<>();
+        private Set<Mensaje> mensajesEnviados = new HashSet<>();
+        private Set<Chat> chats = new HashSet<>();
+
+        public Builder nombre(String nombre) {
+            this.nombre = nombre;
+            return this;
+        }
+
+        public Builder apellidoPaterno(String apellidoPaterno) {
+            this.apellidoPaterno = apellidoPaterno;
+            return this;
+        }
+
+        public Builder apellidoMaterno(String apellidoMaterno) {
+            this.apellidoMaterno = apellidoMaterno;
+            return this;
+        }
+
+        public Builder correoElectronico(String correoElectronico) {
+            this.correoElectronico = correoElectronico;
+            return this;
+        }
+
+        public Builder contrasena(String contrasena) {
+            this.contrasena = contrasena;
+            return this;
+        }
+
+        public Builder carrera(String carrera) {
+            this.carrera = carrera;
+            return this;
+        }
+
+        public Builder biografia(String biografia) {
+            this.biografia = biografia;
+            return this;
+        }
+
+        public Builder urlFotoPerfil(String urlFotoPerfil) {
+            this.urlFotoPerfil = urlFotoPerfil;
+            return this;
+        }
+
+        public Builder genero(Genero genero) {
+            this.genero = genero;
+            return this;
+        }
+
+        public Builder fechaNacimiento(LocalDate fechaNacimiento) {
+            this.fechaNacimiento = fechaNacimiento;
+            return this;
+        }
+
+        public Builder fechaRegistro(LocalDateTime fechaRegistro) {
+            this.fechaRegistro = fechaRegistro;
+            return this;
+        }
+
+        public Builder pasatiempos(Set<Pasatiempo> pasatiempos) {
+            this.pasatiempos = pasatiempos;
+            return this;
+        }
+
+        public Builder fotos(Set<Foto> fotos) {
+            this.fotos = fotos;
+            return this;
+        }
+
+        public Builder chats(Set<Chat> chats) {
+            this.chats = chats;
+            return this;
+        }
+
+        /**
+         * constructor builder con validaciones
+         *
+         * @return
+         */
+        public Usuario build() {
+            return new Usuario(this);
         }
     }
 
-    public Usuario() {
-    }
-
-    public Usuario(Long idUsuario, String nombre, String apellidoPaterno, String apellidoMaterno, String nombreCompleto, String correoElectronico, String contrasena, String carrera, String biografia, String urlFotoPerfil, Genero genero, LocalDate fechaNacimiento, LocalDateTime fechaRegistro) {
-        this.idUsuario = idUsuario;
-        this.nombre = nombre;
-        this.apellidoPaterno = apellidoPaterno;
-        this.apellidoMaterno = apellidoMaterno;
-        this.nombreCompleto = nombreCompleto;
-        this.correoElectronico = correoElectronico;
-        this.contrasena = contrasena;
-        this.carrera = carrera;
-        this.biografia = biografia;
-        this.urlFotoPerfil = urlFotoPerfil;
-        this.genero = genero;
-        this.fechaNacimiento = fechaNacimiento;
-        this.fechaRegistro = fechaRegistro;
-    }
-
+    //getters y setters
     public Long getIdUsuario() {
         return idUsuario;
     }
@@ -163,14 +273,6 @@ public class Usuario implements Serializable {
 
     public void setApellidoMaterno(String apellidoMaterno) {
         this.apellidoMaterno = apellidoMaterno;
-    }
-
-    public String getNombreCompleto() {
-        return nombreCompleto;
-    }
-
-    public void setNombreCompleto(String nombreCompleto) {
-        this.nombreCompleto = nombreCompleto;
     }
 
     public String getCorreoElectronico() {
@@ -299,112 +401,5 @@ public class Usuario implements Serializable {
 
     public void setChats(Set<Chat> chats) {
         this.chats = chats;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 71 * hash + Objects.hashCode(this.idUsuario);
-        hash = 71 * hash + Objects.hashCode(this.nombre);
-        hash = 71 * hash + Objects.hashCode(this.apellidoPaterno);
-        hash = 71 * hash + Objects.hashCode(this.apellidoMaterno);
-        hash = 71 * hash + Objects.hashCode(this.nombreCompleto);
-        hash = 71 * hash + Objects.hashCode(this.correoElectronico);
-        hash = 71 * hash + Objects.hashCode(this.contrasena);
-        hash = 71 * hash + Objects.hashCode(this.carrera);
-        hash = 71 * hash + Objects.hashCode(this.biografia);
-        hash = 71 * hash + Objects.hashCode(this.urlFotoPerfil);
-        hash = 71 * hash + Objects.hashCode(this.genero);
-        hash = 71 * hash + Objects.hashCode(this.fechaNacimiento);
-        hash = 71 * hash + Objects.hashCode(this.fechaRegistro);
-        hash = 71 * hash + Objects.hashCode(this.pasatiempos);
-        hash = 71 * hash + Objects.hashCode(this.fotos);
-        hash = 71 * hash + Objects.hashCode(this.interaccionesEnviadas);
-        hash = 71 * hash + Objects.hashCode(this.interaccionesRecibidas);
-        hash = 71 * hash + Objects.hashCode(this.bloqueosRealizados);
-        hash = 71 * hash + Objects.hashCode(this.bloqueosRecibidos);
-        hash = 71 * hash + Objects.hashCode(this.mensajesEnviados);
-        hash = 71 * hash + Objects.hashCode(this.chats);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Usuario other = (Usuario) obj;
-        if (!Objects.equals(this.nombre, other.nombre)) {
-            return false;
-        }
-        if (!Objects.equals(this.apellidoPaterno, other.apellidoPaterno)) {
-            return false;
-        }
-        if (!Objects.equals(this.apellidoMaterno, other.apellidoMaterno)) {
-            return false;
-        }
-        if (!Objects.equals(this.nombreCompleto, other.nombreCompleto)) {
-            return false;
-        }
-        if (!Objects.equals(this.correoElectronico, other.correoElectronico)) {
-            return false;
-        }
-        if (!Objects.equals(this.contrasena, other.contrasena)) {
-            return false;
-        }
-        if (!Objects.equals(this.carrera, other.carrera)) {
-            return false;
-        }
-        if (!Objects.equals(this.biografia, other.biografia)) {
-            return false;
-        }
-        if (!Objects.equals(this.urlFotoPerfil, other.urlFotoPerfil)) {
-            return false;
-        }
-        if (!Objects.equals(this.idUsuario, other.idUsuario)) {
-            return false;
-        }
-        if (this.genero != other.genero) {
-            return false;
-        }
-        if (!Objects.equals(this.fechaNacimiento, other.fechaNacimiento)) {
-            return false;
-        }
-        if (!Objects.equals(this.fechaRegistro, other.fechaRegistro)) {
-            return false;
-        }
-        if (!Objects.equals(this.pasatiempos, other.pasatiempos)) {
-            return false;
-        }
-        if (!Objects.equals(this.fotos, other.fotos)) {
-            return false;
-        }
-        if (!Objects.equals(this.interaccionesEnviadas, other.interaccionesEnviadas)) {
-            return false;
-        }
-        if (!Objects.equals(this.interaccionesRecibidas, other.interaccionesRecibidas)) {
-            return false;
-        }
-        if (!Objects.equals(this.bloqueosRealizados, other.bloqueosRealizados)) {
-            return false;
-        }
-        if (!Objects.equals(this.bloqueosRecibidos, other.bloqueosRecibidos)) {
-            return false;
-        }
-        if (!Objects.equals(this.mensajesEnviados, other.mensajesEnviados)) {
-            return false;
-        }
-        return Objects.equals(this.chats, other.chats);
-    }
-
-    @Override
-    public String toString() {
-        return "Usuario{" + "idUsuario=" + idUsuario + ", nombre=" + nombre + ", apellidoPaterno=" + apellidoPaterno + ", apellidoMaterno=" + apellidoMaterno + ", nombreCompleto=" + nombreCompleto + ", correoElectronico=" + correoElectronico + ", contrasena=" + contrasena + ", carrera=" + carrera + ", biografia=" + biografia + ", urlFotoPerfil=" + urlFotoPerfil + ", genero=" + genero + ", fechaNacimiento=" + fechaNacimiento + ", fechaRegistro=" + fechaRegistro + ", pasatiempos=" + pasatiempos + ", fotos=" + fotos + ", interaccionesEnviadas=" + interaccionesEnviadas + ", interaccionesRecibidas=" + interaccionesRecibidas + ", bloqueosRealizados=" + bloqueosRealizados + ", bloqueosRecibidos=" + bloqueosRecibidos + ", mensajesEnviados=" + mensajesEnviados + ", chats=" + chats + '}';
     }
 }

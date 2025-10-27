@@ -8,23 +8,23 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
+ * clase que modela el bloqueo de usuarios
  *
  * @author angel
  */
 @Entity
 @Table(name = "bloqueo",
-    uniqueConstraints = @UniqueConstraint(columnNames = {"usuario_bloqueador", "usuario_bloqueado"})
+        uniqueConstraints = @UniqueConstraint(columnNames = {"usuario_bloqueador", "usuario_bloqueado"})
 )
 public class Bloqueo implements Serializable {
 
+    //seccion de mapeo
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_bloqueo")
@@ -41,21 +41,58 @@ public class Bloqueo implements Serializable {
     @Column(name = "fecha_bloqueo", nullable = false)
     private LocalDateTime fechaBloqueo;
 
-    @PrePersist
-    protected void onCreate() {
-        fechaBloqueo = LocalDateTime.now();
+    /**
+     * constructor por ausencia de la clase
+     */
+    protected Bloqueo() {
     }
 
-    public Bloqueo() {
+    /**
+     * consctructor builder
+     */
+    private Bloqueo(Builder builder) {
+        this.idBloqueo = builder.idBloqueo;
+        this.usuarioBloqueador = builder.usuarioBloqueador;
+        this.usuarioBloqueado = builder.usuarioBloqueado;
+        this.fechaBloqueo = builder.fechaBloqueo;
     }
 
-    public Bloqueo(Long idBloqueo, Usuario usuarioBloqueador, Usuario usuarioBloqueado, LocalDateTime fechaBloqueo) {
-        this.idBloqueo = idBloqueo;
-        this.usuarioBloqueador = usuarioBloqueador;
-        this.usuarioBloqueado = usuarioBloqueado;
-        this.fechaBloqueo = fechaBloqueo;
+    /**
+     * clase interna que nos permite implementar el patron builder
+     */
+    public static class Builder {
+
+        private Long idBloqueo;
+        private Usuario usuarioBloqueador;
+        private Usuario usuarioBloqueado;
+        private LocalDateTime fechaBloqueo = LocalDateTime.now();
+
+        public Builder idBloqueo(Long idBloqueo) {
+            this.idBloqueo = idBloqueo;
+            return this;
+        }
+
+        public Builder usuarioBloqueador(Usuario usuarioBloqueador) {
+            this.usuarioBloqueador = usuarioBloqueador;
+            return this;
+        }
+
+        public Builder usuarioBloqueado(Usuario usuarioBloqueado) {
+            this.usuarioBloqueado = usuarioBloqueado;
+            return this;
+        }
+
+        public Builder fechaBloqueo(LocalDateTime fechaBloqueo) {
+            this.fechaBloqueo = fechaBloqueo;
+            return this;
+        }
+
+        public Bloqueo build() {
+            return new Bloqueo(this);
+        }
     }
 
+    //getters y setters
     public Long getIdBloqueo() {
         return idBloqueo;
     }
@@ -86,44 +123,5 @@ public class Bloqueo implements Serializable {
 
     public void setFechaBloqueo(LocalDateTime fechaBloqueo) {
         this.fechaBloqueo = fechaBloqueo;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.idBloqueo);
-        hash = 97 * hash + Objects.hashCode(this.usuarioBloqueador);
-        hash = 97 * hash + Objects.hashCode(this.usuarioBloqueado);
-        hash = 97 * hash + Objects.hashCode(this.fechaBloqueo);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Bloqueo other = (Bloqueo) obj;
-        if (!Objects.equals(this.idBloqueo, other.idBloqueo)) {
-            return false;
-        }
-        if (!Objects.equals(this.usuarioBloqueador, other.usuarioBloqueador)) {
-            return false;
-        }
-        if (!Objects.equals(this.usuarioBloqueado, other.usuarioBloqueado)) {
-            return false;
-        }
-        return Objects.equals(this.fechaBloqueo, other.fechaBloqueo);
-    }
-
-    @Override
-    public String toString() {
-        return "Bloqueo{" + "idBloqueo=" + idBloqueo + ", usuarioBloqueador=" + usuarioBloqueador + ", usuarioBloqueado=" + usuarioBloqueado + ", fechaBloqueo=" + fechaBloqueo + '}';
     }
 }
