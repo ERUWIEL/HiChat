@@ -9,6 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -23,6 +25,20 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "chat")
+@NamedQueries({
+    @NamedQuery(
+        name = "Chat.findAll",
+        query = "SELECT c FROM Chat c ORDER BY c.idChat"
+    ),
+    @NamedQuery(
+        name = "Chat.findByNombre",
+        query = "SELECT c FROM Chat c WHERE c.nombre LIKE :nombre"
+    ),
+    @NamedQuery(
+        name = "Chat.findByParticipante",
+        query = "SELECT c FROM Chat c JOIN c.participantes p WHERE p = :usuario"
+    )
+})
 public class Chat implements Serializable {
 
     // seccion de mapeo

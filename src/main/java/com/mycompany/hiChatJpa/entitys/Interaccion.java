@@ -10,6 +10,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.io.Serializable;
@@ -24,6 +26,24 @@ import java.time.LocalDateTime;
 @Table(name = "interaccion",
         uniqueConstraints = @UniqueConstraint(columnNames = {"usuario_emisor", "usuario_receptor"})
 )
+@NamedQueries({
+    @NamedQuery(
+        name = "Interaccion.findAll",
+        query = "SELECT i FROM Interaccion i ORDER BY i.fechaInteraccion DESC"
+    ),
+    @NamedQuery(
+        name = "Interaccion.findByEmisor",
+        query = "SELECT i FROM Interaccion i WHERE i.usuarioEmisor = :usuario ORDER BY i.fechaInteraccion DESC"
+    ),
+    @NamedQuery(
+        name = "Interaccion.findByReceptor",
+        query = "SELECT i FROM Interaccion i WHERE i.usuarioReceptor = :usuario ORDER BY i.fechaInteraccion DESC"
+    ),
+    @NamedQuery(
+        name = "Interaccion.findByTipo",
+        query = "SELECT i FROM Interaccion i WHERE i.tipo = :tipo ORDER BY i.fechaInteraccion DESC"
+    )
+})
 public class Interaccion implements Serializable {
 
     // seccion de mapeo

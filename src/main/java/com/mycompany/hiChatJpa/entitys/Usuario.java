@@ -11,6 +11,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
@@ -26,6 +28,20 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "usuario")
+@NamedQueries({
+    @NamedQuery(
+        name = "Usuario.findAll",
+        query = "SELECT u FROM Usuario u ORDER BY u.nombre ASC, u.apellidoPaterno ASC"
+    ),
+    @NamedQuery(
+        name = "Usuario.findByCorreo",
+        query = "SELECT u FROM Usuario u WHERE u.correoElectronico = :correo"
+    ),
+    @NamedQuery(
+        name = "Usuario.findByNombreCompleto",
+        query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre AND u.apellidoPaterno = :apellidoPaterno"
+    )
+})
 public class Usuario implements Serializable {
 
     //seccion de mapeo
