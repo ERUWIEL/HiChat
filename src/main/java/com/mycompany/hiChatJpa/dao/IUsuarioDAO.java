@@ -1,4 +1,4 @@
-package com.mycompany.hiChatJpa.dao.usuario;
+package com.mycompany.hiChatJpa.dao;
 
 import com.mycompany.hiChatJpa.entitys.Usuario;
 import java.util.List;

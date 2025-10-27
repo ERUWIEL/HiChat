@@ -1,5 +1,5 @@
 
-package com.mycompany.hiChatJpa.dao.foto;
+package com.mycompany.hiChatJpa.dao;
 
 import com.mycompany.hiChatJpa.entitys.Foto;
 import com.mycompany.hiChatJpa.entitys.Usuario;

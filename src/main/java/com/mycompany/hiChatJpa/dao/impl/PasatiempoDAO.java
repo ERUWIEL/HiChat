@@ -1,29 +1,28 @@
+package com.mycompany.hiChatJpa.dao.impl;
 
-package com.mycompany.hiChatJpa.dao.foto;
-
+import com.mycompany.hiChatJpa.dao.IPasatiempoDAO;
 import com.mycompany.hiChatJpa.config.JpaUtil;
-import com.mycompany.hiChatJpa.entitys.Foto;
-import com.mycompany.hiChatJpa.entitys.Usuario;
+import com.mycompany.hiChatJpa.entitys.Pasatiempo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
 
 /**
- * clase que permite manupular las fotos
+ * clase que permite manupular los pasatiempos
  * @author gatog
  */
-public class FotoDAO implements IFotoDAO {
+public class PasatiempoDAO implements IPasatiempoDAO {
 
     /**
-     * metodo que permite insertar una foto
-     * @param foto 
+     * metodo que permite agregar un pasatiempo
+     * @param pasatiempo 
      */
     @Override
-    public void insertar(Foto foto) {
+    public void insertar(Pasatiempo pasatiempo) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(foto);
+            em.persist(pasatiempo);
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
@@ -34,15 +33,15 @@ public class FotoDAO implements IFotoDAO {
     }
 
     /**
-     * metodo que permite actualizar una foto
-     * @param foto 
+     * metodo que permite actualizar un pasatiempo
+     * @param pasatiempo 
      */
     @Override
-    public void actualizar(Foto foto) {
+    public void actualizar(Pasatiempo pasatiempo) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
             em.getTransaction().begin();
-            em.merge(foto);
+            em.merge(pasatiempo);
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
@@ -53,7 +52,7 @@ public class FotoDAO implements IFotoDAO {
     }
 
     /**
-     * metodo que permite eliminar una foto
+     * metodo que permite eliminar un pasatiempo
      * @param id 
      */
     @Override
@@ -61,8 +60,8 @@ public class FotoDAO implements IFotoDAO {
         EntityManager em = JpaUtil.getEntityManager();
         try {
             em.getTransaction().begin();
-            Foto foto = em.find(Foto.class, id);
-            if (foto != null) em.remove(foto);
+            Pasatiempo p = em.find(Pasatiempo.class, id);
+            if (p != null) em.remove(p);
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
@@ -73,29 +72,29 @@ public class FotoDAO implements IFotoDAO {
     }
 
     /**
-     * metodo que permite buscra por id una foto
+     * metodo que permite buscar un pasatiempo por id
      * @param id
      * @return 
      */
     @Override
-    public Foto buscar(Long id) {
+    public Pasatiempo buscar(Long id) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
-            return em.find(Foto.class, id);
+            return em.find(Pasatiempo.class, id);
         } finally {
             em.close();
         }
     }
 
     /**
-     * metodo que permite listar todas las fotos
+     * metodo que permite consultar todos los pasatiempos
      * @return 
      */
     @Override
-    public List<Foto> listar() {
+    public List<Pasatiempo> listar() {
         EntityManager em = JpaUtil.getEntityManager();
         try {
-            TypedQuery<Foto> query = em.createNamedQuery("Foto.findAll", Foto.class);
+            TypedQuery<Pasatiempo> query = em.createNamedQuery("Pasatiempo.findAll", Pasatiempo.class);
             query.setMaxResults(100);
             return query.getResultList();
         } finally {
@@ -104,39 +103,19 @@ public class FotoDAO implements IFotoDAO {
     }
 
     /**
-     * metodo que permite consultar las fotos por usuario
-     * @param usuario
+     * metodo que permite consultar los pasatiempos por nombre
+     * @param nombre
      * @return 
      */
     @Override
-    public List<Foto> buscarPorUsuario(Usuario usuario) {
+    public Pasatiempo buscarPorNombre(String nombre) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
-            TypedQuery<Foto> query = em.createNamedQuery("Foto.findByUsuario", Foto.class);
-            query.setParameter("usuario", usuario);
-            query.setMaxResults(100);
-            return query.getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    /**
-     * metodo que permite consultar las fotos por su descripcion
-     * @param descripcion
-     * @return 
-     */
-    @Override
-    public List<Foto> buscarPorDescripcion(String descripcion) {
-        EntityManager em = JpaUtil.getEntityManager();
-        try {
-            TypedQuery<Foto> query = em.createNamedQuery("Foto.findByDescripcion", Foto.class);
-            query.setParameter("descripcion", "%" + descripcion + "%");
-            query.setMaxResults(100);
-            return query.getResultList();
+            TypedQuery<Pasatiempo> query = em.createNamedQuery("Pasatiempo.findByNombre", Pasatiempo.class);
+            query.setParameter("nombre", nombre);
+            return query.getResultStream().findFirst().orElse(null);
         } finally {
             em.close();
         }
     }
 }
-

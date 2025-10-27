@@ -1,32 +1,36 @@
-package com.mycompany.hiChatJpa.dao.mensaje;
+package com.mycompany.hiChatJpa.dao.impl;
 
 import com.mycompany.hiChatJpa.config.JpaUtil;
-import com.mycompany.hiChatJpa.entitys.Chat;
-import com.mycompany.hiChatJpa.entitys.Mensaje;
+import com.mycompany.hiChatJpa.dao.IBloqueoDAO;
+import com.mycompany.hiChatJpa.entitys.Bloqueo;
 import com.mycompany.hiChatJpa.entitys.Usuario;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
 
 /**
- * clase que permite manupilar los mensajes
+ * clase dao que permite manipular los bloqueos
+ *
  * @author gatog
  */
-public class MensajeDAO implements IMensajeDAO {
+public class BloqueoDAO implements IBloqueoDAO {
 
     /**
-     * metodo que permite insertar un mensaje
-     * @param mensaje 
+     * metodo que permite agregar un bloqueo
+     *
+     * @param b
      */
     @Override
-    public void insertar(Mensaje mensaje) {
+    public void insertar(Bloqueo b) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(mensaje);
+            em.persist(b);
             em.getTransaction().commit();
         } catch (Exception e) {
-            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
             throw e;
         } finally {
             em.close();
@@ -34,18 +38,21 @@ public class MensajeDAO implements IMensajeDAO {
     }
 
     /**
-     * metodo que permite actualizar un mensaje
-     * @param mensaje 
+     * metodo que permite modificar un bloqueo
+     *
+     * @param b
      */
     @Override
-    public void actualizar(Mensaje mensaje) {
+    public void actualizar(Bloqueo b) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
             em.getTransaction().begin();
-            em.merge(mensaje);
+            em.merge(b);
             em.getTransaction().commit();
         } catch (Exception e) {
-            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
             throw e;
         } finally {
             em.close();
@@ -53,19 +60,24 @@ public class MensajeDAO implements IMensajeDAO {
     }
 
     /**
-     * metodo que permite eliminar un mensaje
-     * @param id 
+     * metodo que permite eliminar un bloqueo
+     *
+     * @param id
      */
     @Override
     public void eliminar(Long id) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
             em.getTransaction().begin();
-            Mensaje mensaje = em.find(Mensaje.class, id);
-            if (mensaje != null) em.remove(mensaje);
+            Bloqueo bloqueo = em.find(Bloqueo.class, id);
+            if (bloqueo != null) {
+                em.remove(bloqueo);
+            }
             em.getTransaction().commit();
         } catch (Exception e) {
-            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
             throw e;
         } finally {
             em.close();
@@ -73,29 +85,31 @@ public class MensajeDAO implements IMensajeDAO {
     }
 
     /**
-     * metodo que permite buscar por id un mensaje
+     * metodo que permite buscar un bloqueo por id
+     *
      * @param id
-     * @return 
+     * @return
      */
     @Override
-    public Mensaje buscar(Long id) {
+    public Bloqueo buscar(Long id) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
-            return em.find(Mensaje.class, id);
+            return em.find(Bloqueo.class, id);
         } finally {
             em.close();
         }
     }
 
     /**
-     * metodo que permite consultar todos los mensajes
-     * @return 
+     * metodo que permite consultar todos los bloqueos
+     *
+     * @return
      */
     @Override
-    public List<Mensaje> listar() {
+    public List<Bloqueo> listar() {
         EntityManager em = JpaUtil.getEntityManager();
         try {
-            TypedQuery<Mensaje> query = em.createNamedQuery("Mensaje.findAll", Mensaje.class);
+            TypedQuery<Bloqueo> query = em.createNamedQuery("Bloqueo.findAll", Bloqueo.class);
             query.setMaxResults(100);
             return query.getResultList();
         } finally {
@@ -104,16 +118,17 @@ public class MensajeDAO implements IMensajeDAO {
     }
 
     /**
-     * metodo que permite consultar los mensajes por chat
-     * @param chat
-     * @return 
+     * metodo que permite consultar los bloqueos que ha hecho un usuario
+     *
+     * @param usuario
+     * @return
      */
     @Override
-    public List<Mensaje> buscarPorChat(Chat chat) {
+    public List<Bloqueo> buscarPorBloqueador(Usuario usuario) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
-            TypedQuery<Mensaje> query = em.createNamedQuery("Mensaje.findByChat", Mensaje.class);
-            query.setParameter("chat", chat);
+            TypedQuery<Bloqueo> query = em.createNamedQuery("Bloqueo.findByBloqueador", Bloqueo.class);
+            query.setParameter("usuario", usuario);
             query.setMaxResults(100);
             return query.getResultList();
         } finally {
@@ -122,15 +137,15 @@ public class MensajeDAO implements IMensajeDAO {
     }
 
     /**
-     * metodo que permite consultar los mensajes no vistos por un usuario
+     * metodo que permite consultar los bloqueos que tiene un usuario
      * @param usuario
      * @return 
      */
     @Override
-    public List<Mensaje> buscarNoVistosPorUsuario(Usuario usuario) {
+    public List<Bloqueo> buscarPorBloqueado(Usuario usuario) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
-            TypedQuery<Mensaje> query = em.createNamedQuery("Mensaje.findNoVistosByUsuario", Mensaje.class);
+            TypedQuery<Bloqueo> query = em.createNamedQuery("Bloqueo.findByBloqueado", Bloqueo.class);
             query.setParameter("usuario", usuario);
             query.setMaxResults(100);
             return query.getResultList();

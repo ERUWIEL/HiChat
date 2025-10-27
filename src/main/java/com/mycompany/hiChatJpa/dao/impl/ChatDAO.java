@@ -1,6 +1,7 @@
-package com.mycompany.hiChatJpa.dao.chat;
+package com.mycompany.hiChatJpa.dao.impl;
 
 import com.mycompany.hiChatJpa.config.JpaUtil;
+import com.mycompany.hiChatJpa.dao.IChatDAO;
 import com.mycompany.hiChatJpa.entitys.Chat;
 import com.mycompany.hiChatJpa.entitys.Usuario;
 import jakarta.persistence.EntityManager;

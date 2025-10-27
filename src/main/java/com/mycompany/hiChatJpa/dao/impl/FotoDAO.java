@@ -1,27 +1,30 @@
-package com.mycompany.hiChatJpa.dao.usuario;
+
+package com.mycompany.hiChatJpa.dao.impl;
 
 import com.mycompany.hiChatJpa.config.JpaUtil;
+import com.mycompany.hiChatJpa.dao.IFotoDAO;
+import com.mycompany.hiChatJpa.entitys.Foto;
 import com.mycompany.hiChatJpa.entitys.Usuario;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
 
 /**
- * clase que permite manupular los usuarios
+ * clase que permite manupular las fotos
  * @author gatog
  */
-public class UsuarioDAO implements IUsuarioDAO {
+public class FotoDAO implements IFotoDAO {
 
     /**
-     * metodo que permite agregar un usuario
-     * @param usuario 
+     * metodo que permite insertar una foto
+     * @param foto 
      */
     @Override
-    public void insertar(Usuario usuario) {
+    public void insertar(Foto foto) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(usuario);
+            em.persist(foto);
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
@@ -32,15 +35,15 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     /**
-     * metodo que permite actualizar un usuario
-     * @param usuario 
+     * metodo que permite actualizar una foto
+     * @param foto 
      */
     @Override
-    public void actualizar(Usuario usuario) {
+    public void actualizar(Foto foto) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
             em.getTransaction().begin();
-            em.merge(usuario);
+            em.merge(foto);
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
@@ -51,7 +54,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     /**
-     * metodo que permite eliminar un usuario
+     * metodo que permite eliminar una foto
      * @param id 
      */
     @Override
@@ -59,8 +62,8 @@ public class UsuarioDAO implements IUsuarioDAO {
         EntityManager em = JpaUtil.getEntityManager();
         try {
             em.getTransaction().begin();
-            Usuario u = em.find(Usuario.class, id);
-            if (u != null) em.remove(u);
+            Foto foto = em.find(Foto.class, id);
+            if (foto != null) em.remove(foto);
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
@@ -71,29 +74,29 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     /**
-     * metodo que permite buscar un usuairo por id
+     * metodo que permite buscra por id una foto
      * @param id
      * @return 
      */
     @Override
-    public Usuario buscar(Long id) {
+    public Foto buscar(Long id) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
-            return em.find(Usuario.class, id);
+            return em.find(Foto.class, id);
         } finally {
             em.close();
         }
     }
 
     /**
-     * metodo que permite consultar todos los usuarios
+     * metodo que permite listar todas las fotos
      * @return 
      */
     @Override
-    public List<Usuario> listar() {
+    public List<Foto> listar() {
         EntityManager em = JpaUtil.getEntityManager();
         try {
-            TypedQuery<Usuario> query = em.createNamedQuery("Usuario.findAll", Usuario.class);
+            TypedQuery<Foto> query = em.createNamedQuery("Foto.findAll", Foto.class);
             query.setMaxResults(100);
             return query.getResultList();
         } finally {
@@ -102,38 +105,39 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     /**
-     * metodo que permite buscar a un usuario por su correo
-     * @param correo
+     * metodo que permite consultar las fotos por usuario
+     * @param usuario
      * @return 
      */
     @Override
-    public Usuario buscarPorCorreo(String correo) {
+    public List<Foto> buscarPorUsuario(Usuario usuario) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
-            TypedQuery<Usuario> query = em.createNamedQuery("Usuario.findByCorreo", Usuario.class);
-            query.setParameter("correo", correo);
-            return query.getResultStream().findFirst().orElse(null);
+            TypedQuery<Foto> query = em.createNamedQuery("Foto.findByUsuario", Foto.class);
+            query.setParameter("usuario", usuario);
+            query.setMaxResults(100);
+            return query.getResultList();
         } finally {
             em.close();
         }
     }
 
     /**
-     * metodo que permite buscar a un usuario por su nombre completo
-     * @param nombre
-     * @param apellidoPaterno
+     * metodo que permite consultar las fotos por su descripcion
+     * @param descripcion
      * @return 
      */
     @Override
-    public List<Usuario> buscarPorNombreCompleto(String nombre, String apellidoPaterno) {
+    public List<Foto> buscarPorDescripcion(String descripcion) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
-            TypedQuery<Usuario> query = em.createNamedQuery("Usuario.findByNombreCompleto", Usuario.class);
-            query.setParameter("nombre", nombre);
-            query.setParameter("apellidoPaterno", apellidoPaterno);
+            TypedQuery<Foto> query = em.createNamedQuery("Foto.findByDescripcion", Foto.class);
+            query.setParameter("descripcion", "%" + descripcion + "%");
+            query.setMaxResults(100);
             return query.getResultList();
         } finally {
             em.close();
         }
     }
 }
+

@@ -1,6 +1,7 @@
-package com.mycompany.hiChatJpa.dao.interaccion;
+package com.mycompany.hiChatJpa.dao.impl;
 
 import com.mycompany.hiChatJpa.config.JpaUtil;
+import com.mycompany.hiChatJpa.dao.IInteraccionDAO;
 import com.mycompany.hiChatJpa.entitys.Interaccion;
 import com.mycompany.hiChatJpa.entitys.TipoInteraccion;
 import com.mycompany.hiChatJpa.entitys.Usuario;

@@ -1,4 +1,4 @@
-package com.mycompany.hiChatJpa.dao.pasatiempo;
+package com.mycompany.hiChatJpa.dao;
 
 import com.mycompany.hiChatJpa.entitys.Pasatiempo;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.mycompany.hiChatJpa.dao.match;
+package com.mycompany.hiChatJpa.dao;
 
 import com.mycompany.hiChatJpa.entitys.Match;
 import com.mycompany.hiChatJpa.entitys.Usuario;

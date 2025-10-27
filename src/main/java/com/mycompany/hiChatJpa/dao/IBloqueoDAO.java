@@ -1,4 +1,4 @@
-package com.mycompany.hiChatJpa.dao.bloqueo;
+package com.mycompany.hiChatJpa.dao;
 
 import com.mycompany.hiChatJpa.entitys.Bloqueo;
 import com.mycompany.hiChatJpa.entitys.Usuario;

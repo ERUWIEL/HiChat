@@ -1,4 +1,4 @@
-package com.mycompany.hiChatJpa.dao.interaccion;
+package com.mycompany.hiChatJpa.dao;
 
 import com.mycompany.hiChatJpa.entitys.Interaccion;
 import com.mycompany.hiChatJpa.entitys.TipoInteraccion;

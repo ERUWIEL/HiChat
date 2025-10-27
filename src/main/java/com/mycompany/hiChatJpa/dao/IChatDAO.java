@@ -1,5 +1,5 @@
 
-package com.mycompany.hiChatJpa.dao.chat;
+package com.mycompany.hiChatJpa.dao;
 
 import com.mycompany.hiChatJpa.entitys.Chat;
 import com.mycompany.hiChatJpa.entitys.Usuario;

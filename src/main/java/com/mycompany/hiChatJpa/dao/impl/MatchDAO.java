@@ -1,27 +1,29 @@
-package com.mycompany.hiChatJpa.dao.pasatiempo;
+package com.mycompany.hiChatJpa.dao.impl;
 
+import com.mycompany.hiChatJpa.dao.IMatchDAO;
 import com.mycompany.hiChatJpa.config.JpaUtil;
-import com.mycompany.hiChatJpa.entitys.Pasatiempo;
+import com.mycompany.hiChatJpa.entitys.Match;
+import com.mycompany.hiChatJpa.entitys.Usuario;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
 
 /**
- * clase que permite manupular los pasatiempos
+ * clase que permite manupular los matches
  * @author gatog
  */
-public class PasatiempoDAO implements IPasatiempoDAO {
+public class MatchDAO implements IMatchDAO {
 
     /**
-     * metodo que permite agregar un pasatiempo
-     * @param pasatiempo 
+     * metodo que permite insertar un match
+     * @param match 
      */
     @Override
-    public void insertar(Pasatiempo pasatiempo) {
+    public void insertar(Match match) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(pasatiempo);
+            em.persist(match);
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
@@ -32,15 +34,15 @@ public class PasatiempoDAO implements IPasatiempoDAO {
     }
 
     /**
-     * metodo que permite actualizar un pasatiempo
-     * @param pasatiempo 
+     * metodo que permite acualizar un match
+     * @param match 
      */
     @Override
-    public void actualizar(Pasatiempo pasatiempo) {
+    public void actualizar(Match match) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
             em.getTransaction().begin();
-            em.merge(pasatiempo);
+            em.merge(match);
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
@@ -51,7 +53,7 @@ public class PasatiempoDAO implements IPasatiempoDAO {
     }
 
     /**
-     * metodo que permite eliminar un pasatiempo
+     * metodo que permite eliminar un match
      * @param id 
      */
     @Override
@@ -59,8 +61,8 @@ public class PasatiempoDAO implements IPasatiempoDAO {
         EntityManager em = JpaUtil.getEntityManager();
         try {
             em.getTransaction().begin();
-            Pasatiempo p = em.find(Pasatiempo.class, id);
-            if (p != null) em.remove(p);
+            Match match = em.find(Match.class, id);
+            if (match != null) em.remove(match);
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
@@ -71,29 +73,29 @@ public class PasatiempoDAO implements IPasatiempoDAO {
     }
 
     /**
-     * metodo que permite buscar un pasatiempo por id
+     * metodo que permite consutlar un match por id
      * @param id
      * @return 
      */
     @Override
-    public Pasatiempo buscar(Long id) {
+    public Match buscar(Long id) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
-            return em.find(Pasatiempo.class, id);
+            return em.find(Match.class, id);
         } finally {
             em.close();
         }
     }
 
     /**
-     * metodo que permite consultar todos los pasatiempos
+     * metodo que permite consultar todos los matches
      * @return 
      */
     @Override
-    public List<Pasatiempo> listar() {
+    public List<Match> listar() {
         EntityManager em = JpaUtil.getEntityManager();
         try {
-            TypedQuery<Pasatiempo> query = em.createNamedQuery("Pasatiempo.findAll", Pasatiempo.class);
+            TypedQuery<Match> query = em.createNamedQuery("Match.findAll", Match.class);
             query.setMaxResults(100);
             return query.getResultList();
         } finally {
@@ -102,17 +104,36 @@ public class PasatiempoDAO implements IPasatiempoDAO {
     }
 
     /**
-     * metodo que permite consultar los pasatiempos por nombre
-     * @param nombre
+     * metodo que permite consultar los matches por su usuario a
+     * @param usuario
      * @return 
      */
     @Override
-    public Pasatiempo buscarPorNombre(String nombre) {
+    public List<Match> buscarPorUsuarioA(Usuario usuario) {
         EntityManager em = JpaUtil.getEntityManager();
         try {
-            TypedQuery<Pasatiempo> query = em.createNamedQuery("Pasatiempo.findByNombre", Pasatiempo.class);
-            query.setParameter("nombre", nombre);
-            return query.getResultStream().findFirst().orElse(null);
+            TypedQuery<Match> query = em.createNamedQuery("Match.findByUsuarioA", Match.class);
+            query.setParameter("usuario", usuario);
+            query.setMaxResults(100);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    /**
+     * metodo que permite consultar los matches por su usuario b
+     * @param usuario
+     * @return 
+     */
+    @Override
+    public List<Match> buscarPorUsuarioB(Usuario usuario) {
+        EntityManager em = JpaUtil.getEntityManager();
+        try {
+            TypedQuery<Match> query = em.createNamedQuery("Match.findByUsuarioB", Match.class);
+            query.setParameter("usuario", usuario);
+            query.setMaxResults(100);
+            return query.getResultList();
         } finally {
             em.close();
         }

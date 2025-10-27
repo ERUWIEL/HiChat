@@ -1,4 +1,4 @@
-package com.mycompany.hiChatJpa.dao.mensaje;
+package com.mycompany.hiChatJpa.dao;
 
 import com.mycompany.hiChatJpa.entitys.Chat;
 import com.mycompany.hiChatJpa.entitys.Mensaje;
