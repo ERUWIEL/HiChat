@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -18,6 +20,16 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "pasatiempo")
+@NamedQueries({
+    @NamedQuery(
+        name = "Pasatiempo.findAll",
+        query = "SELECT p FROM Pasatiempo p ORDER BY p.nombre ASC"
+    ),
+    @NamedQuery(
+        name = "Pasatiempo.findByNombre",
+        query = "SELECT p FROM Pasatiempo p WHERE p.nombre = :nombre"
+    )
+})
 public class Pasatiempo implements Serializable {
     // seccion de mapeo
     @Id

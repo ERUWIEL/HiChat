@@ -9,6 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.io.Serializable;
@@ -21,6 +23,20 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "matches")
+@NamedQueries({
+    @NamedQuery(
+        name = "Match.findAll",
+        query = "SELECT m FROM Match m ORDER BY m.fechaMatch DESC"
+    ),
+    @NamedQuery(
+        name = "Match.findByUsuarioA",
+        query = "SELECT m FROM Match m WHERE m.usuarioA = :usuario ORDER BY m.fechaMatch DESC"
+    ),
+    @NamedQuery(
+        name = "Match.findByUsuarioB",
+        query = "SELECT m FROM Match m WHERE m.usuarioB = :usuario ORDER BY m.fechaMatch DESC"
+    )
+})
 public class Match implements Serializable {
 
     //seccion de mapeo

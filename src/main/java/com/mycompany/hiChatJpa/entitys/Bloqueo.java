@@ -8,6 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.io.Serializable;
@@ -22,6 +24,20 @@ import java.time.LocalDateTime;
 @Table(name = "bloqueo",
         uniqueConstraints = @UniqueConstraint(columnNames = {"usuario_bloqueador", "usuario_bloqueado"})
 )
+@NamedQueries({
+    @NamedQuery(
+            name = "Bloqueo.findAll",
+            query = "SELECT b FROM Bloqueo b"
+    ),
+    @NamedQuery(
+            name = "Bloqueo.findByBloqueador",
+            query = "SELECT b FROM Bloqueo b WHERE b.usuarioBloqueador = :usuario"
+    ),
+    @NamedQuery(
+            name = "Bloqueo.findByBloqueado",
+            query = "SELECT b FROM Bloqueo b WHERE b.usuarioBloqueado = :usuario"
+    )
+})
 public class Bloqueo implements Serializable {
 
     //seccion de mapeo

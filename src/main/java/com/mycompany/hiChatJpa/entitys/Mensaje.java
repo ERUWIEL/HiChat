@@ -8,6 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -19,6 +21,20 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "mensaje")
+@NamedQueries({
+    @NamedQuery(
+        name = "Mensaje.findAll",
+        query = "SELECT m FROM Mensaje m ORDER BY m.fechaEnvio DESC"
+    ),
+    @NamedQuery(
+        name = "Mensaje.findByChat",
+        query = "SELECT m FROM Mensaje m WHERE m.chat = :chat ORDER BY m.fechaEnvio DESC"
+    ),
+    @NamedQuery(
+        name = "Mensaje.findNoVistosByUsuario",
+        query = "SELECT m FROM Mensaje m WHERE m.chat IN (SELECT c FROM Chat c JOIN c.participantes p WHERE p = :usuario) AND m.usuarioEmisor <> :usuario AND m.estaVisto = false ORDER BY m.fechaEnvio DESC"
+    )
+})
 public class Mensaje implements Serializable {
 
     // seccion de mapeo

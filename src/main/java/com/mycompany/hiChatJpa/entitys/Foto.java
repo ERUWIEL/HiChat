@@ -8,6 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 
@@ -17,6 +19,20 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "foto")
+@NamedQueries({
+    @NamedQuery(
+        name = "Foto.findAll",
+        query = "SELECT f FROM Foto f ORDER BY f.idFoto"
+    ),
+    @NamedQuery(
+        name = "Foto.findByUsuario",
+        query = "SELECT f FROM Foto f WHERE f.usuario = :usuario ORDER BY f.idFoto"
+    ),
+    @NamedQuery(
+        name = "Foto.findByDescripcion",
+        query = "SELECT f FROM Foto f WHERE f.descripcion LIKE :descripcion"
+    )
+})
 public class Foto implements Serializable {
     // seccion de mapeo
     @Id
