@@ -27,12 +27,17 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>9.4.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.netbeans.external</groupId>
+            <artifactId>AbsoluteLayout</artifactId>
+            <version>RELEASE270</version>
+        </dependency>
     </dependencies>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
-        <exec.mainClass>com.mycompany.hiChatJpa.HiChatJpa</exec.mainClass>
+        <exec.mainClass>com.mycompany.hiChatJpa.view.MainFrame</exec.mainClass>
     </properties>
     <name>HiChat</name>
 </project>
