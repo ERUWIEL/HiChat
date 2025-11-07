@@ -119,7 +119,12 @@ public class LoginPane extends javax.swing.JPanel {
         forgotPasswordLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         forgotPasswordLabel.setText("forgot password? ");
         forgotPasswordLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        dataPane.add(forgotPasswordLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 330, 20));
+        forgotPasswordLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                forgotPasswordLabelMouseClicked(evt);
+            }
+        });
+        dataPane.add(forgotPasswordLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 160, 130, 20));
 
         backgroundPane.add(dataPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, 400, 190));
 
@@ -192,6 +197,10 @@ public class LoginPane extends javax.swing.JPanel {
     private void signUpLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signUpLabelMouseClicked
         FATHER.showView(MainFrame.SIGNIN_VIEW);
     }//GEN-LAST:event_signUpLabelMouseClicked
+
+    private void forgotPasswordLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_forgotPasswordLabelMouseClicked
+        FATHER.showView(MainFrame.RSPSW_VIEW);
+    }//GEN-LAST:event_forgotPasswordLabelMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

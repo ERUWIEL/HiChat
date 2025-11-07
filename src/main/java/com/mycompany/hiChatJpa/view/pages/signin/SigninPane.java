@@ -288,7 +288,7 @@ public class SigninPane extends javax.swing.JPanel {
     }//GEN-LAST:event_logInLabelMouseClicked
 
     private void continueLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_continueLabelMouseClicked
-        FATHER.showView(MainFrame.SIGNINDATE_VIEW);
+        FATHER.showView(MainFrame.SIGNIN_DATE_VIEW);
     }//GEN-LAST:event_continueLabelMouseClicked
 
 

@@ -1,5 +1,5 @@
 
-package com.mycompany.hiChatJpa.view.pages.signin;
+package com.mycompany.hiChatJpa.view.pages.restorePassword;
 
 import com.mycompany.hiChatJpa.view.MainFrame;
 
@@ -7,7 +7,7 @@ import com.mycompany.hiChatJpa.view.MainFrame;
  *
  * @author gatog
  */
-public class SigninPicturePane extends javax.swing.JPanel {
+public class RestorePswConfirmUserPane extends javax.swing.JPanel {
 
     private final MainFrame FATHER;
     
@@ -15,7 +15,7 @@ public class SigninPicturePane extends javax.swing.JPanel {
      * Creates new form SigninPane
      * @param frame
      */
-    public SigninPicturePane(MainFrame frame) {
+    public RestorePswConfirmUserPane(MainFrame frame) {
         this.FATHER  =  frame;
         initComponents();
     }
@@ -34,18 +34,15 @@ public class SigninPicturePane extends javax.swing.JPanel {
         tittleLabel = new javax.swing.JLabel();
         returnButton = new javax.swing.JLabel();
         stepsPane = new javax.swing.JPanel();
-        coloredPane1 = new com.mycompany.hiChatJpa.view.components.PanelRound();
         coloredPane2 = new com.mycompany.hiChatJpa.view.components.PanelRound();
         coloredPane3 = new com.mycompany.hiChatJpa.view.components.PanelRound();
         coloredPane4 = new com.mycompany.hiChatJpa.view.components.PanelRound();
-        coloredPane5 = new com.mycompany.hiChatJpa.view.components.PanelRound();
         usernameLabel = new javax.swing.JLabel();
-        createAccountLabel = new javax.swing.JLabel();
+        findUserLabel = new javax.swing.JLabel();
         continuePane = new com.mycompany.hiChatJpa.view.components.PanelRound();
         continueLabel = new javax.swing.JLabel();
         messageLabel = new javax.swing.JLabel();
         logInLabel = new javax.swing.JLabel();
-        picturePane = new com.mycompany.hiChatJpa.view.components.PanelRound();
 
         setPreferredSize(new java.awt.Dimension(400, 600));
 
@@ -73,25 +70,6 @@ public class SigninPicturePane extends javax.swing.JPanel {
         stepsPane.setBackground(new java.awt.Color(0, 0, 0));
         stepsPane.setOpaque(false);
         stepsPane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        coloredPane1.setBackground(new java.awt.Color(108, 43, 238));
-        coloredPane1.setRoundBottomLeft(15);
-        coloredPane1.setRoundBottomRight(15);
-        coloredPane1.setRoundTopLeft(15);
-        coloredPane1.setRoundTopRight(15);
-
-        javax.swing.GroupLayout coloredPane1Layout = new javax.swing.GroupLayout(coloredPane1);
-        coloredPane1.setLayout(coloredPane1Layout);
-        coloredPane1Layout.setHorizontalGroup(
-            coloredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 40, Short.MAX_VALUE)
-        );
-        coloredPane1Layout.setVerticalGroup(
-            coloredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 10, Short.MAX_VALUE)
-        );
-
-        stepsPane.add(coloredPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 15, 40, 10));
 
         coloredPane2.setBackground(new java.awt.Color(108, 43, 238));
         coloredPane2.setRoundBottomLeft(15);
@@ -131,7 +109,7 @@ public class SigninPicturePane extends javax.swing.JPanel {
 
         stepsPane.add(coloredPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 15, 40, 10));
 
-        coloredPane4.setBackground(new java.awt.Color(108, 43, 238));
+        coloredPane4.setBackground(new java.awt.Color(47, 35, 72));
         coloredPane4.setRoundBottomLeft(15);
         coloredPane4.setRoundBottomRight(15);
         coloredPane4.setRoundTopLeft(15);
@@ -150,35 +128,16 @@ public class SigninPicturePane extends javax.swing.JPanel {
 
         stepsPane.add(coloredPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 15, 40, 10));
 
-        coloredPane5.setBackground(new java.awt.Color(108, 43, 238));
-        coloredPane5.setRoundBottomLeft(15);
-        coloredPane5.setRoundBottomRight(15);
-        coloredPane5.setRoundTopLeft(15);
-        coloredPane5.setRoundTopRight(15);
-
-        javax.swing.GroupLayout coloredPane5Layout = new javax.swing.GroupLayout(coloredPane5);
-        coloredPane5.setLayout(coloredPane5Layout);
-        coloredPane5Layout.setHorizontalGroup(
-            coloredPane5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 40, Short.MAX_VALUE)
-        );
-        coloredPane5Layout.setVerticalGroup(
-            coloredPane5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 10, Short.MAX_VALUE)
-        );
-
-        stepsPane.add(coloredPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 15, 40, 10));
-
         usernameLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
         usernameLabel.setForeground(new java.awt.Color(204, 204, 204));
         usernameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        usernameLabel.setText("Step 5 of 5");
+        usernameLabel.setText("Step 2 of 3");
         stepsPane.add(usernameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 400, 20));
 
-        createAccountLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 24)); // NOI18N
-        createAccountLabel.setForeground(new java.awt.Color(255, 255, 255));
-        createAccountLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        createAccountLabel.setText("Say Whiskeey!");
+        findUserLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 24)); // NOI18N
+        findUserLabel.setForeground(new java.awt.Color(255, 255, 255));
+        findUserLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        findUserLabel.setText("Confirm its you");
 
         continuePane.setBackground(new java.awt.Color(108, 43, 238));
         continuePane.setRoundBottomLeft(25);
@@ -189,7 +148,7 @@ public class SigninPicturePane extends javax.swing.JPanel {
         continueLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 16)); // NOI18N
         continueLabel.setForeground(new java.awt.Color(255, 255, 255));
         continueLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        continueLabel.setText("Done");
+        continueLabel.setText("Continue");
         continueLabel.setToolTipText("");
         continueLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         continueLabel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -216,7 +175,7 @@ public class SigninPicturePane extends javax.swing.JPanel {
         messageLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 16)); // NOI18N
         messageLabel.setForeground(new java.awt.Color(255, 255, 255));
         messageLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        messageLabel.setText("You already have an account ?");
+        messageLabel.setText("actualy i remember my password");
         messageLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         logInLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 16)); // NOI18N
@@ -230,50 +189,26 @@ public class SigninPicturePane extends javax.swing.JPanel {
             }
         });
 
-        picturePane.setBackground(new java.awt.Color(47, 35, 72));
-        picturePane.setRoundBottomLeft(360);
-        picturePane.setRoundBottomRight(360);
-        picturePane.setRoundTopLeft(360);
-        picturePane.setRoundTopRight(360);
-
-        javax.swing.GroupLayout picturePaneLayout = new javax.swing.GroupLayout(picturePane);
-        picturePane.setLayout(picturePaneLayout);
-        picturePaneLayout.setHorizontalGroup(
-            picturePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 275, Short.MAX_VALUE)
-        );
-        picturePaneLayout.setVerticalGroup(
-            picturePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 255, Short.MAX_VALUE)
-        );
-
         javax.swing.GroupLayout backgroundPaneLayout = new javax.swing.GroupLayout(backgroundPane);
         backgroundPane.setLayout(backgroundPaneLayout);
         backgroundPaneLayout.setHorizontalGroup(
             backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(headerPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(backgroundPaneLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(backgroundPaneLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(stepsPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(createAccountLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(backgroundPaneLayout.createSequentialGroup()
-                        .addGroup(backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(backgroundPaneLayout.createSequentialGroup()
-                                .addGap(39, 39, 39)
-                                .addGroup(backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(continuePane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(backgroundPaneLayout.createSequentialGroup()
-                                        .addComponent(messageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(logInLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                            .addGroup(backgroundPaneLayout.createSequentialGroup()
-                                .addGap(68, 68, 68)
-                                .addComponent(picturePane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(stepsPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(findUserLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(backgroundPaneLayout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addGroup(backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(continuePane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(backgroundPaneLayout.createSequentialGroup()
+                        .addComponent(messageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(logInLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         backgroundPaneLayout.setVerticalGroup(
             backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -282,10 +217,8 @@ public class SigninPicturePane extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(stepsPane, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(createAccountLabel)
-                .addGap(27, 27, 27)
-                .addComponent(picturePane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+                .addComponent(findUserLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 352, Short.MAX_VALUE)
                 .addComponent(continuePane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -307,7 +240,7 @@ public class SigninPicturePane extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void returnButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_returnButtonMouseClicked
-        FATHER.showView(MainFrame.SIGNIN_BIO_VIEW);
+        FATHER.showView(MainFrame.RSPSW_VIEW);
     }//GEN-LAST:event_returnButtonMouseClicked
 
     private void logInLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logInLabelMouseClicked
@@ -315,24 +248,21 @@ public class SigninPicturePane extends javax.swing.JPanel {
     }//GEN-LAST:event_logInLabelMouseClicked
 
     private void continueLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_continueLabelMouseClicked
-        FATHER.showView(MainFrame.LOGIN_VIEW);
+        FATHER.showView(MainFrame.RSPSW_CHANGE_VIEW);
     }//GEN-LAST:event_continueLabelMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel backgroundPane;
-    private com.mycompany.hiChatJpa.view.components.PanelRound coloredPane1;
     private com.mycompany.hiChatJpa.view.components.PanelRound coloredPane2;
     private com.mycompany.hiChatJpa.view.components.PanelRound coloredPane3;
     private com.mycompany.hiChatJpa.view.components.PanelRound coloredPane4;
-    private com.mycompany.hiChatJpa.view.components.PanelRound coloredPane5;
     private javax.swing.JLabel continueLabel;
     private com.mycompany.hiChatJpa.view.components.PanelRound continuePane;
-    private javax.swing.JLabel createAccountLabel;
+    private javax.swing.JLabel findUserLabel;
     private javax.swing.JPanel headerPane;
     private javax.swing.JLabel logInLabel;
     private javax.swing.JLabel messageLabel;
-    private com.mycompany.hiChatJpa.view.components.PanelRound picturePane;
     private javax.swing.JLabel returnButton;
     private javax.swing.JPanel stepsPane;
     private javax.swing.JLabel tittleLabel;

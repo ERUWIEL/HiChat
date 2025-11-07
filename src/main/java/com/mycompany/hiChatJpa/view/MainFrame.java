@@ -1,6 +1,9 @@
 package com.mycompany.hiChatJpa.view;
 
 import com.mycompany.hiChatJpa.view.pages.login.LoginPane;
+import com.mycompany.hiChatJpa.view.pages.restorePassword.RestorePswChangePane;
+import com.mycompany.hiChatJpa.view.pages.restorePassword.RestorePswConfirmUserPane;
+import com.mycompany.hiChatJpa.view.pages.restorePassword.RestorePswUserPane;
 import com.mycompany.hiChatJpa.view.pages.signin.SigninBioPane;
 import com.mycompany.hiChatJpa.view.pages.signin.SigninDatePane;
 import com.mycompany.hiChatJpa.view.pages.signin.SigninPane;
@@ -20,12 +23,15 @@ public class MainFrame extends javax.swing.JFrame {
     public static final String LOGIN_VIEW = "LOG_IN";
     //pantallas del sign up
     public static final String SIGNIN_VIEW = "SIGN_IN";
-    public static final String SIGNINDATE_VIEW = "SIGN_IN_DATE";
-    public static final String SIGNINPASSWORD_VIEW = "SIGN_IN_PASSWORD";
-    public static final String SIGNINBIO_VIEW = "SIGN_IN_BIO";
-    public static final String SIGNINPICTURE_VIEW = "SIGN_IN_PICTURE";
+    public static final String SIGNIN_DATE_VIEW = "SIGN_IN_DATE";
+    public static final String SIGNIN_PASSWORD_VIEW = "SIGN_IN_PASSWORD";
+    public static final String SIGNIN_BIO_VIEW = "SIGN_IN_BIO";
+    public static final String SIGNIN_PICTURE_VIEW = "SIGN_IN_PICTURE";
 
-    //pantallas de __
+    //pantallas de recuperacion de contrasena
+    public static final String RSPSW_VIEW = "RESTORE_PASSWORD";
+    public static final String RSPSW_CONFIRM_USER_VIEW = "RESTORE_PASSWORD_CONFIRMUSER";
+    public static final String RSPSW_CHANGE_VIEW = "RESTORE_PASSWORD_CHANGE";
     
     /**
      * Creates new form frmPrincipal
@@ -35,10 +41,14 @@ public class MainFrame extends javax.swing.JFrame {
         //inicializacion de las ventanas
         contentPanel.add(new LoginPane(this), LOGIN_VIEW);
         contentPanel.add(new SigninPane(this), SIGNIN_VIEW);
-        contentPanel.add(new SigninDatePane(this), SIGNINDATE_VIEW);
-        contentPanel.add(new SigninPasswordPane(this), SIGNINPASSWORD_VIEW);
-        contentPanel.add(new SigninBioPane(this), SIGNINBIO_VIEW);
-        contentPanel.add(new SigninPicturePane(this), SIGNINPICTURE_VIEW);
+        contentPanel.add(new SigninDatePane(this), SIGNIN_DATE_VIEW);
+        contentPanel.add(new SigninPasswordPane(this), SIGNIN_PASSWORD_VIEW);
+        contentPanel.add(new SigninBioPane(this), SIGNIN_BIO_VIEW);
+        contentPanel.add(new SigninPicturePane(this), SIGNIN_PICTURE_VIEW);
+        
+        contentPanel.add(new RestorePswUserPane(this), RSPSW_VIEW);
+        contentPanel.add(new RestorePswConfirmUserPane(this), RSPSW_CONFIRM_USER_VIEW);
+        contentPanel.add(new RestorePswChangePane(this), RSPSW_CHANGE_VIEW);
 
         showView(LOGIN_VIEW);
     }

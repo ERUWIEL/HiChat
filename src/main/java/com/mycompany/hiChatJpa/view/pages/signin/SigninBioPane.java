@@ -280,7 +280,7 @@ public class SigninBioPane extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void returnButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_returnButtonMouseClicked
-        FATHER.showView(MainFrame.SIGNINPASSWORD_VIEW);
+        FATHER.showView(MainFrame.SIGNIN_PASSWORD_VIEW);
     }//GEN-LAST:event_returnButtonMouseClicked
 
     private void logInLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logInLabelMouseClicked
@@ -288,7 +288,7 @@ public class SigninBioPane extends javax.swing.JPanel {
     }//GEN-LAST:event_logInLabelMouseClicked
 
     private void continueLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_continueLabelMouseClicked
-        FATHER.showView(MainFrame.SIGNINPICTURE_VIEW);
+        FATHER.showView(MainFrame.SIGNIN_PICTURE_VIEW);
     }//GEN-LAST:event_continueLabelMouseClicked
 
 
