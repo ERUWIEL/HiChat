@@ -143,6 +143,11 @@ public class LoginPane extends javax.swing.JPanel {
         signInLabel.setText("Sign In");
         signInLabel.setToolTipText("");
         signInLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        signInLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                signInLabelMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout signInPaneLayout = new javax.swing.GroupLayout(signInPane);
         signInPane.setLayout(signInPaneLayout);
@@ -201,6 +206,10 @@ public class LoginPane extends javax.swing.JPanel {
     private void forgotPasswordLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_forgotPasswordLabelMouseClicked
         FATHER.showView(MainFrame.RSPSW_VIEW);
     }//GEN-LAST:event_forgotPasswordLabelMouseClicked
+
+    private void signInLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signInLabelMouseClicked
+        FATHER.showView(MainFrame.HOME_DISCOVER_VIEW);
+    }//GEN-LAST:event_signInLabelMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

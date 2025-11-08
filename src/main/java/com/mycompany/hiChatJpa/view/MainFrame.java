@@ -1,5 +1,6 @@
 package com.mycompany.hiChatJpa.view;
 
+import com.mycompany.hiChatJpa.view.pages.home.HomePane;
 import com.mycompany.hiChatJpa.view.pages.login.LoginPane;
 import com.mycompany.hiChatJpa.view.pages.restorePassword.RestorePswChangePane;
 import com.mycompany.hiChatJpa.view.pages.restorePassword.RestorePswConfirmUserPane;
@@ -33,6 +34,9 @@ public class MainFrame extends javax.swing.JFrame {
     public static final String RSPSW_CONFIRM_USER_VIEW = "RESTORE_PASSWORD_CONFIRMUSER";
     public static final String RSPSW_CHANGE_VIEW = "RESTORE_PASSWORD_CHANGE";
     
+    //pantallas de inicio
+    public static final String HOME_DISCOVER_VIEW = "HOME_DISCOVER_VIEW";
+    
     /**
      * Creates new form frmPrincipal
      */
@@ -49,6 +53,8 @@ public class MainFrame extends javax.swing.JFrame {
         contentPanel.add(new RestorePswUserPane(this), RSPSW_VIEW);
         contentPanel.add(new RestorePswConfirmUserPane(this), RSPSW_CONFIRM_USER_VIEW);
         contentPanel.add(new RestorePswChangePane(this), RSPSW_CHANGE_VIEW);
+        
+        contentPanel.add(new HomePane(this), HOME_DISCOVER_VIEW);
 
         showView(LOGIN_VIEW);
     }
