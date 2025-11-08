@@ -1,5 +1,5 @@
 
-package com.mycompany.hiChatJpa.view.pages.login;
+package com.mycompany.hiChatJpa.view.pages.home;
 
 import com.mycompany.hiChatJpa.view.MainFrame;
 
@@ -7,16 +7,13 @@ import com.mycompany.hiChatJpa.view.MainFrame;
  *
  * @author gatog
  */
-public class LoginPane extends javax.swing.JPanel {
-
-    private final MainFrame FATHER;
+public class MatchPane extends javax.swing.JPanel {
     
     /**
      * Creates new form LoginPane
      * @param frame
      */
-    public LoginPane(MainFrame frame) {
-        this.FATHER = frame;
+    public MatchPane(MainFrame frame) {
         initComponents();
     }
 
@@ -29,194 +26,22 @@ public class LoginPane extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        backgroundPane = new javax.swing.JPanel();
-        tittleLabel = new javax.swing.JLabel();
-        descriptionLabel = new javax.swing.JLabel();
-        dataPane = new javax.swing.JPanel();
-        usernameLabel = new javax.swing.JLabel();
-        usernamePane = new com.mycompany.hiChatJpa.view.components.PanelRound();
-        passwordLabel = new javax.swing.JLabel();
-        passwordPane = new com.mycompany.hiChatJpa.view.components.PanelRound();
-        forgotPasswordLabel = new javax.swing.JLabel();
-        actionsPane = new javax.swing.JPanel();
-        signInPane = new com.mycompany.hiChatJpa.view.components.PanelRound();
-        signInLabel = new javax.swing.JLabel();
-        messageLabel = new javax.swing.JLabel();
-        signUpLabel = new javax.swing.JLabel();
-
+        setBackground(new java.awt.Color(22, 16, 34));
         setPreferredSize(new java.awt.Dimension(400, 600));
-
-        backgroundPane.setBackground(new java.awt.Color(22, 16, 34));
-        backgroundPane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        tittleLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 36)); // NOI18N
-        tittleLabel.setForeground(new java.awt.Color(255, 255, 255));
-        tittleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        tittleLabel.setText("HiChat!");
-        backgroundPane.add(tittleLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 400, -1));
-
-        descriptionLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
-        descriptionLabel.setForeground(new java.awt.Color(204, 204, 204));
-        descriptionLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        descriptionLabel.setText("Welcome to hichat get started or login to continue");
-        backgroundPane.add(descriptionLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 400, 20));
-
-        dataPane.setOpaque(false);
-        dataPane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        usernameLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
-        usernameLabel.setForeground(new java.awt.Color(204, 204, 204));
-        usernameLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        usernameLabel.setText("Email or Username");
-        dataPane.add(usernameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 360, 20));
-
-        usernamePane.setBackground(new java.awt.Color(47, 35, 72));
-        usernamePane.setRoundBottomLeft(25);
-        usernamePane.setRoundBottomRight(25);
-        usernamePane.setRoundTopLeft(25);
-        usernamePane.setRoundTopRight(25);
-
-        javax.swing.GroupLayout usernamePaneLayout = new javax.swing.GroupLayout(usernamePane);
-        usernamePane.setLayout(usernamePaneLayout);
-        usernamePaneLayout.setHorizontalGroup(
-            usernamePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 340, Short.MAX_VALUE)
-        );
-        usernamePaneLayout.setVerticalGroup(
-            usernamePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 40, Short.MAX_VALUE)
-        );
-
-        dataPane.add(usernamePane, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 25, 340, 40));
-
-        passwordLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
-        passwordLabel.setForeground(new java.awt.Color(204, 204, 204));
-        passwordLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        passwordLabel.setText("Password");
-        dataPane.add(passwordLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 85, 360, 20));
-
-        passwordPane.setBackground(new java.awt.Color(47, 35, 72));
-        passwordPane.setRoundBottomLeft(25);
-        passwordPane.setRoundBottomRight(25);
-        passwordPane.setRoundTopLeft(25);
-        passwordPane.setRoundTopRight(25);
-
-        javax.swing.GroupLayout passwordPaneLayout = new javax.swing.GroupLayout(passwordPane);
-        passwordPane.setLayout(passwordPaneLayout);
-        passwordPaneLayout.setHorizontalGroup(
-            passwordPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 340, Short.MAX_VALUE)
-        );
-        passwordPaneLayout.setVerticalGroup(
-            passwordPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 40, Short.MAX_VALUE)
-        );
-
-        dataPane.add(passwordPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 340, 40));
-
-        forgotPasswordLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 14)); // NOI18N
-        forgotPasswordLabel.setForeground(new java.awt.Color(189, 147, 249));
-        forgotPasswordLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        forgotPasswordLabel.setText("forgot password? ");
-        forgotPasswordLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        forgotPasswordLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                forgotPasswordLabelMouseClicked(evt);
-            }
-        });
-        dataPane.add(forgotPasswordLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 160, 130, 20));
-
-        backgroundPane.add(dataPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, 400, 190));
-
-        actionsPane.setOpaque(false);
-        actionsPane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        signInPane.setBackground(new java.awt.Color(108, 43, 238));
-        signInPane.setRoundBottomLeft(25);
-        signInPane.setRoundBottomRight(25);
-        signInPane.setRoundTopLeft(25);
-        signInPane.setRoundTopRight(25);
-
-        signInLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 16)); // NOI18N
-        signInLabel.setForeground(new java.awt.Color(255, 255, 255));
-        signInLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        signInLabel.setText("Sign In");
-        signInLabel.setToolTipText("");
-        signInLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        javax.swing.GroupLayout signInPaneLayout = new javax.swing.GroupLayout(signInPane);
-        signInPane.setLayout(signInPaneLayout);
-        signInPaneLayout.setHorizontalGroup(
-            signInPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 340, Short.MAX_VALUE)
-            .addGroup(signInPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(signInLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE))
-        );
-        signInPaneLayout.setVerticalGroup(
-            signInPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
-            .addGroup(signInPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(signInLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE))
-        );
-
-        actionsPane.add(signInPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 15, 340, 60));
-
-        messageLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 16)); // NOI18N
-        messageLabel.setForeground(new java.awt.Color(255, 255, 255));
-        messageLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        messageLabel.setText("Dont't have an account?");
-        messageLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        actionsPane.add(messageLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 220, 20));
-
-        signUpLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 16)); // NOI18N
-        signUpLabel.setForeground(new java.awt.Color(189, 147, 249));
-        signUpLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        signUpLabel.setText("Sign up");
-        signUpLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        signUpLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                signUpLabelMouseClicked(evt);
-            }
-        });
-        actionsPane.add(signUpLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, 110, 20));
-
-        backgroundPane.add(actionsPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 420, 400, 120));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(backgroundPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(backgroundPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 470, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void signUpLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signUpLabelMouseClicked
-        FATHER.showView(MainFrame.SIGNIN_VIEW);
-    }//GEN-LAST:event_signUpLabelMouseClicked
-
-    private void forgotPasswordLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_forgotPasswordLabelMouseClicked
-        FATHER.showView(MainFrame.RSPSW_VIEW);
-    }//GEN-LAST:event_forgotPasswordLabelMouseClicked
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel actionsPane;
-    private javax.swing.JPanel backgroundPane;
-    private javax.swing.JPanel dataPane;
-    private javax.swing.JLabel descriptionLabel;
-    private javax.swing.JLabel forgotPasswordLabel;
-    private javax.swing.JLabel messageLabel;
-    private javax.swing.JLabel passwordLabel;
-    private com.mycompany.hiChatJpa.view.components.PanelRound passwordPane;
-    private javax.swing.JLabel signInLabel;
-    private com.mycompany.hiChatJpa.view.components.PanelRound signInPane;
-    private javax.swing.JLabel signUpLabel;
-    private javax.swing.JLabel tittleLabel;
-    private javax.swing.JLabel usernameLabel;
-    private com.mycompany.hiChatJpa.view.components.PanelRound usernamePane;
     // End of variables declaration//GEN-END:variables
 }
