@@ -43,6 +43,11 @@ public class RestorePswChangePane extends javax.swing.JPanel {
         continueLabel = new javax.swing.JLabel();
         messageLabel = new javax.swing.JLabel();
         logInLabel = new javax.swing.JLabel();
+        dataPane = new javax.swing.JPanel();
+        usernameLabel1 = new javax.swing.JLabel();
+        textFieldPanel1 = new com.mycompany.hiChatJpa.view.components.TextFieldPanel();
+        usernameLabel2 = new javax.swing.JLabel();
+        textFieldPanel2 = new com.mycompany.hiChatJpa.view.components.TextFieldPanel();
 
         setPreferredSize(new java.awt.Dimension(400, 600));
 
@@ -189,17 +194,29 @@ public class RestorePswChangePane extends javax.swing.JPanel {
             }
         });
 
+        dataPane.setBackground(new java.awt.Color(51, 0, 153));
+        dataPane.setOpaque(false);
+        dataPane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        usernameLabel1.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        usernameLabel1.setForeground(new java.awt.Color(204, 204, 204));
+        usernameLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        usernameLabel1.setText("Confirm password");
+        dataPane.add(usernameLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, 350, 20));
+        dataPane.add(textFieldPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, -1));
+
+        usernameLabel2.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        usernameLabel2.setForeground(new java.awt.Color(204, 204, 204));
+        usernameLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        usernameLabel2.setText("New password");
+        dataPane.add(usernameLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 350, 20));
+        dataPane.add(textFieldPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
+
         javax.swing.GroupLayout backgroundPaneLayout = new javax.swing.GroupLayout(backgroundPane);
         backgroundPane.setLayout(backgroundPaneLayout);
         backgroundPaneLayout.setHorizontalGroup(
             backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(headerPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(backgroundPaneLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(stepsPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(findUserLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
             .addGroup(backgroundPaneLayout.createSequentialGroup()
                 .addGap(39, 39, 39)
                 .addGroup(backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -209,6 +226,13 @@ public class RestorePswChangePane extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(logInLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(backgroundPaneLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(stepsPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(findUserLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dataPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         backgroundPaneLayout.setVerticalGroup(
             backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -218,7 +242,9 @@ public class RestorePswChangePane extends javax.swing.JPanel {
                 .addComponent(stepsPane, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(findUserLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 352, Short.MAX_VALUE)
+                .addGap(39, 39, 39)
+                .addComponent(dataPane, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
                 .addComponent(continuePane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -259,13 +285,18 @@ public class RestorePswChangePane extends javax.swing.JPanel {
     private com.mycompany.hiChatJpa.view.components.PanelRound coloredPane4;
     private javax.swing.JLabel continueLabel;
     private com.mycompany.hiChatJpa.view.components.PanelRound continuePane;
+    private javax.swing.JPanel dataPane;
     private javax.swing.JLabel findUserLabel;
     private javax.swing.JPanel headerPane;
     private javax.swing.JLabel logInLabel;
     private javax.swing.JLabel messageLabel;
     private javax.swing.JLabel returnButton;
     private javax.swing.JPanel stepsPane;
+    private com.mycompany.hiChatJpa.view.components.TextFieldPanel textFieldPanel1;
+    private com.mycompany.hiChatJpa.view.components.TextFieldPanel textFieldPanel2;
     private javax.swing.JLabel tittleLabel;
     private javax.swing.JLabel usernameLabel;
+    private javax.swing.JLabel usernameLabel1;
+    private javax.swing.JLabel usernameLabel2;
     // End of variables declaration//GEN-END:variables
 }
