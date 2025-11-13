@@ -41,6 +41,11 @@ public class SigninPane extends javax.swing.JPanel {
         coloredPane5 = new com.mycompany.hiChatJpa.view.components.PanelRound();
         usernameLabel = new javax.swing.JLabel();
         createAccountLabel = new javax.swing.JLabel();
+        dataPane = new javax.swing.JPanel();
+        usernameLabel1 = new javax.swing.JLabel();
+        textFieldPanel1 = new com.mycompany.hiChatJpa.view.components.TextFieldPanel();
+        usernameLabel2 = new javax.swing.JLabel();
+        textFieldPanel2 = new com.mycompany.hiChatJpa.view.components.TextFieldPanel();
         continuePane = new com.mycompany.hiChatJpa.view.components.PanelRound();
         continueLabel = new javax.swing.JLabel();
         messageLabel = new javax.swing.JLabel();
@@ -179,6 +184,24 @@ public class SigninPane extends javax.swing.JPanel {
         createAccountLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         createAccountLabel.setText("Create your account");
 
+        dataPane.setBackground(new java.awt.Color(51, 0, 153));
+        dataPane.setOpaque(false);
+        dataPane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        usernameLabel1.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        usernameLabel1.setForeground(new java.awt.Color(204, 204, 204));
+        usernameLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        usernameLabel1.setText("last name");
+        dataPane.add(usernameLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 360, 20));
+        dataPane.add(textFieldPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, -1, -1));
+
+        usernameLabel2.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        usernameLabel2.setForeground(new java.awt.Color(204, 204, 204));
+        usernameLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        usernameLabel2.setText("name");
+        dataPane.add(usernameLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 360, 20));
+        dataPane.add(textFieldPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+
         continuePane.setBackground(new java.awt.Color(108, 43, 238));
         continuePane.setRoundBottomLeft(25);
         continuePane.setRoundBottomRight(25);
@@ -235,12 +258,6 @@ public class SigninPane extends javax.swing.JPanel {
             backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(headerPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(backgroundPaneLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(stepsPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(createAccountLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-            .addGroup(backgroundPaneLayout.createSequentialGroup()
                 .addGap(39, 39, 39)
                 .addGroup(backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(continuePane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -249,6 +266,13 @@ public class SigninPane extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(logInLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(backgroundPaneLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(stepsPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(createAccountLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dataPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         backgroundPaneLayout.setVerticalGroup(
             backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -258,7 +282,9 @@ public class SigninPane extends javax.swing.JPanel {
                 .addComponent(stepsPane, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(createAccountLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 352, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(dataPane, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(continuePane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -302,12 +328,17 @@ public class SigninPane extends javax.swing.JPanel {
     private javax.swing.JLabel continueLabel;
     private com.mycompany.hiChatJpa.view.components.PanelRound continuePane;
     private javax.swing.JLabel createAccountLabel;
+    private javax.swing.JPanel dataPane;
     private javax.swing.JPanel headerPane;
     private javax.swing.JLabel logInLabel;
     private javax.swing.JLabel messageLabel;
     private javax.swing.JLabel returnButton;
     private javax.swing.JPanel stepsPane;
+    private com.mycompany.hiChatJpa.view.components.TextFieldPanel textFieldPanel1;
+    private com.mycompany.hiChatJpa.view.components.TextFieldPanel textFieldPanel2;
     private javax.swing.JLabel tittleLabel;
     private javax.swing.JLabel usernameLabel;
+    private javax.swing.JLabel usernameLabel1;
+    private javax.swing.JLabel usernameLabel2;
     // End of variables declaration//GEN-END:variables
 }

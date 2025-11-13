@@ -11,7 +11,8 @@ import java.util.regex.Pattern;
 public class TextFieldPanel extends javax.swing.JPanel {
 
     public static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]{1,25}@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-    
+    public static final String NAME_REGEX = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+(?:[\\s-][a-zA-ZáéíóúÁÉÍÓÚñÑ]+)*$";
+    public static final String DATE_REGEX = "^\\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2}$";
     
     private String regex;
     private String errorMessage;
@@ -58,7 +59,7 @@ public class TextFieldPanel extends javax.swing.JPanel {
 
         inputTxt.setBackground(new java.awt.Color(47, 35, 72));
         inputTxt.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 12)); // NOI18N
-        inputTxt.setForeground(new java.awt.Color(255, 255, 255));
+        inputTxt.setForeground(new java.awt.Color(158, 140, 185));
         inputTxt.setText(this.message);
         inputTxt.setBorder(null);
         inputTxt.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -111,14 +112,17 @@ public class TextFieldPanel extends javax.swing.JPanel {
         String input = inputTxt.getText();
         if (input.isEmpty()) {
             inputTxt.setText(message);
+            inputTxt.setForeground(new Color(158, 140, 185));
         } else {
             if (this.regex != null) {
                 Pattern pattern = Pattern.compile(this.regex);
                 Matcher matcher = pattern.matcher(input);
                 if (matcher.matches()) {
                     errorDescriptionLabel.setVisible(false);
+                    inputTxt.setForeground(Color.WHITE);
                 }else {
                     this.inputBorderPane.setBackground(Color.RED);
+                    inputTxt.setForeground(Color.RED);
                     errorDescriptionLabel.setVisible(true);
                 }
             }
