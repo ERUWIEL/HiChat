@@ -14,9 +14,9 @@
       <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/HiChat"/>
       <property name="jakarta.persistence.jdbc.user" value="root"/>
       <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-      <property name="jakarta.persistence.jdbc.password" value="@Efj-300705/?"/>
+      <property name="jakarta.persistence.jdbc.password" value="QWERTY"/>
       <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
-      <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
+      <property name="jakarta.persistence.schema-generation.database.action" value="update"/>
     </properties>
   </persistence-unit>
 </persistence>
