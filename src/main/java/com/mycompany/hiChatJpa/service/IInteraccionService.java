@@ -41,6 +41,28 @@ public interface IInteraccionService {
      */
     void bloquearUsuario(Long idUsuarioBloqueador, Long idUsuarioBloqueado) throws Exception;
 
+<<<<<<< HEAD
+    Interaccion buscarPorId(Long id);
+
+    List<Interaccion> listarInteracciones();
+
+    List<Interaccion> listarPorEmisor(Usuario usuario);
+
+    List<Interaccion> listarPorReceptor(Usuario usuario);
+
+    List<Interaccion> listarPorTipo(TipoInteraccion tipo);
+    
+    
+    Boolean darLike(Long idUsuario) throws Exception;
+
+    Boolean darDislike(Long idUsuario) throws Exception;
+
+    Boolean darSuperLike(Long idUsuario) throws Exception;
+
+    Boolean bloquearUsuario(Long idUsuario) throws Exception;
+
+    Boolean desbloquearUsuario(Long idUsuario) throws Exception;
+=======
     /**
      * Desbloquea a un usuario
      * Verifica que exista un bloqueo previo
@@ -50,4 +72,5 @@ public interface IInteraccionService {
      * @throws Exception si hay error en la validación
      */
     void desbloquearUsuario(Long idUsuarioBloqueador, Long idUsuarioBloqueado) throws Exception;
+>>>>>>> 29b7ddc5fc4b24b6e43f8643730bcfc27af6c560
 }

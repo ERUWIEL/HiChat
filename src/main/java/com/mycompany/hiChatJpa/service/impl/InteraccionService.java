@@ -371,5 +371,66 @@ public class InteraccionService implements IInteraccionService {
             System.err.println("Error al deshabilitar chat: " + e.getMessage());
         }
     }
+
+
+@Override
+public Boolean darLike(Long idUsuario) throws Exception {
+    if (idUsuario == null || idUsuario <= 0) {
+        throw new Exception("ID de usuario inválido para dar like.");
+    }
+
+    System.out.println("👍 Like enviado al usuario con ID: " + idUsuario);
+
+    return true;
+}
+
+@Override
+public Boolean darDislike(Long idUsuario) throws Exception {
+    if (idUsuario == null || idUsuario <= 0) {
+        throw new Exception("ID de usuario inválido para dar dislike.");
+    }
+
+    System.out.println("👎 Dislike enviado al usuario con ID: " + idUsuario);
+
+    return true;
+}
+
+@Override
+public Boolean darSuperLike(Long idUsuario) throws Exception {
+    if (idUsuario == null || idUsuario <= 0) {
+        throw new Exception("ID de usuario inválido para dar super like.");
+    }
+
+    System.out.println("💖 Super Like enviado al usuario con ID: " + idUsuario);
+
+    // Aquí podrías verificar si hay un like recíproco
+    System.out.println("Verificando si existe un like del otro usuario...");
+    return true;
+}
+
+@Override
+public Boolean bloquearUsuario(Long idUsuario) throws Exception {
+    if (idUsuario == null || idUsuario <= 0) {
+        throw new Exception("ID de usuario inválido para bloquear.");
+    }
+
+    System.out.println("⛔ Usuario bloqueado con ID: " + idUsuario);
+    System.out.println("Chat deshabilitado para ambos usuarios.");
+
+    return true;
+}
+
+@Override
+public Boolean desbloquearUsuario(Long idUsuario) throws Exception {
+    if (idUsuario == null || idUsuario <= 0) {
+        throw new Exception("ID de usuario inválido para desbloquear.");
+    }
+
+    System.out.println("🔓 Usuario desbloqueado con ID: " + idUsuario);
+    System.out.println("Chat reactivado.");
+
+    return true;
+}
+
 }
 
