@@ -68,8 +68,10 @@ public class LoginPane extends javax.swing.JPanel {
         usernameLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
         usernameLabel.setForeground(new java.awt.Color(204, 204, 204));
         usernameLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        usernameLabel.setText("Email or Username");
+        usernameLabel.setText("Email");
         dataPane.add(usernameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 360, 20));
+
+        userInputPane.setMessage("enter your email");
         dataPane.add(userInputPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
 
         passwordLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
@@ -77,6 +79,8 @@ public class LoginPane extends javax.swing.JPanel {
         passwordLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         passwordLabel.setText("Password");
         dataPane.add(passwordLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 85, 360, 20));
+
+        passwordInputPane.setMessage("enter your password");
         dataPane.add(passwordInputPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
 
         forgotPasswordLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 14)); // NOI18N

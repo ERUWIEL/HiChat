@@ -10,9 +10,11 @@ import java.util.regex.Pattern;
  */
 public class TextFieldPanel extends javax.swing.JPanel {
 
-    public static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]{1,25}@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-    public static final String NAME_REGEX = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+(?:[\\s-][a-zA-ZáéíóúÁÉÍÓÚñÑ]+)*$";
-    public static final String DATE_REGEX = "^\\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2}$";
+    public static final String BIOGRAPHY_REGEX = "^(?=.{1,500}$)";
+    public static final String PASSWORD_REGEX = "^(?=.{1,255}$)";
+    public static final String EMAIL_REGEX = "^(?=.{1,100}$)[a-zA-Z0-9._%+-]{1,25}@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+    public static final String NAME_REGEX = "^(?=.{1,50}$)[a-zA-ZáéíóúÁÉÍÓÚñÑ]+(?:[\\s-][a-zA-ZáéíóúÁÉÍÓÚñÑ]+)*$";
+    public static final String DATE_REGEX =  "^(19|20)\\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$";;
     
     private String regex;
     private String errorMessage;
@@ -113,11 +115,13 @@ public class TextFieldPanel extends javax.swing.JPanel {
         if (input.isEmpty()) {
             inputTxt.setText(message);
             inputTxt.setForeground(new Color(158, 140, 185));
+            errorDescriptionLabel.setVisible(false);
         } else {
             if (this.regex != null) {
                 Pattern pattern = Pattern.compile(this.regex);
                 Matcher matcher = pattern.matcher(input);
                 if (matcher.matches()) {
+                    this.inputBorderPane.setBackground(Color.GREEN);
                     errorDescriptionLabel.setVisible(false);
                     inputTxt.setForeground(Color.WHITE);
                 }else {

@@ -178,7 +178,7 @@ public class SigninPicturePane extends javax.swing.JPanel {
         createAccountLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 24)); // NOI18N
         createAccountLabel.setForeground(new java.awt.Color(255, 255, 255));
         createAccountLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        createAccountLabel.setText("Say Whiskeey!");
+        createAccountLabel.setText("Find Something Cool");
 
         continuePane.setBackground(new java.awt.Color(108, 43, 238));
         continuePane.setRoundBottomLeft(25);

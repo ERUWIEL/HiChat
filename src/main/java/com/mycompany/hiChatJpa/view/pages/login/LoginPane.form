@@ -99,7 +99,7 @@
                   <Color blue="cc" green="cc" red="cc" type="rgb"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="text" type="java.lang.String" value="Email or Username"/>
+                <Property name="text" type="java.lang.String" value="Email"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -108,6 +108,9 @@
               </Constraints>
             </Component>
             <Component class="com.mycompany.hiChatJpa.view.components.TextFieldPanel" name="userInputPane">
+              <Properties>
+                <Property name="message" type="java.lang.String" value="enter your email"/>
+              </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new TextFieldPanel(TextFieldPanel.EMAIL_REGEX, &quot;invalid type of email&quot;)"/>
               </AuxValues>
@@ -135,6 +138,9 @@
               </Constraints>
             </Component>
             <Component class="com.mycompany.hiChatJpa.view.components.TextFieldPanel" name="passwordInputPane">
+              <Properties>
+                <Property name="message" type="java.lang.String" value="enter your password"/>
+              </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                   <AbsoluteConstraints x="30" y="110" width="-1" height="-1"/>
