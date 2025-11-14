@@ -1,7 +1,7 @@
 
 package com.mycompany.hiChatJpa.view.pages.home;
 
-import com.mycompany.hiChatJpa.view.MainFrame;
+import javax.swing.JPanel;
 
 /**
  *
@@ -12,9 +12,9 @@ public class ProfilePane extends javax.swing.JPanel {
     
     /**
      * Creates new form LoginPane
-     * @param frame
+     * @param panel
      */
-    public ProfilePane(MainFrame frame) {
+    public ProfilePane(JPanel panel) {
         initComponents();
     }
 

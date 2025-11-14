@@ -1,7 +1,7 @@
 
 package com.mycompany.hiChatJpa.view.pages.home;
 
-import com.mycompany.hiChatJpa.view.MainFrame;
+import javax.swing.JPanel;
 
 /**
  *
@@ -11,9 +11,9 @@ public class MatchPane extends javax.swing.JPanel {
     
     /**
      * Creates new form LoginPane
-     * @param frame
+     * @param panel
      */
-    public MatchPane(MainFrame frame) {
+    public MatchPane(JPanel panel) {
         initComponents();
     }
 
@@ -26,7 +26,7 @@ public class MatchPane extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setBackground(new java.awt.Color(22, 16, 34));
+        setBackground(new java.awt.Color(255, 255, 102));
         setPreferredSize(new java.awt.Dimension(400, 600));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -37,7 +37,7 @@ public class MatchPane extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 470, Short.MAX_VALUE)
+            .addGap(0, 480, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 

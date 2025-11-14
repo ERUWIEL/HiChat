@@ -1,7 +1,7 @@
 package com.mycompany.hiChatJpa.view.pages.home;
 
 import com.mycompany.hiChatJpa.view.MainFrame;
-import java.awt.Color;
+import java.awt.CardLayout;
 
 /**
  *
@@ -20,6 +20,11 @@ public class HomePane extends javax.swing.JPanel {
     public HomePane(MainFrame frame) {
         this.FATHER = frame;
         initComponents();
+        contentPane.add(new DiscoverPane(contentPane), "DISCOVER");
+        contentPane.add(new MatchPane(contentPane), "MATCH");
+        contentPane.add(new ChatPane(contentPane), "CHAT");
+        contentPane.add(new ProfilePane(contentPane), "PROFILE");
+
         this.currentStatus = "DISCOVER";
         discoverLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/purple-discover.png")));
     }
@@ -55,21 +60,15 @@ public class HomePane extends javax.swing.JPanel {
         settingsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         settingsLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/white-settings.png"))); // NOI18N
         settingsLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        settingsLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                settingsLabelMouseClicked(evt);
+            }
+        });
         backgroundPane.add(settingsLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 0, 40, 60));
 
         contentPane.setBackground(new java.awt.Color(204, 255, 102));
-
-        javax.swing.GroupLayout contentPaneLayout = new javax.swing.GroupLayout(contentPane);
-        contentPane.setLayout(contentPaneLayout);
-        contentPaneLayout.setHorizontalGroup(
-            contentPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        contentPaneLayout.setVerticalGroup(
-            contentPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 480, Short.MAX_VALUE)
-        );
-
+        contentPane.setLayout(new java.awt.CardLayout());
         backgroundPane.add(contentPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 400, 480));
 
         dashboard.setOpaque(false);
@@ -130,7 +129,7 @@ public class HomePane extends javax.swing.JPanel {
             disableAll();
             discoverLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/purple-discover.png")));
             currentStatus = "DISCOVER";
-            contentPane.setBackground(Color.red);
+            showInternView();
         }
     }//GEN-LAST:event_discoverLabelMouseClicked
 
@@ -139,7 +138,7 @@ public class HomePane extends javax.swing.JPanel {
             disableAll();
             matchLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/purple-heart.png")));
             currentStatus = "MATCH";
-            contentPane.setBackground(Color.blue);
+            showInternView();
         }
     }//GEN-LAST:event_matchLabelMouseClicked
 
@@ -148,7 +147,7 @@ public class HomePane extends javax.swing.JPanel {
             disableAll();
             chatLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/purple-chat.png")));
             currentStatus = "CHAT";
-            contentPane.setBackground(Color.yellow);
+            showInternView();
         }
     }//GEN-LAST:event_chatLabelMouseClicked
 
@@ -157,9 +156,18 @@ public class HomePane extends javax.swing.JPanel {
             disableAll();
             profileLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/purple-profile.png")));
             currentStatus = "PROFILE";
-            contentPane.setBackground(Color.orange);
+            showInternView();
         }
     }//GEN-LAST:event_profileLabelMouseClicked
+
+    private void settingsLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_settingsLabelMouseClicked
+        FATHER.showView(MainFrame.LOGIN_VIEW);
+    }//GEN-LAST:event_settingsLabelMouseClicked
+
+    public final void showInternView() {
+        CardLayout cl = (CardLayout) contentPane.getLayout();
+        cl.show(contentPane, currentStatus);
+    }
 
     private void disableAll() {
         discoverLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/grey-discover.png")));
