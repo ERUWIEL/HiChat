@@ -144,4 +144,8 @@ public class TextFieldPanel extends javax.swing.JPanel {
         this.message = message;
         this.inputTxt.setText(message);
     }
+    
+    public String getText(){
+        return this.inputTxt.getText();
+    }
 }

@@ -1,8 +1,11 @@
-
 package com.mycompany.hiChatJpa.view.pages.login;
 
+import com.mycompany.hiChatJpa.entitys.Usuario;
+import com.mycompany.hiChatJpa.service.IUsuarioService;
+import com.mycompany.hiChatJpa.service.impl.UsuarioService;
 import com.mycompany.hiChatJpa.view.MainFrame;
 import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -11,13 +14,16 @@ import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
 public class LoginPane extends javax.swing.JPanel {
 
     private final MainFrame FATHER;
-    
+    private final IUsuarioService USUARIO_SERVICE;
+
     /**
      * Creates new form LoginPane
+     *
      * @param frame
      */
     public LoginPane(MainFrame frame) {
         this.FATHER = frame;
+        this.USUARIO_SERVICE = new UsuarioService();
         initComponents();
     }
 
@@ -177,7 +183,19 @@ public class LoginPane extends javax.swing.JPanel {
     }//GEN-LAST:event_forgotPasswordLabelMouseClicked
 
     private void signInLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signInLabelMouseClicked
-        FATHER.showView(MainFrame.HOME_DISCOVER_VIEW);
+        String email = userInputPane.getText();
+        String password = passwordInputPane.getText();
+        Usuario usuario = new Usuario.Builder()
+                .correoElectronico(email)
+                .contrasena(password)
+                .build();
+
+        try {
+            USUARIO_SERVICE.iniciarSesion(usuario);
+            FATHER.showView(MainFrame.HOME_DISCOVER_VIEW);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(FATHER,"email or password dont match with a real user","login error",JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_signInLabelMouseClicked
 
 

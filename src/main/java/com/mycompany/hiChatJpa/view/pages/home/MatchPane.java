@@ -26,7 +26,7 @@ public class MatchPane extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setBackground(new java.awt.Color(255, 255, 102));
+        setBackground(new java.awt.Color(22, 16, 34));
         setPreferredSize(new java.awt.Dimension(400, 600));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

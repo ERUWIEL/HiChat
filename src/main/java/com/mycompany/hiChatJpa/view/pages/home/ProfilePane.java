@@ -28,7 +28,6 @@ public class ProfilePane extends javax.swing.JPanel {
     private void initComponents() {
 
         tittleLabel = new javax.swing.JLabel();
-        textFieldPanel1 = new com.mycompany.hiChatJpa.view.components.TextFieldPanel();
         panelRound1 = new com.mycompany.hiChatJpa.view.components.PanelRound();
 
         setBackground(new java.awt.Color(22, 16, 34));
@@ -38,33 +37,32 @@ public class ProfilePane extends javax.swing.JPanel {
         tittleLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 18)); // NOI18N
         tittleLabel.setForeground(new java.awt.Color(255, 255, 255));
         tittleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        tittleLabel.setText("nombre perfil");
-        add(tittleLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 230, 220, -1));
-        add(textFieldPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, -1, -1));
+        tittleLabel.setText("option not supported yet");
+        add(tittleLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 148, 270, 40));
 
-        panelRound1.setRoundBottomLeft(360);
-        panelRound1.setRoundBottomRight(360);
-        panelRound1.setRoundTopLeft(360);
-        panelRound1.setRoundTopRight(360);
+        panelRound1.setBackground(new java.awt.Color(0, 102, 204));
+        panelRound1.setRoundBottomLeft(100);
+        panelRound1.setRoundBottomRight(100);
+        panelRound1.setRoundTopLeft(100);
+        panelRound1.setRoundTopRight(100);
 
         javax.swing.GroupLayout panelRound1Layout = new javax.swing.GroupLayout(panelRound1);
         panelRound1.setLayout(panelRound1Layout);
         panelRound1Layout.setHorizontalGroup(
             panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 270, Short.MAX_VALUE)
+            .addGap(0, 290, Short.MAX_VALUE)
         );
         panelRound1Layout.setVerticalGroup(
             panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 220, Short.MAX_VALUE)
+            .addGap(0, 60, Short.MAX_VALUE)
         );
 
-        add(panelRound1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, 270, 220));
+        add(panelRound1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 140, 290, 60));
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.mycompany.hiChatJpa.view.components.PanelRound panelRound1;
-    private com.mycompany.hiChatJpa.view.components.TextFieldPanel textFieldPanel1;
     private javax.swing.JLabel tittleLabel;
     // End of variables declaration//GEN-END:variables
 }

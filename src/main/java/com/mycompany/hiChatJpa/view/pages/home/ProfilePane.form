@@ -35,43 +35,39 @@
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="nombre perfil"/>
+        <Property name="text" type="java.lang.String" value="option not supported yet"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="90" y="230" width="220" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="com.mycompany.hiChatJpa.view.components.TextFieldPanel" name="textFieldPanel1">
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="40" y="280" width="-1" height="-1"/>
+          <AbsoluteConstraints x="70" y="148" width="270" height="40"/>
         </Constraint>
       </Constraints>
     </Component>
     <Container class="com.mycompany.hiChatJpa.view.components.PanelRound" name="panelRound1">
       <Properties>
-        <Property name="roundBottomLeft" type="int" value="360"/>
-        <Property name="roundBottomRight" type="int" value="360"/>
-        <Property name="roundTopLeft" type="int" value="360"/>
-        <Property name="roundTopRight" type="int" value="360"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="cc" green="66" red="0" type="rgb"/>
+        </Property>
+        <Property name="roundBottomLeft" type="int" value="100"/>
+        <Property name="roundBottomRight" type="int" value="100"/>
+        <Property name="roundTopLeft" type="int" value="100"/>
+        <Property name="roundTopRight" type="int" value="100"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="70" y="10" width="270" height="220"/>
+          <AbsoluteConstraints x="60" y="140" width="290" height="60"/>
         </Constraint>
       </Constraints>
 
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="270" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="290" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="220" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="60" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
