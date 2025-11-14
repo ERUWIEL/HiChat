@@ -26,4 +26,15 @@ public interface IInteraccionService {
     List<Interaccion> listarPorReceptor(Usuario usuario);
 
     List<Interaccion> listarPorTipo(TipoInteraccion tipo);
+    
+    
+    Boolean darLike(Long idUsuario) throws Exception;
+
+    Boolean darDislike(Long idUsuario) throws Exception;
+
+    Boolean darSuperLike(Long idUsuario) throws Exception;
+
+    Boolean bloquearUsuario(Long idUsuario) throws Exception;
+
+    Boolean desbloquearUsuario(Long idUsuario) throws Exception;
 }
