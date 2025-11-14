@@ -4,6 +4,7 @@
  */
 
 import com.mycompany.hiChatJpa.entitys.Usuario;
+import com.mycompany.hiChatJpa.service.impl.UsuarioService;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
