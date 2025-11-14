@@ -52,6 +52,7 @@ public class InteraccionService implements IInteraccionService {
      * @return true si se crea un match, false si solo se registra el like
      * @throws Exception si hay error en la validación
      */
+    @Override
     public boolean darLike(Long idUsuarioEmisor, Long idUsuarioReceptor) throws Exception {
         // ============ VALIDACIONES ============
         if (idUsuarioEmisor == null || idUsuarioEmisor <= 0) {
@@ -122,6 +123,7 @@ public class InteraccionService implements IInteraccionService {
      * @param idUsuarioReceptor ID del usuario que recibe el dislike
      * @throws Exception si hay error en la validación
      */
+    @Override
     public void darDislike(Long idUsuarioEmisor, Long idUsuarioReceptor) throws Exception {
         // ============ VALIDACIONES ============
         if (idUsuarioEmisor == null || idUsuarioEmisor <= 0) {
@@ -179,6 +181,7 @@ public class InteraccionService implements IInteraccionService {
      * @param idUsuarioBloqueado ID del usuario a bloquear
      * @throws Exception si hay error en la validación
      */
+    @Override
     public void bloquearUsuario(Long idUsuarioBloqueador, Long idUsuarioBloqueado) throws Exception {
         // ============ VALIDACIONES ============
         if (idUsuarioBloqueador == null || idUsuarioBloqueador <= 0) {
