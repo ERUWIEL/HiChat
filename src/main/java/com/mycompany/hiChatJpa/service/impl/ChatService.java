@@ -59,6 +59,7 @@ public class ChatService implements IChatService {
      * @param nuevoNombre Nuevo nombre para el chat
      * @throws Exception si hay error en la validación
      */
+    @Override
     public void cambiarAliasDelChat(Long chatId, String nuevoNombre) throws Exception {
         
         String nombreLimpio = nuevoNombre.trim();
@@ -113,6 +114,7 @@ public class ChatService implements IChatService {
      * @return Lista de chats del usuario
      * @throws Exception si hay error
      */
+    @Override
     public List<Chat> cargarChatsDelUsuario(Usuario usuario) throws Exception {
         // Validar usuario
         if (usuario == null || usuario.getIdUsuario() == null) {
@@ -164,6 +166,7 @@ public class ChatService implements IChatService {
      * @param mensaje Mensaje a enviar
      * @throws Exception si hay error en la validación
      */
+    @Override
     public void mandarMensaje(Chat chat, Mensaje mensaje) throws Exception {
         // ============ VALIDACIONES DEL CHAT ============
         if (chat == null || chat.getIdChat() == null) {

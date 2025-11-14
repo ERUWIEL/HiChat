@@ -14,6 +14,7 @@ import com.mycompany.hiChatJpa.service.IUsuarioService;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import javax.swing.JLabel;
 
 
 /**
@@ -28,9 +29,8 @@ public class UsuarioService implements IUsuarioService {
     private final IInteraccionDAO interaccionDAO;
 
     // Patrón para validar email
-    private static final String EMAIL_PATTERN = 
-        "^[A-Za-z0-9+_.-]+@(.+)$";
-    private static final Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+    private static final String EMAIL_PATTERN = "^[A-Za-z0-9+_.-]+@(.+)$";
+    private static final Pattern PATTERN = Pattern.compile(EMAIL_PATTERN);
 
     public UsuarioService() {
         this.usuarioDAO = new UsuarioDAO();
@@ -46,7 +46,7 @@ public class UsuarioService implements IUsuarioService {
      * @return true si es válido
      */
     private boolean validarEmail(String email) {
-        return pattern.matcher(email).matches();
+        return PATTERN.matcher(email).matches();
     }
 
     /**
@@ -66,6 +66,7 @@ public class UsuarioService implements IUsuarioService {
      * @return Usuario autenticado o null si falla
      * @throws Exception si hay error en la validación
      */
+    @Override
     public Usuario iniciarSesion(Usuario usuario) throws Exception {
         // Validar datos de entrada
         if (usuario == null) {
@@ -234,6 +235,7 @@ public class UsuarioService implements IUsuarioService {
      * @param nuevaContrasenia Nueva contraseña
      * @throws Exception si hay error en la validación
      */
+    @Override
     public void reestablecerContrasenia(Long idUsuario, String nuevaContrasenia) throws Exception {
         // Validar ID
         if (idUsuario == null || idUsuario <= 0) {
@@ -271,7 +273,6 @@ public class UsuarioService implements IUsuarioService {
      * Busca usuarios por nombre
      * @param nombre Nombre o parte del nombre a buscar
      * @return Lista de usuarios encontrados
-     * @throws Exception si hay error
      */
     @Override
     public List<Usuario> buscarPorNombreCompleto(String nombre, String apellidoPaterno) {
@@ -292,6 +293,7 @@ public class UsuarioService implements IUsuarioService {
      * @param nombre Nombre o parte del nombre
      * @return Lista de usuarios encontrados
      */
+    @Override
     public List<Usuario> fitrarUsuariosPorNombre(String nombre) throws Exception {
         // Validar datos de entrada
         if (nombre == null || nombre.trim().isEmpty()) {
@@ -326,12 +328,13 @@ public class UsuarioService implements IUsuarioService {
      * @return Lista de usuarios pretendientes
      * @throws Exception si hay error
      */
+    @Override
     public List<Usuario> mostrarPretendientes(Long idUsuarioActual) throws Exception {
         // Validar ID
         if (idUsuarioActual == null || idUsuarioActual <= 0) {
             throw new Exception("ID de usuario inválido.");
         }
-
+        
         // Verificar que existe el usuario actual
         Usuario usuarioActual = usuarioDAO.buscar(idUsuarioActual);
         if (usuarioActual == null) {
@@ -429,4 +432,9 @@ public class UsuarioService implements IUsuarioService {
         usuarioDAO.eliminar(id);
     }
 
+    public JLabel crearImagen(){
+        JLabel img = new JLabel();
+        return img;
+    }
+    
 }
