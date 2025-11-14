@@ -11,6 +11,10 @@ import com.mycompany.hiChatJpa.view.pages.signin.SigninPane;
 import com.mycompany.hiChatJpa.view.pages.signin.SigninPasswordPane;
 import com.mycompany.hiChatJpa.view.pages.signin.SigninPicturePane;
 import java.awt.CardLayout;
+import javax.swing.ImageIcon;
+import com.formdev.flatlaf.FlatDarkLaf;
+import java.awt.Color;
+import javax.swing.UIManager;
 
 /**
  * clase gestora de las ventanas
@@ -33,15 +37,30 @@ public class MainFrame extends javax.swing.JFrame {
     public static final String RSPSW_VIEW = "RESTORE_PASSWORD";
     public static final String RSPSW_CONFIRM_USER_VIEW = "RESTORE_PASSWORD_CONFIRMUSER";
     public static final String RSPSW_CHANGE_VIEW = "RESTORE_PASSWORD_CHANGE";
-    
+
     //pantallas de inicio
     public static final String HOME_DISCOVER_VIEW = "HOME_DISCOVER_VIEW";
-    
+
     /**
      * Creates new form frmPrincipal
      */
     public MainFrame() {
-        initComponents();        
+        try {
+            java.net.URL iconURL = getClass().getResource("/icons/main-logo-yellow.png");
+            UIManager.setLookAndFeel(new FlatDarkLaf());
+            UIManager.put("TitlePane.background", new Color(40, 42, 54)); // Dracula
+            UIManager.put("TitlePane.foreground", Color.WHITE);
+            if (iconURL != null) {
+                ImageIcon icon = new ImageIcon(iconURL);
+                setIconImage(icon.getImage());
+            } else {
+                System.err.println("No se encontró el ícono");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        initComponents();
         //inicializacion de las ventanas
         contentPanel.add(new LoginPane(this), LOGIN_VIEW);
         contentPanel.add(new SigninPane(this), SIGNIN_VIEW);
@@ -49,11 +68,11 @@ public class MainFrame extends javax.swing.JFrame {
         contentPanel.add(new SigninPasswordPane(this), SIGNIN_PASSWORD_VIEW);
         contentPanel.add(new SigninBioPane(this), SIGNIN_BIO_VIEW);
         contentPanel.add(new SigninPicturePane(this), SIGNIN_PICTURE_VIEW);
-        
+
         contentPanel.add(new RestorePswUserPane(this), RSPSW_VIEW);
         contentPanel.add(new RestorePswConfirmUserPane(this), RSPSW_CONFIRM_USER_VIEW);
         contentPanel.add(new RestorePswChangePane(this), RSPSW_CHANGE_VIEW);
-        
+
         contentPanel.add(new HomePane(this), HOME_DISCOVER_VIEW);
 
         showView(LOGIN_VIEW);
@@ -114,6 +133,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
         //</editor-fold>
         /* Create and display the form */
+        FlatDarkLaf.setup();
         java.awt.EventQueue.invokeLater(() -> new MainFrame().setVisible(true));
     }
 
@@ -124,7 +144,7 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public final void showView(String viewName) {
         System.out.println("mostrando " + viewName);
-        
+
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, viewName);
     }

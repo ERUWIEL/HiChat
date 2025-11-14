@@ -11,12 +11,37 @@ import java.util.List;
  */
 public interface IInteraccionService {
 
-    void registrarInteraccion(Interaccion interaccion) throws Exception;
+    /**
+     * Da un like a un usuario
+     * Si el usuario receptor también dio like, se genera automáticamente un match
+     * 
+     * @param idUsuarioEmisor ID del usuario que da el like
+     * @param idUsuarioReceptor ID del usuario que recibe el like
+     * @return true si se crea un match, false si solo se registra el like
+     * @throws Exception si hay error en la validación
+     */
+    boolean darLike(Long idUsuarioEmisor, Long idUsuarioReceptor) throws Exception;
 
-    void actualizarInteraccion(Interaccion interaccion) throws Exception;
+    /**
+     * Da un dislike a un usuario
+     * 
+     * @param idUsuarioEmisor ID del usuario que da el dislike
+     * @param idUsuarioReceptor ID del usuario que recibe el dislike
+     * @throws Exception si hay error en la validación
+     */
+    void darDislike(Long idUsuarioEmisor, Long idUsuarioReceptor) throws Exception;
 
-    void eliminarInteraccion(Long id) throws Exception;
+    /**
+     * Bloquea a un usuario
+     * Después de bloquear, el chat se deshabilita para ambos
+     * 
+     * @param idUsuarioBloqueador ID del usuario que bloquea
+     * @param idUsuarioBloqueado ID del usuario a bloquear
+     * @throws Exception si hay error en la validación
+     */
+    void bloquearUsuario(Long idUsuarioBloqueador, Long idUsuarioBloqueado) throws Exception;
 
+<<<<<<< HEAD
     Interaccion buscarPorId(Long id);
 
     List<Interaccion> listarInteracciones();
@@ -37,4 +62,15 @@ public interface IInteraccionService {
     Boolean bloquearUsuario(Long idUsuario) throws Exception;
 
     Boolean desbloquearUsuario(Long idUsuario) throws Exception;
+=======
+    /**
+     * Desbloquea a un usuario
+     * Verifica que exista un bloqueo previo
+     * 
+     * @param idUsuarioBloqueador ID del usuario que desbloquea
+     * @param idUsuarioBloqueado ID del usuario a desbloquear
+     * @throws Exception si hay error en la validación
+     */
+    void desbloquearUsuario(Long idUsuarioBloqueador, Long idUsuarioBloqueado) throws Exception;
+>>>>>>> 29b7ddc5fc4b24b6e43f8643730bcfc27af6c560
 }

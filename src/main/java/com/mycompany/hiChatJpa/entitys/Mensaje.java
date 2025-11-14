@@ -31,7 +31,7 @@ import java.time.LocalDateTime;
         query = "SELECT m FROM Mensaje m WHERE m.chat = :chat ORDER BY m.fechaEnvio DESC"
     ),
     @NamedQuery(
-        name = "Mensaje.findNoVistosByUsuario",
+        name = "Mensaje.findNoVistosPorUsuario",
         query = "SELECT m FROM Mensaje m WHERE m.chat IN (SELECT c FROM Chat c JOIN c.participantes p WHERE p = :usuario) AND m.usuarioEmisor <> :usuario AND m.estaVisto = false ORDER BY m.fechaEnvio DESC"
     )
 })

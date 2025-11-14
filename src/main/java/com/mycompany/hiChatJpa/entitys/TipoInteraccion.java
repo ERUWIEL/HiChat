@@ -6,6 +6,5 @@ package com.mycompany.hiChatJpa.entitys;
  */
 public enum TipoInteraccion {
     ME_GUSTA,
-    NO_ME_INTERESA,
-    SUPER_LIKE
+    NO_ME_INTERESA
 }

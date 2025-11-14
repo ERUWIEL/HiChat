@@ -1,12 +1,25 @@
 
 package com.mycompany.hiChatJpa.service.impl;
 
+import com.mycompany.hiChatJpa.dao.IBloqueoDAO;
+import com.mycompany.hiChatJpa.dao.IChatDAO;
 import com.mycompany.hiChatJpa.dao.IInteraccionDAO;
+import com.mycompany.hiChatJpa.dao.IMatchDAO;
+import com.mycompany.hiChatJpa.dao.IUsuarioDAO;
+import com.mycompany.hiChatJpa.dao.impl.BloqueoDAO;
+import com.mycompany.hiChatJpa.dao.impl.ChatDAO;
 import com.mycompany.hiChatJpa.dao.impl.InteraccionDAO;
+import com.mycompany.hiChatJpa.dao.impl.MatchDAO;
+import com.mycompany.hiChatJpa.dao.impl.UsuarioDAO;
+import com.mycompany.hiChatJpa.entitys.Bloqueo;
+import com.mycompany.hiChatJpa.entitys.Chat;
 import com.mycompany.hiChatJpa.entitys.Interaccion;
+import com.mycompany.hiChatJpa.entitys.Match;
 import com.mycompany.hiChatJpa.entitys.TipoInteraccion;
 import com.mycompany.hiChatJpa.entitys.Usuario;
 import com.mycompany.hiChatJpa.service.IInteraccionService;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -17,193 +30,346 @@ import java.util.List;
 public class InteraccionService implements IInteraccionService {
 
     private final IInteraccionDAO interaccionDAO;
+    private final IUsuarioDAO usuarioDAO;
+    private final IMatchDAO matchDAO;
+    private final IBloqueoDAO bloqueoDAO;
+    private final IChatDAO chatDAO;
 
     public InteraccionService() {
         this.interaccionDAO = new InteraccionDAO();
+        this.usuarioDAO = new UsuarioDAO();
+        this.matchDAO = new MatchDAO();
+        this.bloqueoDAO = new BloqueoDAO();
+        this.chatDAO = new ChatDAO();
     }
 
     /**
-     * método que valida y registra una interaccion
-     * @param interaccion
-     * @throws Exception 
+     * Da un like a un usuario
+     * Si el usuario receptor también dio like, se genera automáticamente un match
+     * 
+     * @param idUsuarioEmisor ID del usuario que da el like
+     * @param idUsuarioReceptor ID del usuario que recibe el like
+     * @return true si se crea un match, false si solo se registra el like
+     * @throws Exception si hay error en la validación
      */
-    @Override
-    public void registrarInteraccion(Interaccion interaccion) throws Exception {
-        // validación de datos de entrada
-        if (interaccion == null) {
-            throw new Exception("La interacción no puede ser nula.");
-        }
-        if (interaccion.getUsuarioEmisor() == null || interaccion.getUsuarioReceptor() == null) {
-            throw new Exception("Debe especificar los usuarios emisor y receptor.");
-        }
-        if (interaccion.getUsuarioEmisor().equals(interaccion.getUsuarioReceptor())) {
-            throw new Exception("Un usuario no puede interactuar consigo mismo.");
-        }
-        if (interaccion.getTipo()== null) {
-            throw new Exception("Debe especificar el tipo de interacción.");
+    public boolean darLike(Long idUsuarioEmisor, Long idUsuarioReceptor) throws Exception {
+        // ============ VALIDACIONES ============
+        if (idUsuarioEmisor == null || idUsuarioEmisor <= 0) {
+            throw new Exception("ID del usuario emisor inválido.");
         }
 
-        // evitar duplicados de interacción reciente del mismo tipo
-        List<Interaccion> previas = interaccionDAO.buscarPorEmisor(interaccion.getUsuarioEmisor());
-        boolean duplicada = previas.stream().anyMatch(item ->
-                item.getUsuarioReceptor().equals(interaccion.getUsuarioReceptor()) &&
-                item.getTipo().equals(interaccion.getTipo()));
-        if (duplicada) {
-            throw new Exception("Ya existe una interacción de este tipo entre los mismos usuarios.");
+        if (idUsuarioReceptor == null || idUsuarioReceptor <= 0) {
+            throw new Exception("ID del usuario receptor inválido.");
         }
 
-        // ejecutar
-        interaccionDAO.insertar(interaccion);
+        if (idUsuarioEmisor.equals(idUsuarioReceptor)) {
+            throw new Exception("No puedes dar like a ti mismo.");
+        }
+
+        // Buscar usuarios
+        Usuario usuarioEmisor = usuarioDAO.buscar(idUsuarioEmisor);
+        if (usuarioEmisor == null) {
+            throw new Exception("El usuario emisor no existe.");
+        }
+
+        Usuario usuarioReceptor = usuarioDAO.buscar(idUsuarioReceptor);
+        if (usuarioReceptor == null) {
+            throw new Exception("El usuario receptor no existe.");
+        }
+
+        // Validar que no exista un bloqueo
+        validarNoExistaBloqueo(usuarioEmisor, usuarioReceptor);
+
+        // Validar que no exista un like previo
+        List<Interaccion> likesDelEmisor = interaccionDAO.buscarPorEmisor(usuarioEmisor);
+        boolean likeExistente = likesDelEmisor.stream()
+            .anyMatch(i -> i.getUsuarioReceptor().getIdUsuario().equals(idUsuarioReceptor) &&
+                          i.getTipo().equals(TipoInteraccion.ME_GUSTA));
+
+        if (likeExistente) {
+            throw new Exception("Ya habías dado like a este usuario.");
+        }
+
+        // ============ REGISTRAR EL LIKE ============
+        Interaccion like = new Interaccion.Builder()
+            .usuarioEmisor(usuarioEmisor)
+            .usuarioReceptor(usuarioReceptor)
+            .tipo(TipoInteraccion.ME_GUSTA)
+            .fechaInteraccion(LocalDateTime.now())
+            .build();
+
+        interaccionDAO.insertar(like);
+
+        // ============ VERIFICAR SI EXISTE UN LIKE RECÍPROCO ============
+        List<Interaccion> likesDelReceptor = interaccionDAO.buscarPorEmisor(usuarioReceptor);
+        boolean likeRecíproco = likesDelReceptor.stream()
+            .anyMatch(i -> i.getUsuarioReceptor().getIdUsuario().equals(idUsuarioEmisor) &&
+                          i.getTipo().equals(TipoInteraccion.ME_GUSTA));
+
+        if (likeRecíproco) {
+            // ============ CREAR MATCH ============
+            crearMatch(usuarioEmisor, usuarioReceptor);
+            return true; // Se creó un match
+        }
+
+        return false; // No se creó match, solo like
     }
 
     /**
-     * método que valida y actualiza una interaccion
-     * @param interaccion
-     * @throws Exception 
+     * Da un dislike a un usuario
+     * 
+     * @param idUsuarioEmisor ID del usuario que da el dislike
+     * @param idUsuarioReceptor ID del usuario que recibe el dislike
+     * @throws Exception si hay error en la validación
      */
-    @Override
-    public void actualizarInteraccion(Interaccion interaccion) throws Exception {
-        // validaciones de datos de entrada
-        if (interaccion == null || interaccion.getIdInteraccion() == null) {
-            throw new Exception("Debe especificar una interacción válida para actualizar.");
+    public void darDislike(Long idUsuarioEmisor, Long idUsuarioReceptor) throws Exception {
+        // ============ VALIDACIONES ============
+        if (idUsuarioEmisor == null || idUsuarioEmisor <= 0) {
+            throw new Exception("ID del usuario emisor inválido.");
         }
 
-        // verificar que exista
-        boolean falta = interaccionDAO.buscar(interaccion.getIdInteraccion()) == null;
-        if (falta) {
-            throw new Exception("Debe existir una interacción para actualizar.");
+        if (idUsuarioReceptor == null || idUsuarioReceptor <= 0) {
+            throw new Exception("ID del usuario receptor inválido.");
         }
 
-        // ejecutar
-        interaccionDAO.actualizar(interaccion);
+        if (idUsuarioEmisor.equals(idUsuarioReceptor)) {
+            throw new Exception("No puedes dar dislike a ti mismo.");
+        }
+
+        // Buscar usuarios
+        Usuario usuarioEmisor = usuarioDAO.buscar(idUsuarioEmisor);
+        if (usuarioEmisor == null) {
+            throw new Exception("El usuario emisor no existe.");
+        }
+
+        Usuario usuarioReceptor = usuarioDAO.buscar(idUsuarioReceptor);
+        if (usuarioReceptor == null) {
+            throw new Exception("El usuario receptor no existe.");
+        }
+
+        // Validar que no exista un bloqueo
+        validarNoExistaBloqueo(usuarioEmisor, usuarioReceptor);
+
+        // Validar que no exista un dislike previo
+        List<Interaccion> dislikesDelEmisor = interaccionDAO.buscarPorEmisor(usuarioEmisor);
+        boolean dislikeExistente = dislikesDelEmisor.stream()
+            .anyMatch(i -> i.getUsuarioReceptor().getIdUsuario().equals(idUsuarioReceptor) &&
+                          i.getTipo().equals(TipoInteraccion.NO_ME_INTERESA));
+
+        if (dislikeExistente) {
+            throw new Exception("Ya habías dado dislike a este usuario.");
+        }
+
+        // ============ REGISTRAR EL DISLIKE ============
+        Interaccion dislike = new Interaccion.Builder()
+            .usuarioEmisor(usuarioEmisor)
+            .usuarioReceptor(usuarioReceptor)
+            .tipo(TipoInteraccion.NO_ME_INTERESA)
+            .fechaInteraccion(LocalDateTime.now())
+            .build();
+
+        interaccionDAO.insertar(dislike);
     }
 
     /**
-     * método que valida y elimina una interaccion
-     * @param id
-     * @throws Exception 
+     * Bloquea a un usuario
+     * Después de bloquear, el chat se deshabilita para ambos
+     * 
+     * @param idUsuarioBloqueador ID del usuario que bloquea
+     * @param idUsuarioBloqueado ID del usuario a bloquear
+     * @throws Exception si hay error en la validación
      */
-    @Override
-    public void eliminarInteraccion(Long id) throws Exception {
-        // validación de datos de entrada
-        if (id == null || id <= 0) {
-            throw new Exception("ID inválido para eliminar interacción.");
+    public void bloquearUsuario(Long idUsuarioBloqueador, Long idUsuarioBloqueado) throws Exception {
+        // ============ VALIDACIONES ============
+        if (idUsuarioBloqueador == null || idUsuarioBloqueador <= 0) {
+            throw new Exception("ID del usuario bloqueador inválido.");
         }
 
-        // verificar que exista
-        boolean falta = interaccionDAO.buscar(id) == null;
-        if (falta) {
-            throw new Exception("Debe existir una interacción para eliminar.");
+        if (idUsuarioBloqueado == null || idUsuarioBloqueado <= 0) {
+            throw new Exception("ID del usuario a bloquear inválido.");
         }
 
-        // ejecutar
-        interaccionDAO.eliminar(id);
+        if (idUsuarioBloqueador.equals(idUsuarioBloqueado)) {
+            throw new Exception("No puedes bloquearte a ti mismo.");
+        }
+
+        // Buscar usuarios
+        Usuario usuarioBloqueador = usuarioDAO.buscar(idUsuarioBloqueador);
+        if (usuarioBloqueador == null) {
+            throw new Exception("El usuario bloqueador no existe.");
+        }
+
+        Usuario usuarioBloqueado = usuarioDAO.buscar(idUsuarioBloqueado);
+        if (usuarioBloqueado == null) {
+            throw new Exception("El usuario a bloquear no existe.");
+        }
+
+        // Validar que no exista un bloqueo previo
+        List<Bloqueo> bloqueosExistentes = bloqueoDAO.buscarPorBloqueador(usuarioBloqueador);
+        boolean yaBloqueado = bloqueosExistentes.stream()
+            .anyMatch(b -> b.getUsuarioBloqueado().getIdUsuario().equals(idUsuarioBloqueado));
+
+        if (yaBloqueado) {
+            throw new Exception("Ya habías bloqueado a este usuario.");
+        }
+
+        // ============ REGISTRAR EL BLOQUEO ============
+        Bloqueo bloqueo = new Bloqueo.Builder()
+            .usuarioBloqueador(usuarioBloqueador)
+            .usuarioBloqueado(usuarioBloqueado)
+            .fechaBloqueo(LocalDateTime.now())
+            .build();
+
+        bloqueoDAO.insertar(bloqueo);
+
+        // ============ DESHABILITAR CHAT ============
+        deshabilitarChatEntre(usuarioBloqueador, usuarioBloqueado);
     }
 
     /**
-     * método que valida y busca una interaccion por id
-     * @param id
-     * @return 
+     * Desbloquea a un usuario
+     * Verifica que exista un bloqueo previo
+     * 
+     * @param idUsuarioBloqueador ID del usuario que desbloquea
+     * @param idUsuarioBloqueado ID del usuario a desbloquear
+     * @throws Exception si hay error en la validación
      */
-    @Override
-    public Interaccion buscarPorId(Long id) {
-        // valida datos de entrada
-        if (id == null || id <= 0) {
-            return null;
+    public void desbloquearUsuario(Long idUsuarioBloqueador, Long idUsuarioBloqueado) throws Exception {
+        // ============ VALIDACIONES ============
+        if (idUsuarioBloqueador == null || idUsuarioBloqueador <= 0) {
+            throw new Exception("ID del usuario bloqueador inválido.");
         }
 
-        // ejecutar
-        return interaccionDAO.buscar(id);
+        if (idUsuarioBloqueado == null || idUsuarioBloqueado <= 0) {
+            throw new Exception("ID del usuario a desbloquear inválido.");
+        }
+
+        if (idUsuarioBloqueador.equals(idUsuarioBloqueado)) {
+            throw new Exception("No puedes desbloquearte a ti mismo.");
+        }
+
+        // Buscar usuarios
+        Usuario usuarioBloqueador = usuarioDAO.buscar(idUsuarioBloqueador);
+        if (usuarioBloqueador == null) {
+            throw new Exception("El usuario bloqueador no existe.");
+        }
+
+        Usuario usuarioBloqueado = usuarioDAO.buscar(idUsuarioBloqueado);
+        if (usuarioBloqueado == null) {
+            throw new Exception("El usuario a desbloquear no existe.");
+        }
+
+        // ============ BUSCAR EL BLOQUEO ============
+        List<Bloqueo> bloqueosExistentes = bloqueoDAO.buscarPorBloqueador(usuarioBloqueador);
+        Bloqueo bloqueoAEliminar = bloqueosExistentes.stream()
+            .filter(b -> b.getUsuarioBloqueado().getIdUsuario().equals(idUsuarioBloqueado))
+            .findFirst()
+            .orElse(null);
+
+        // Validar que exista el bloqueo
+        if (bloqueoAEliminar == null) {
+            throw new Exception("No existe un bloqueo previo con este usuario.");
+        }
+
+        // ============ ELIMINAR EL BLOQUEO ============
+        bloqueoDAO.eliminar(bloqueoAEliminar.getIdBloqueo());
     }
 
     /**
-     * método que lista no más de 100 interacciones
-     * @return 
+     * Crea un match entre dos usuarios
+     * Valida que no exista un match previo
+     * 
+     * @param usuarioA Primer usuario
+     * @param usuarioB Segundo usuario
+     * @throws Exception si hay error
      */
-    @Override
-    public List<Interaccion> listarInteracciones() {
-        // valida límite de registros
-        List<Interaccion> lista = interaccionDAO.listar();
-        if (lista == null) return lista;
+    private void crearMatch(Usuario usuarioA, Usuario usuarioB) throws Exception {
+        // Validar que no exista un match previo
+        List<Match> matchesExistentes = matchDAO.buscarPorUsuarioA(usuarioA);
+        boolean matchExistente = matchesExistentes.stream()
+            .anyMatch(m -> m.getUsuarioB().getIdUsuario().equals(usuarioB.getIdUsuario()));
 
-        if (lista.size() > 100) {
-            return null;
+        if (matchExistente) {
+            throw new Exception("Ya existe un match entre estos usuarios.");
         }
 
-        // regresa
-        return lista;
+        // ============ CREAR EL MATCH ============
+        Match nuevoMatch = new Match.Builder()
+            .usuarioA(usuarioA)
+            .usuarioB(usuarioB)
+            .fechaMatch(LocalDateTime.now())
+            .build();
+
+        matchDAO.insertar(nuevoMatch);
+
+        // ============ CREAR CHAT ASOCIADO ============
+        Chat nuevoChat = new Chat.Builder()
+            .nombre(usuarioA.getNombre() + " & " + usuarioB.getNombre())
+            .match(nuevoMatch)
+            .participantes(new HashSet<Usuario>() {{
+                add(usuarioA);
+                add(usuarioB);
+            }})
+            .build();
+
+        chatDAO.insertar(nuevoChat);
     }
 
     /**
-     * método que valida y lista las interacciones por emisor
-     * @param usuario
-     * @return 
+     * Valida que no exista un bloqueo entre dos usuarios en ambas direcciones
+     * 
+     * @param usuarioA Primer usuario
+     * @param usuarioB Segundo usuario
+     * @throws Exception si existe un bloqueo
      */
-    @Override
-    public List<Interaccion> listarPorEmisor(Usuario usuario) {
-        // validación de datos de entrada
-        if (usuario == null) {
-            return null;
+    private void validarNoExistaBloqueo(Usuario usuarioA, Usuario usuarioB) throws Exception {
+        // Validar si A bloqueó a B
+        List<Bloqueo> bloqueosDeA = bloqueoDAO.buscarPorBloqueador(usuarioA);
+        boolean ABloqueaAB = bloqueosDeA.stream()
+            .anyMatch(b -> b.getUsuarioBloqueado().getIdUsuario().equals(usuarioB.getIdUsuario()));
+
+        if (ABloqueaAB) {
+            throw new Exception("Has bloqueado a este usuario.");
         }
 
-        // valida límite de registros
-        List<Interaccion> lista = interaccionDAO.buscarPorEmisor(usuario);
-        if (lista == null) return lista;
+        // Validar si B bloqueó a A
+        List<Bloqueo> bloqueosDeB = bloqueoDAO.buscarPorBloqueador(usuarioB);
+        boolean BBloquearA = bloqueosDeB.stream()
+            .anyMatch(b -> b.getUsuarioBloqueado().getIdUsuario().equals(usuarioA.getIdUsuario()));
 
-        if (lista.size() > 100) {
-            return null;
+        if (BBloquearA) {
+            throw new Exception("Este usuario te ha bloqueado.");
         }
-
-        // regresa
-        return lista;
     }
 
     /**
-     * método que valida y lista las interacciones por receptor
-     * @param usuario
-     * @return 
+     * Deshabilita el chat entre dos usuarios después de un bloqueo
+     * Elimina los chats comunes entre los dos usuarios
+     * 
+     * @param usuarioBloqueador Usuario que bloquea
+     * @param usuarioBloqueado Usuario bloqueado
      */
-    @Override
-    public List<Interaccion> listarPorReceptor(Usuario usuario) {
-        // validación de datos de entrada
-        if (usuario == null) {
-            return null;
+    private void deshabilitarChatEntre(Usuario usuarioBloqueador, Usuario usuarioBloqueado) {
+        try {
+            // Obtener chats del bloqueador
+            List<Chat> chatsDelBloqueador = chatDAO.buscarPorParticipante(usuarioBloqueador);
+
+            if (chatsDelBloqueador != null) {
+                // Encontrar chats que incluyan a ambos usuarios
+                for (Chat chat : chatsDelBloqueador) {
+                    boolean tieneAlOtro = chat.getParticipantes().stream()
+                        .anyMatch(u -> u.getIdUsuario().equals(usuarioBloqueado.getIdUsuario()));
+
+                    if (tieneAlOtro) {
+                        // Eliminar el chat
+                        chatDAO.eliminar(chat.getIdChat());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Log del error (en producción, usar un logger)
+            System.err.println("Error al deshabilitar chat: " + e.getMessage());
         }
-
-        // valida límite de registros
-        List<Interaccion> lista = interaccionDAO.buscarPorReceptor(usuario);
-        if (lista == null) return lista;
-
-        if (lista.size() > 100) {
-            return null;
-        }
-
-        // regresa
-        return lista;
-    }
-
-    /**
-     * método que valida y lista las interacciones por tipo
-     * @param tipo
-     * @return 
-     */
-    @Override
-    public List<Interaccion> listarPorTipo(TipoInteraccion tipo) {
-        // validación de datos de entrada
-        if (tipo == null) {
-            return null;
-        }
-
-        // valida límite de registros
-        List<Interaccion> lista = interaccionDAO.buscarPorTipo(tipo);
-        if (lista == null) return lista;
-
-        if (lista.size() > 100) {
-            return null;
-        }
-
-        // regresa
-        return lista;
     }
 
 

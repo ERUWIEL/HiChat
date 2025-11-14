@@ -28,20 +28,20 @@ import java.time.LocalDateTime;
 )
 @NamedQueries({
     @NamedQuery(
-        name = "Interaccion.findAll",
-        query = "SELECT i FROM Interaccion i ORDER BY i.fechaInteraccion DESC"
+            name = "Interaccion.findAll",
+            query = "SELECT i FROM Interaccion i ORDER BY i.fechaInteraccion DESC"
     ),
     @NamedQuery(
-        name = "Interaccion.findByEmisor",
-        query = "SELECT i FROM Interaccion i WHERE i.usuarioEmisor = :usuario ORDER BY i.fechaInteraccion DESC"
+            name = "Interaccion.findByEmisor",
+            query = "SELECT i FROM Interaccion i WHERE i.usuarioEmisor = :emisor ORDER BY i.fechaInteraccion DESC"
     ),
     @NamedQuery(
-        name = "Interaccion.findByReceptor",
-        query = "SELECT i FROM Interaccion i WHERE i.usuarioReceptor = :usuario ORDER BY i.fechaInteraccion DESC"
+            name = "Interaccion.findByReceptor",
+            query = "SELECT i FROM Interaccion i WHERE i.usuarioReceptor = :receptor ORDER BY i.fechaInteraccion DESC"
     ),
     @NamedQuery(
-        name = "Interaccion.findByTipo",
-        query = "SELECT i FROM Interaccion i WHERE i.tipo = :tipo ORDER BY i.fechaInteraccion DESC"
+            name = "Interaccion.findByTipo",
+            query = "SELECT i FROM Interaccion i WHERE i.tipo = :tipo ORDER BY i.fechaInteraccion DESC"
     )
 })
 public class Interaccion implements Serializable {

@@ -11,17 +11,19 @@ import java.util.List;
  */
 public interface IMatchService {
 
-    void registrarMatch(Match match) throws Exception;
-
-    void actualizarMatch(Match match) throws Exception;
-
-    void eliminarMatch(Long id) throws Exception;
-
-    Match buscarPorId(Long id);
-
-    List<Match> listarMatchs();
-
-    List<Match> listarPorUsuarioA(Usuario usuario);
-
-    List<Match> listarPorUsuarioB(Usuario usuario);
+    /**
+     * Muestra todos los matches de un usuario
+     * Retorna los matches donde el usuario participa (como usuarioA o usuarioB)
+     * Ordena los matches por fecha (más recientes primero)
+     * 
+     * Validaciones:
+     * - Verifica que el usuario exista
+     * - Verifica que tenga al menos un match
+     * - Limita a 100 matches máximo
+     * 
+     * @param usuario Usuario del cual obtener los matches
+     * @return Lista de matches del usuario ordenados por fecha descendente
+     * @throws Exception si el usuario no existe, no tiene matches, o hay error
+     */
+    List<Match> mostrarMatches(Usuario usuario) throws Exception;
 }
