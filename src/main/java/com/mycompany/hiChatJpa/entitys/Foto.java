@@ -15,25 +15,27 @@ import java.io.Serializable;
 
 /**
  * clase que modela una foto
+ *
  * @author angel
  */
 @Entity
 @Table(name = "foto")
 @NamedQueries({
     @NamedQuery(
-        name = "Foto.findAll",
-        query = "SELECT f FROM Foto f ORDER BY f.idFoto"
+            name = "Foto.findAll",
+            query = "SELECT f FROM Foto f ORDER BY f.idFoto"
     ),
     @NamedQuery(
-        name = "Foto.findByUsuario",
-        query = "SELECT f FROM Foto f WHERE f.usuario = :usuario ORDER BY f.idFoto"
+            name = "Foto.findByUsuario",
+            query = "SELECT f FROM Foto f WHERE f.usuario = :usuario ORDER BY f.idFoto"
     ),
     @NamedQuery(
-        name = "Foto.findByDescripcion",
-        query = "SELECT f FROM Foto f WHERE f.descripcion LIKE :descripcion"
+            name = "Foto.findByDescripcion",
+            query = "SELECT f FROM Foto f WHERE f.descripcion LIKE :descripcion"
     )
 })
 public class Foto implements Serializable {
+
     // seccion de mapeo
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,6 +74,7 @@ public class Foto implements Serializable {
      * clase interna para implementar builder
      */
     public static class Builder {
+
         private Long idFoto;
         private String urlFoto;
         private String descripcion;

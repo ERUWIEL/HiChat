@@ -27,16 +27,16 @@ import java.util.Set;
 @Table(name = "chat")
 @NamedQueries({
     @NamedQuery(
-        name = "Chat.findAll",
-        query = "SELECT c FROM Chat c ORDER BY c.idChat"
+            name = "Chat.findAll",
+            query = "SELECT c FROM Chat c ORDER BY c.idChat"
     ),
     @NamedQuery(
-        name = "Chat.findByNombre",
-        query = "SELECT c FROM Chat c WHERE c.nombre LIKE :nombre"
+            name = "Chat.findByNombre",
+            query = "SELECT c FROM Chat c WHERE c.nombre LIKE :nombre"
     ),
     @NamedQuery(
-        name = "Chat.findByParticipante",
-        query = "SELECT c FROM Chat c JOIN c.participantes p WHERE p = :usuario"
+            name = "Chat.findByParticipante",
+            query = "SELECT c FROM Chat c JOIN c.participantes p WHERE p = :participante"
     )
 })
 public class Chat implements Serializable {
@@ -83,6 +83,7 @@ public class Chat implements Serializable {
      * clas que permite implementar el builder
      */
     public static class Builder {
+
         private Long idChat;
         private String nombre;
         private Match match;
@@ -93,7 +94,7 @@ public class Chat implements Serializable {
             this.idChat = idChat;
             return this;
         }
-        
+
         public Builder nombre(String nombre) {
             this.nombre = nombre;
             return this;
@@ -116,7 +117,8 @@ public class Chat implements Serializable {
 
         /**
          * constructor builder con validaciones
-         * @return 
+         *
+         * @return
          */
         public Chat build() {
             return new Chat(this);

@@ -31,11 +31,11 @@ import java.time.LocalDateTime;
     ),
     @NamedQuery(
             name = "Bloqueo.findByBloqueador",
-            query = "SELECT b FROM Bloqueo b WHERE b.usuarioBloqueador = :usuario"
+            query = "SELECT b FROM Bloqueo b WHERE b.usuarioBloqueador = :bloqueador"
     ),
     @NamedQuery(
             name = "Bloqueo.findByBloqueado",
-            query = "SELECT b FROM Bloqueo b WHERE b.usuarioBloqueado = :usuario"
+            query = "SELECT b FROM Bloqueo b WHERE b.usuarioBloqueado = :bloqueado"
     )
 })
 public class Bloqueo implements Serializable {
