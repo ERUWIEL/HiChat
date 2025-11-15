@@ -68,7 +68,7 @@ public class Usuario implements Serializable {
     @Column(name = "carrera", length = 100)
     private String carrera;
 
-    @Column(name = "biografia", columnDefinition = "TEXT")
+    @Column(name = "biografia", columnDefinition = "TEXT", length = 500)
     private String biografia;
 
     @Column(name = "url_foto_perfil", length = 255)

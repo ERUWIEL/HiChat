@@ -7,9 +7,14 @@ import java.awt.Shape;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class PanelRound extends JPanel {
+
+    private JLabel labelImagen;
+    private ImageIcon iconoActual;
 
     public int getRoundTopLeft() {
         return roundTopLeft;
@@ -54,6 +59,55 @@ public class PanelRound extends JPanel {
 
     public PanelRound() {
         setOpaque(false);
+        setLayout(null);
+    }
+
+    /**
+     * Establece un icono en el panel
+     * @param icon ImageIcon a mostrar
+     */
+    public void setIcon(ImageIcon icon) {
+        if (icon == null) {
+            if (labelImagen != null) {
+                remove(labelImagen);
+                labelImagen = null;
+            }
+            revalidate();
+            repaint();
+            return;
+        }
+
+        this.iconoActual = icon;
+
+        if (labelImagen == null) {
+            labelImagen = new JLabel(icon);
+            labelImagen.setHorizontalAlignment(JLabel.CENTER);
+            labelImagen.setVerticalAlignment(JLabel.CENTER);
+            add(labelImagen);
+        } else {
+            labelImagen.setIcon(icon);
+        }
+
+        // Posicionar el label en el centro del panel
+        labelImagen.setBounds(0, 0, getWidth(), getHeight());
+        revalidate();
+        repaint();
+    }
+
+    /**
+     * Obtiene el icono actual
+     * @return ImageIcon actual
+     */
+    public ImageIcon getIcon() {
+        return iconoActual;
+    }
+
+    @Override
+    public void setBounds(int x, int y, int width, int height) {
+        super.setBounds(x, y, width, height);
+        if (labelImagen != null) {
+            labelImagen.setBounds(0, 0, width, height);
+        }
     }
 
     @Override
