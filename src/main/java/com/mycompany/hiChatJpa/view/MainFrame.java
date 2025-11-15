@@ -36,7 +36,6 @@ public class MainFrame extends javax.swing.JFrame {
     public static final String RSPSW_VIEW = "RESTORE_PASSWORD";
     public static final String RSPSW_CONFIRM_USER_VIEW = "RESTORE_PASSWORD_CONFIRMUSER";
     public static final String RSPSW_CHANGE_VIEW = "RESTORE_PASSWORD_CHANGE";
-    public static final String HOME_DISCOVER_VIEW = "HOME_DISCOVER_VIEW";
 
     private LoginPane loginPane;
     private SigninPane signinPane;
@@ -47,7 +46,6 @@ public class MainFrame extends javax.swing.JFrame {
     private RestorePswUserPane restorePswPane;
     private RestorePswConfirmUserPane restorePswUserPane;
     private RestorePswChangePane restorePswChangePane;
-    private HomePane homePane;
 
     /**
      * Creates new form frmPrincipal
@@ -132,15 +130,14 @@ public class MainFrame extends javax.swing.JFrame {
 
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, viewName);
-    }
-
+    }    
     /**
      * metodo publico que permite refrescar todas las ventanas
      */
     public final void resetViews() {
         System.out.println("reiniciando instancias");
         contentPanel.removeAll();
-        loginPane = new LoginPane(this);
+        loginPane = new LoginPane(this, contentPanel);
         signinPane = new SigninPane(this);
         signinDatePane = new SigninDatePane(this);
         signinPasswordPane = new SigninPasswordPane(this);
@@ -149,7 +146,6 @@ public class MainFrame extends javax.swing.JFrame {
         restorePswPane = new RestorePswUserPane(this);
         restorePswUserPane = new RestorePswConfirmUserPane(this);
         restorePswChangePane = new RestorePswChangePane(this);
-        homePane = new HomePane(this);
 
         setViews();
         contentPanel.revalidate();
@@ -190,7 +186,6 @@ public class MainFrame extends javax.swing.JFrame {
         contentPanel.add(restorePswPane, RSPSW_VIEW);
         contentPanel.add(restorePswUserPane, RSPSW_CONFIRM_USER_VIEW);
         contentPanel.add(restorePswChangePane, RSPSW_CHANGE_VIEW);
-        contentPanel.add(homePane, HOME_DISCOVER_VIEW);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

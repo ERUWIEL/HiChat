@@ -5,7 +5,10 @@ import com.mycompany.hiChatJpa.service.IUsuarioService;
 import com.mycompany.hiChatJpa.service.impl.UsuarioService;
 import com.mycompany.hiChatJpa.view.MainFrame;
 import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
+import com.mycompany.hiChatJpa.view.pages.home.HomePane;
+import java.awt.CardLayout;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -13,17 +16,21 @@ import javax.swing.JOptionPane;
  */
 public class LoginPane extends javax.swing.JPanel {
 
+    private final JPanel CONTENT_PANE;
     private final MainFrame FATHER;
     private final IUsuarioService USUARIO_SERVICE;
 
     /**
      * Creates new form LoginPane
      *
-     * @param frame
+     * @param father
+     * @param content
      */
-    public LoginPane(MainFrame frame) {
-        this.FATHER = frame;
+    public LoginPane(MainFrame father, JPanel content) {
+        this.FATHER = father;
+        this.CONTENT_PANE = content;
         this.USUARIO_SERVICE = new UsuarioService();
+
         initComponents();
     }
 
@@ -43,7 +50,7 @@ public class LoginPane extends javax.swing.JPanel {
         usernameLabel = new javax.swing.JLabel();
         userInputPane = new TextFieldPanel(TextFieldPanel.EMAIL_REGEX, "invalid type of email");
         passwordLabel = new javax.swing.JLabel();
-        passwordInputPane = new com.mycompany.hiChatJpa.view.components.TextFieldPanel();
+        passwordInputPane = new TextFieldPanel(TextFieldPanel.PASSWORD_REGEX, "invalid password format to looong");
         forgotPasswordLabel = new javax.swing.JLabel();
         actionsPane = new javax.swing.JPanel();
         signInPane = new com.mycompany.hiChatJpa.view.components.PanelRound();
@@ -185,16 +192,20 @@ public class LoginPane extends javax.swing.JPanel {
     private void signInLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signInLabelMouseClicked
         String email = userInputPane.getText();
         String password = passwordInputPane.getText();
-        Usuario usuario = new Usuario.Builder()
+        Usuario user = new Usuario.Builder()
                 .correoElectronico(email)
                 .contrasena(password)
                 .build();
 
         try {
-            USUARIO_SERVICE.iniciarSesion(usuario);
-            FATHER.showView(MainFrame.HOME_DISCOVER_VIEW);
+            Usuario userMatched = USUARIO_SERVICE.iniciarSesion(user);
+            CONTENT_PANE.add(new HomePane(FATHER, userMatched), "HOME_VIEW");
+            CardLayout cl = (CardLayout) CONTENT_PANE.getLayout();
+            cl.show(CONTENT_PANE, "HOME_VIEW");
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(FATHER,"email or password dont match with a real user","login error",JOptionPane.ERROR_MESSAGE);
+            System.out.println(ex.getCause());
+            System.out.println(ex.getMessage());
+            JOptionPane.showMessageDialog(FATHER, "email or password dont match with a real user", "login error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_signInLabelMouseClicked
 

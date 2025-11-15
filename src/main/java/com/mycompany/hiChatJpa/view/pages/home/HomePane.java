@@ -1,5 +1,6 @@
 package com.mycompany.hiChatJpa.view.pages.home;
 
+import com.mycompany.hiChatJpa.entitys.Usuario;
 import com.mycompany.hiChatJpa.view.MainFrame;
 import java.awt.CardLayout;
 
@@ -10,17 +11,21 @@ import java.awt.CardLayout;
 public class HomePane extends javax.swing.JPanel {
 
     private final MainFrame FATHER;
+    private final Usuario user;
     private String currentStatus;
 
     /**
      * Creates new form HomePane
      *
      * @param frame
+     * @param user
      */
-    public HomePane(MainFrame frame) {
+    public HomePane(MainFrame frame, Usuario user) {
         this.FATHER = frame;
+        this.user = user;
         initComponents();
-        contentPane.add(new DiscoverPane(contentPane), "DISCOVER");
+        
+        contentPane.add(new DiscoverPane(contentPane, user), "DISCOVER");
         contentPane.add(new MatchPane(contentPane), "MATCH");
         contentPane.add(new ChatPane(contentPane), "CHAT");
         contentPane.add(new ProfilePane(contentPane), "PROFILE");
@@ -53,9 +58,9 @@ public class HomePane extends javax.swing.JPanel {
 
         tittleLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 18)); // NOI18N
         tittleLabel.setForeground(new java.awt.Color(255, 255, 255));
-        tittleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        tittleLabel.setText("HiChat!");
-        backgroundPane.add(tittleLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 100, 60));
+        tittleLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        tittleLabel.setText("Welcome!  " + user.getNombre());
+        backgroundPane.add(tittleLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, 240, 60));
 
         settingsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         settingsLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/white-settings.png"))); // NOI18N

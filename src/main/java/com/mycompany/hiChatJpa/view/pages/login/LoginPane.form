@@ -141,6 +141,9 @@
               <Properties>
                 <Property name="message" type="java.lang.String" value="enter your password"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new TextFieldPanel(TextFieldPanel.PASSWORD_REGEX, &quot;invalid password format to looong&quot;)"/>
+              </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                   <AbsoluteConstraints x="30" y="110" width="-1" height="-1"/>

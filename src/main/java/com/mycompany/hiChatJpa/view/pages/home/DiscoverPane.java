@@ -1,6 +1,11 @@
 
 package com.mycompany.hiChatJpa.view.pages.home;
 
+import com.mycompany.hiChatJpa.entitys.Usuario;
+import com.mycompany.hiChatJpa.service.IUsuarioService;
+import com.mycompany.hiChatJpa.service.impl.UsuarioService;
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -8,12 +13,22 @@ import javax.swing.JPanel;
  * @author gatog
  */
 public class DiscoverPane extends javax.swing.JPanel {
+    private final IUsuarioService USUARIO_SERVICE; 
+    private List<Usuario> PRETENDIENTES;
     
     /**
      * Creates new form LoginPane
+     * @param panel
+     * @param usuario
      */
-    public DiscoverPane(JPanel panel) {
+    public DiscoverPane(JPanel panel, Usuario usuario) {
         initComponents();
+        this.USUARIO_SERVICE = new UsuarioService();
+        try {
+            this.PRETENDIENTES = USUARIO_SERVICE.listarUsuarios();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "it seems like theres nobody to judge", "soo sorry :(", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     /**
@@ -25,22 +40,107 @@ public class DiscoverPane extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        likePanel1 = new com.mycompany.hiChatJpa.view.components.PanelRound();
+        heartLabel = new javax.swing.JLabel();
+        dislikePanel = new com.mycompany.hiChatJpa.view.components.PanelRound();
+        dislikeLabel = new javax.swing.JLabel();
+        userCard = new javax.swing.JPanel();
+        username = new javax.swing.JLabel();
+        imgLabel = new javax.swing.JLabel();
+        panelRound1 = new com.mycompany.hiChatJpa.view.components.PanelRound();
+
         setBackground(new java.awt.Color(22, 16, 34));
         setPreferredSize(new java.awt.Dimension(400, 600));
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        likePanel1.setBackground(new java.awt.Color(55, 65, 81));
+        likePanel1.setRoundBottomLeft(360);
+        likePanel1.setRoundBottomRight(360);
+        likePanel1.setRoundTopLeft(360);
+        likePanel1.setRoundTopRight(360);
+        likePanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        heartLabel.setBackground(new java.awt.Color(55, 65, 81));
+        heartLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        heartLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/blue-heart.png"))); // NOI18N
+        heartLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        likePanel1.add(heartLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 70, 70));
+
+        add(likePanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 380, 70, 70));
+
+        dislikePanel.setBackground(new java.awt.Color(55, 65, 81));
+        dislikePanel.setRoundBottomLeft(360);
+        dislikePanel.setRoundBottomRight(360);
+        dislikePanel.setRoundTopLeft(360);
+        dislikePanel.setRoundTopRight(360);
+        dislikePanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        dislikeLabel.setBackground(new java.awt.Color(55, 65, 81));
+        dislikeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        dislikeLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/red-cancel.png"))); // NOI18N
+        dislikeLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        dislikePanel.add(dislikeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 70, 70));
+
+        add(dislikePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 380, 70, 70));
+
+        userCard.setBackground(new java.awt.Color(0, 0, 0));
+
+        username.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 18)); // NOI18N
+        username.setForeground(new java.awt.Color(255, 255, 255));
+        username.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        username.setText("name");
+
+        javax.swing.GroupLayout userCardLayout = new javax.swing.GroupLayout(userCard);
+        userCard.setLayout(userCardLayout);
+        userCardLayout.setHorizontalGroup(
+            userCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(userCardLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(imgLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, userCardLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 480, Short.MAX_VALUE)
+        userCardLayout.setVerticalGroup(
+            userCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(userCardLayout.createSequentialGroup()
+                .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(imgLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
+                .addContainerGap())
         );
+
+        add(userCard, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 380, 400));
+
+        panelRound1.setBackground(new java.awt.Color(51, 0, 153));
+
+        javax.swing.GroupLayout panelRound1Layout = new javax.swing.GroupLayout(panelRound1);
+        panelRound1.setLayout(panelRound1Layout);
+        panelRound1Layout.setHorizontalGroup(
+            panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 380, Short.MAX_VALUE)
+        );
+        panelRound1Layout.setVerticalGroup(
+            panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 30, Short.MAX_VALUE)
+        );
+
+        add(panelRound1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 400, 380, 30));
     }// </editor-fold>//GEN-END:initComponents
 
-
+    private void loadUsers(){
+        //PRETENDIENTES.
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel dislikeLabel;
+    private com.mycompany.hiChatJpa.view.components.PanelRound dislikePanel;
+    private javax.swing.JLabel heartLabel;
+    private javax.swing.JLabel imgLabel;
+    private com.mycompany.hiChatJpa.view.components.PanelRound likePanel1;
+    private com.mycompany.hiChatJpa.view.components.PanelRound panelRound1;
+    private javax.swing.JPanel userCard;
+    private javax.swing.JLabel username;
     // End of variables declaration//GEN-END:variables
 }
