@@ -1,6 +1,8 @@
 
 package com.mycompany.hiChatJpa.view.pages.home;
 
+import com.mycompany.hiChatJpa.dto.ActualizarUsuarioDTO;
+import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
 import com.mycompany.hiChatJpa.entitys.Usuario;
 import com.mycompany.hiChatJpa.service.IUsuarioService;
 import com.mycompany.hiChatJpa.service.impl.UsuarioService;
@@ -16,26 +18,26 @@ import javax.swing.JPanel;
  */
 public class ProfilePane extends javax.swing.JPanel {
     
-    private Usuario usuarioActual;
+    private UsuarioPerfilDTO usuarioActual;
     private IUsuarioService usuarioService;
-    private Usuario usuario;
+    private UsuarioPerfilDTO usuario;
     
     /**
      * Creates new form LoginPane
      * @param panel
      */
-    public ProfilePane(JPanel panel, Usuario usuario) {
+    public ProfilePane(JPanel panel, UsuarioPerfilDTO usuarioParam) {
         this.usuarioService = new UsuarioService();
-        this.usuario = usuario;
+        this.usuarioActual = usuarioParam;
         
         initComponents();
-        configurarPerfil(usuario);
+        configurarPerfil(usuarioParam);
     }
     /**
      * Configura el perfil del usuario actual
      * @param usuario Usuario a mostrar
      */
-    public void configurarPerfil(Usuario usuario) {
+    public void configurarPerfil(UsuarioPerfilDTO usuario) {
         
         this.usuarioActual = usuario;
 
@@ -47,11 +49,13 @@ public class ProfilePane extends javax.swing.JPanel {
             }
             LabelUserName1.setText(nombreCompleto);
 
-            // Fecha de nacimiento
+            // Fecha de nacimiento y edad
             if (usuario.getFechaNacimiento() != null) {
                 String fechaFormato = usuario.getFechaNacimiento().toString();
                 int edad = calcularEdad(usuario.getFechaNacimiento());
                 FchNacLabel.setText(fechaFormato + " (" + edad + " años)");
+            } else if (usuario.getEdad() != null) {
+                FchNacLabel.setText(usuario.getEdad() + " años");
             } else {
                 FchNacLabel.setText("No especificado");
             }
@@ -353,13 +357,16 @@ public class ProfilePane extends javax.swing.JPanel {
         }
 
         try {
-            // Actualizar la biografía en el objeto usuario
-            usuarioActual.setBiografia(nuevaBiografia);
+            // Crear DTO para actualizar
+            ActualizarUsuarioDTO actualizarDTO = new ActualizarUsuarioDTO();
+            actualizarDTO.setIdUsuario(usuarioActual.getIdUsuario());
+            actualizarDTO.setBiografia(nuevaBiografia);
             
             // Guardar en la base de datos
-            usuarioService.actualizarUsuario(usuarioActual);
+            usuarioService.actualizarUsuario(actualizarDTO);
             
-            // Actualizar la etiqueta de biografía
+            // Actualizar la biografía en el DTO local
+            usuarioActual.setBiografia(nuevaBiografia);
             textFieldPanel1.setMessage(nuevaBiografia);
             
             JOptionPane.showMessageDialog(this, "Biografía actualizada correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);

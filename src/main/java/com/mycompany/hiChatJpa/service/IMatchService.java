@@ -1,5 +1,6 @@
 package com.mycompany.hiChatJpa.service;
 
+import com.mycompany.hiChatJpa.dto.MatchDTO;
 import com.mycompany.hiChatJpa.entitys.Match;
 import com.mycompany.hiChatJpa.entitys.Usuario;
 import java.util.List;
@@ -25,5 +26,5 @@ public interface IMatchService {
      * @return Lista de matches del usuario ordenados por fecha descendente
      * @throws Exception si el usuario no existe, no tiene matches, o hay error
      */
-    List<Match> mostrarMatches(Usuario usuario) throws Exception;
+    List<MatchDTO> mostrarMatches(Long idUsuario) throws Exception;
 }

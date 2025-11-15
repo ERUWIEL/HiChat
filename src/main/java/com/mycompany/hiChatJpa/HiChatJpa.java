@@ -1,8 +1,8 @@
 package com.mycompany.hiChatJpa;
 
 import com.mycompany.hiChatJpa.config.JpaUtil;
-import com.mycompany.hiChatJpa.entitys.Genero;
-import com.mycompany.hiChatJpa.entitys.Usuario;
+import com.mycompany.hiChatJpa.dto.RegistroDTO;
+import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
 import com.mycompany.hiChatJpa.service.impl.InteraccionService;
 import com.mycompany.hiChatJpa.service.impl.UsuarioService;
 import java.time.LocalDate;
@@ -23,11 +23,11 @@ public class HiChatJpa {
             System.out.println("========== INICIANDO CARGA DE DATOS ==========\n");
 
             // 1. Verificar si ya hay usuarios
-            List<Usuario> usuariosExistentes = usuarioService.listarUsuarios();
-            List<Usuario> estudiantes;
+            List<UsuarioPerfilDTO> usuariosExistentes = usuarioService.listarUsuarios();
+            List<UsuarioPerfilDTO> estudiantes;
 
             if (usuariosExistentes != null && !usuariosExistentes.isEmpty()) {
-                System.out.println("⚠ Ya existen " + usuariosExistentes.size() + " usuarios en la BD");
+                System.out.println(" Ya existen " + usuariosExistentes.size() + " usuarios en la BD");
                 System.out.println("¿Deseas usar los existentes? (Presiona Enter para continuar)\n");
                 estudiantes = usuariosExistentes;
                 
@@ -38,17 +38,17 @@ public class HiChatJpa {
             } else {
                 // 2. Agregar 50 estudiantes
                 estudiantes = agregarEstudiantes();
-                System.out.println("\n✓ 50 estudiantes agregados correctamente\n");
+                System.out.println("\n 50 estudiantes agregados correctamente\n");
             }
 
             // 3. Agregar "me gusta" de forma inteligente
             int likesAgregados = agregarMeGustas(estudiantes);
-            System.out.println("\n✓ " + likesAgregados + " 'Me Gusta' agregados correctamente\n");
+            System.out.println("\n " + likesAgregados + " 'Me Gusta' agregados correctamente\n");
 
             System.out.println("========== CARGA DE DATOS COMPLETADA ==========");
 
         } catch (Exception e) {
-            System.err.println("❌ Error durante la carga de datos: " + e.getMessage());
+            System.err.println(" Error durante la carga de datos: " + e.getMessage());
             e.printStackTrace();
         } finally {
             // IMPORTANTE: Cerrar recursos
@@ -59,8 +59,8 @@ public class HiChatJpa {
     /**
      * Método que agrega 50 estudiantes
      */
-    private static List<Usuario> agregarEstudiantes() throws Exception {
-        List<Usuario> estudiantes = new ArrayList<>();
+    private static List<UsuarioPerfilDTO> agregarEstudiantes() throws Exception {
+        List<UsuarioPerfilDTO> estudiantes = new ArrayList<>();
 
         String[] nombres = {
             "Juan", "María", "Carlos", "Ana", "Luis",
@@ -92,31 +92,30 @@ public class HiChatJpa {
             String apellidoPaterno = apellidos[i % apellidos.length];
             String apellidoMaterno = apellidos[(i + 1) % apellidos.length];
             String carrera = carreras[i % carreras.length];
-            Genero genero = (i % 2 == 0) ? Genero.MASCULINO : Genero.FEMENINO;
+            String genero = (i % 2 == 0) ? "MASCULINO" : "FEMENINO";
 
-            Usuario usuario = new Usuario.Builder()
-                    .nombre(nombre)
-                    .apellidoPaterno(apellidoPaterno)
-                    .apellidoMaterno(apellidoMaterno)
-                    .correoElectronico("estudiante" + i + "@uni.edu")
-                    .contrasena("Pass" + i + "123!")
-                    .carrera(carrera)
-                    .genero(genero)
-                    .fechaNacimiento(LocalDate.of(2000, 1, 1).plusDays(i * 5))
-                    .biografia("Estudiante de " + carrera)
-                    .build();
+            RegistroDTO registroDTO = new RegistroDTO(
+                    nombre,
+                    apellidoPaterno,
+                    apellidoMaterno,
+                    "estudiante" + i + "@uni.edu",
+                    "Pass" + i + "123!",
+                    LocalDate.of(2000, 1, 1).plusDays(i * 5),
+                    carrera,
+                    genero
+            );
 
             try {
-                usuarioService.registrarUsuario(usuario);
+                usuarioService.registrarUsuario(registroDTO);
                 
                 // Buscar el usuario recién insertado para obtener su ID
-                Usuario usuarioInsertado = usuarioService.buscarPorCorreo(usuario.getCorreoElectronico());
+                UsuarioPerfilDTO usuarioInsertado = usuarioService.buscarPorCorreo(registroDTO.getCorreoElectronico());
                 estudiantes.add(usuarioInsertado);
 
                 System.out.println((i + 1) + ". " + nombre + " " + apellidoPaterno
                         + " - " + carrera + " (ID: " + usuarioInsertado.getIdUsuario() + ")");
             } catch (Exception e) {
-                System.err.println("   ❌ Error al registrar " + nombre + ": " + e.getMessage());
+                System.err.println("    Error al registrar " + nombre + ": " + e.getMessage());
             }
         }
 
@@ -126,7 +125,7 @@ public class HiChatJpa {
     /**
      * Método mejorado que agrega exactamente 100 "me gusta" sin duplicados
      */
-    private static int agregarMeGustas(List<Usuario> estudiantes) throws Exception {
+    private static int agregarMeGustas(List<UsuarioPerfilDTO> estudiantes) throws Exception {
         System.out.println("--- Agregando 'Me Gusta' ---\n");
 
         int contador = 0;
@@ -137,7 +136,7 @@ public class HiChatJpa {
         // Estrategia: distribuir los likes entre todos los usuarios
         // Cada estudiante dará likes hasta completar 100
         for (int i = 0; i < estudiantes.size() && contador < 99; i++) {
-            Usuario emisor = estudiantes.get(i);
+            UsuarioPerfilDTO emisor = estudiantes.get(i);
             Long idEmisor = emisor.getIdUsuario();
             int offset = 1;
 
@@ -150,7 +149,7 @@ public class HiChatJpa {
 
                 // Evitar que sea él mismo
                 if (receptorIdx != i) {
-                    Usuario receptor = estudiantes.get(receptorIdx);
+                    UsuarioPerfilDTO receptor = estudiantes.get(receptorIdx);
                     Long idReceptor = receptor.getIdUsuario();
 
                     try {
@@ -158,7 +157,7 @@ public class HiChatJpa {
 
                         contador++;
 
-                        String matchInfo = matchCreado ? " [✓ MATCH CREADO!]" : "";
+                        String matchInfo = matchCreado ? " [ MATCH CREADO!]" : "";
                         System.out.println(contador + ". " + emisor.getNombre() + " (ID:" 
                                 + idEmisor + ") → " + receptor.getNombre() + " (ID:" 
                                 + idReceptor + ")" + matchInfo);
@@ -170,9 +169,9 @@ public class HiChatJpa {
                     } catch (Exception e) {
                         // Si ya existe el like, simplemente pasamos al siguiente
                         if (e.getMessage().contains("Ya habías dado like")) {
-                            System.out.println("   ⊗ Like ya existente, omitiendo...");
+                            System.out.println("    Like ya existente, omitiendo...");
                         } else {
-                            System.out.println("   ⚠ Error: " + e.getMessage());
+                            System.out.println("    Error: " + e.getMessage());
                         }
                     }
                 }
@@ -183,8 +182,8 @@ public class HiChatJpa {
         // LIKE ESPECIAL #100: Usuario 50 → Usuario 1
         System.out.println("\n--- Like Especial Final ---");
         if (estudiantes.size() >= 50) {
-            Usuario usuario50 = estudiantes.get(49); // Índice 49 = usuario 50
-            Usuario usuario1 = estudiantes.get(0);   // Índice 0 = usuario 1
+            UsuarioPerfilDTO usuario50 = estudiantes.get(49); // Índice 49 = usuario 50
+            UsuarioPerfilDTO usuario1 = estudiantes.get(0);   // Índice 0 = usuario 1
             
             try {
                 boolean matchCreado = interaccionService.darLike(
@@ -194,9 +193,9 @@ public class HiChatJpa {
 
                 contador++;
                 
-                String matchInfo = matchCreado ? " [✓ MATCH CREADO!]" : "";
+                String matchInfo = matchCreado ? " [ MATCH CREADO!]" : "";
                 System.out.println("100. " + usuario50.getNombre() + " (ID:" 
-                        + usuario50.getIdUsuario() + ") → " + usuario1.getNombre() 
+                        + usuario50.getIdUsuario() + ")  " + usuario1.getNombre() 
                         + " (ID:" + usuario1.getIdUsuario() + ")" + matchInfo 
                         + " [LIKE FINAL ESPECIAL]");
 
@@ -205,19 +204,19 @@ public class HiChatJpa {
                 }
 
             } catch (Exception e) {
-                System.out.println("   ⚠ Error en like final: " + e.getMessage());
+                System.out.println("   Error en like final: " + e.getMessage());
             }
         } else {
-            System.out.println("⚠ No hay suficientes usuarios para el like final");
+            System.out.println(" No hay suficientes usuarios para el like final");
         }
 
-        System.out.println("\n📊 Resumen:");
+        System.out.println("\n Resumen:");
         System.out.println("   - Likes agregados: " + contador);
         System.out.println("   - Matches creados: " + matchesCreados);
         System.out.println("   - Intentos totales: " + intentos);
 
         if (intentos >= maxIntentos) {
-            System.out.println("\n⚠ Advertencia: Se alcanzó el límite de intentos");
+            System.out.println("\n Advertencia: Se alcanzó el límite de intentos");
         }
 
         return contador;

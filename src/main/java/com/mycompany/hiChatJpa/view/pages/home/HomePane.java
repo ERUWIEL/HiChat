@@ -1,5 +1,6 @@
 package com.mycompany.hiChatJpa.view.pages.home;
 
+import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
 import com.mycompany.hiChatJpa.entitys.Usuario;
 import com.mycompany.hiChatJpa.view.MainFrame;
 import java.awt.CardLayout;
@@ -11,7 +12,7 @@ import java.awt.CardLayout;
 public class HomePane extends javax.swing.JPanel {
 
     private final MainFrame FATHER;
-    private final Usuario user;
+    private final UsuarioPerfilDTO user;
     private String currentStatus;
 
     /**
@@ -20,7 +21,7 @@ public class HomePane extends javax.swing.JPanel {
      * @param frame
      * @param user
      */
-    public HomePane(MainFrame frame, Usuario user) {
+    public HomePane(MainFrame frame, UsuarioPerfilDTO user) {
         this.FATHER = frame;
         this.user = user;
         initComponents();

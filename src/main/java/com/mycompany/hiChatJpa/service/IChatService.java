@@ -5,8 +5,13 @@ import com.mycompany.hiChatJpa.entitys.Mensaje;
 import com.mycompany.hiChatJpa.entitys.Usuario;
 import java.util.List;
 
+import com.mycompany.hiChatJpa.dto.ChatConMensajesDTO;
+import java.util.List;
+
 /**
- * interfaz que define las reglas de negocio antes de llamar alos dao
+ * Interfaz de servicio para Chat
+ * Utiliza DTOs para encapsular datos
+ *
  * @author gatog
  */
 public interface IChatService {
@@ -26,11 +31,11 @@ public interface IChatService {
      * Retorna los chats donde el usuario es participante
      * Ordena los chats por última actividad (más recientes primero)
      * 
-     * @param usuario Usuario del cual cargar chats
-     * @return Lista de chats del usuario ordenados
+     * @param idUsuario ID del usuario del cual cargar chats
+     * @return Lista de ChatConMensajesDTO ordenados por actividad
      * @throws Exception si hay error
      */
-    List<Chat> cargarChatsDelUsuario(Usuario usuario) throws Exception;
+    List<ChatConMensajesDTO> cargarChatsDelUsuario(Long idUsuario) throws Exception;
 
     /**
      * Envía un mensaje en un chat validando bloqueos y otros criterios
@@ -40,12 +45,12 @@ public interface IChatService {
      * - El usuario emisor sea participante del chat
      * - No exista bloqueo entre participantes
      * 
-     * @param chat Chat donde enviar el mensaje
-     * @param mensaje Mensaje a enviar
+     * @param idChat ID del chat donde enviar el mensaje
+     * @param idUsuarioEmisor ID del usuario que envía el mensaje
+     * @param contenidoMensaje Contenido del mensaje
      * @throws Exception si hay error en la validación
      */
-    void mandarMensaje(Chat chat, Mensaje mensaje) throws Exception;
-
+    void mandarMensaje(Long idChat, Long idUsuarioEmisor, String contenidoMensaje) throws Exception;
 //    /**
 //     * Marca un mensaje como visto
 //     * @param idMensaje ID del mensaje

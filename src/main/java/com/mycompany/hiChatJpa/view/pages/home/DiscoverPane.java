@@ -1,6 +1,7 @@
 
 package com.mycompany.hiChatJpa.view.pages.home;
 
+import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
 import com.mycompany.hiChatJpa.entitys.Usuario;
 import com.mycompany.hiChatJpa.service.IUsuarioService;
 import com.mycompany.hiChatJpa.service.impl.UsuarioService;
@@ -14,18 +15,18 @@ import javax.swing.JPanel;
  */
 public class DiscoverPane extends javax.swing.JPanel {
     private final IUsuarioService USUARIO_SERVICE; 
-    private List<Usuario> PRETENDIENTES;
+    private List<UsuarioPerfilDTO> PRETENDIENTES;
     
     /**
      * Creates new form LoginPane
      * @param panel
      * @param usuario
      */
-    public DiscoverPane(JPanel panel, Usuario usuario) {
+    public DiscoverPane(JPanel panel, UsuarioPerfilDTO usuario) {
         initComponents();
         this.USUARIO_SERVICE = new UsuarioService();
         try {
-            this.PRETENDIENTES = USUARIO_SERVICE.listarUsuarios();
+            this.PRETENDIENTES = USUARIO_SERVICE.mostrarPretendientes(usuario.getIdUsuario());
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "it seems like theres nobody to judge", "soo sorry :(", JOptionPane.INFORMATION_MESSAGE);
         }

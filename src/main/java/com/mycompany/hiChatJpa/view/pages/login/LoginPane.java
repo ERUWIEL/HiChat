@@ -1,5 +1,7 @@
 package com.mycompany.hiChatJpa.view.pages.login;
 
+import com.mycompany.hiChatJpa.dto.LoginDTO;
+import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
 import com.mycompany.hiChatJpa.entitys.Usuario;
 import com.mycompany.hiChatJpa.service.IUsuarioService;
 import com.mycompany.hiChatJpa.service.impl.UsuarioService;
@@ -191,13 +193,13 @@ public class LoginPane extends javax.swing.JPanel {
     private void signInLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signInLabelMouseClicked
         String email = userInputPane.getText();
         String password = passwordInputPane.getText();
-        Usuario user = new Usuario.Builder()
-                .correoElectronico(email)
-                .contrasena(password)
-                .build();
+        
+        // Crear LoginDTO en lugar de Usuario
+        LoginDTO loginDTO = new LoginDTO(email, password);
 
         try {
-            Usuario userMatched = USUARIO_SERVICE.iniciarSesion(user);
+            // Retorna UsuarioPerfilDTO en lugar de Usuario
+            UsuarioPerfilDTO userMatched = USUARIO_SERVICE.iniciarSesion(loginDTO);
             CONTENT_PANE.add(new HomePane(FATHER, userMatched), "HOME_VIEW");
             CardLayout cl = (CardLayout) CONTENT_PANE.getLayout();
             cl.show(CONTENT_PANE, "HOME_VIEW");
