@@ -28,7 +28,7 @@ public class HomePane extends javax.swing.JPanel {
         contentPane.add(new DiscoverPane(contentPane, user), "DISCOVER");
         contentPane.add(new MatchPane(contentPane), "MATCH");
         contentPane.add(new ChatPane(contentPane), "CHAT");
-        contentPane.add(new ProfilePane(contentPane), "PROFILE");
+        contentPane.add(new ProfilePane(contentPane,user), "PROFILE");
 
         this.currentStatus = "DISCOVER";
         discoverLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/purple-discover.png")));

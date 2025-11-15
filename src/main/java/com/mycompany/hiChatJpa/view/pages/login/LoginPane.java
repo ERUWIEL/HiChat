@@ -135,15 +135,14 @@ public class LoginPane extends javax.swing.JPanel {
         signInPane.setLayout(signInPaneLayout);
         signInPaneLayout.setHorizontalGroup(
             signInPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 340, Short.MAX_VALUE)
-            .addGroup(signInPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(signInLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE))
+            .addComponent(signInLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
         );
         signInPaneLayout.setVerticalGroup(
             signInPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
-            .addGroup(signInPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(signInLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE))
+            .addGroup(signInPaneLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(signInLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+                .addGap(16, 16, 16))
         );
 
         actionsPane.add(signInPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 15, 340, 60));
