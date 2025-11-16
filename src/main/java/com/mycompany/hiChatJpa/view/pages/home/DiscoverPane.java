@@ -1,5 +1,6 @@
 package com.mycompany.hiChatJpa.view.pages.home;
 
+import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
 import com.mycompany.hiChatJpa.entitys.Usuario;
 import com.mycompany.hiChatJpa.service.IUsuarioService;
 import com.mycompany.hiChatJpa.service.impl.UsuarioService;
@@ -13,18 +14,17 @@ import javax.swing.JPanel;
  * @author gatog
  */
 public class DiscoverPane extends javax.swing.JPanel {
-
-    private Usuario currentUser;
+    private UsuarioPerfilDTO currentUser;
     private final IUsuarioService USUARIO_SERVICE;
-    private Iterator<Usuario> PRETENDIENTES;
-
+    private Iterator<UsuarioPerfilDTO> PRETENDIENTES;
+    
     /**
      * Creates new form LoginPane
      *
      * @param panel
      * @param usuario
      */
-    public DiscoverPane(JPanel panel, Usuario usuario) {
+    public DiscoverPane(JPanel panel, UsuarioPerfilDTO usuario) {
         initComponents();
         this.USUARIO_SERVICE = new UsuarioService();
         try {

@@ -1,34 +1,31 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.hiChatJpa.dto;
 
+import java.time.LocalDate;
 
 /**
- *
+ * DTO para mostrar perfil de usuario
+ * Contiene información del usuario para ser usado en vistas
+ * 
  * @author Luis Valenzuela
- * DTO para mostrar perfil público de usuario
- * Contiene solo información visible para otros usuarios
- * No incluye datos sensibles
  */
-
 public class UsuarioPerfilDTO {
-
     private Long idUsuario;
     private String nombre;
     private String apellidoPaterno;
+    private String apellidoMaterno;
+    private String correoElectronico;
     private String carrera;
     private String biografia;
     private String urlFotoPerfil;
     private String genero;
+    private LocalDate fechaNacimiento;
     private Integer edad;
 
     // Constructor vacío
     public UsuarioPerfilDTO() {
     }
 
-    // Constructor completo
+    // Constructor con campos principales
     public UsuarioPerfilDTO(Long idUsuario, String nombre, String apellidoPaterno,
                            String carrera, String biografia, String urlFotoPerfil,
                            String genero, Integer edad) {
@@ -39,6 +36,24 @@ public class UsuarioPerfilDTO {
         this.biografia = biografia;
         this.urlFotoPerfil = urlFotoPerfil;
         this.genero = genero;
+        this.edad = edad;
+    }
+
+    // Constructor completo
+    public UsuarioPerfilDTO(Long idUsuario, String nombre, String apellidoPaterno,
+                           String apellidoMaterno, String correoElectronico, String carrera,
+                           String biografia, String urlFotoPerfil, String genero,
+                           LocalDate fechaNacimiento, Integer edad) {
+        this.idUsuario = idUsuario;
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.correoElectronico = correoElectronico;
+        this.carrera = carrera;
+        this.biografia = biografia;
+        this.urlFotoPerfil = urlFotoPerfil;
+        this.genero = genero;
+        this.fechaNacimiento = fechaNacimiento;
         this.edad = edad;
     }
 
@@ -65,6 +80,22 @@ public class UsuarioPerfilDTO {
 
     public void setApellidoPaterno(String apellidoPaterno) {
         this.apellidoPaterno = apellidoPaterno;
+    }
+
+    public String getApellidoMaterno() {
+        return apellidoMaterno;
+    }
+
+    public void setApellidoMaterno(String apellidoMaterno) {
+        this.apellidoMaterno = apellidoMaterno;
+    }
+
+    public String getCorreoElectronico() {
+        return correoElectronico;
+    }
+
+    public void setCorreoElectronico(String correoElectronico) {
+        this.correoElectronico = correoElectronico;
     }
 
     public String getCarrera() {
@@ -99,6 +130,14 @@ public class UsuarioPerfilDTO {
         this.genero = genero;
     }
 
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
     public Integer getEdad() {
         return edad;
     }
@@ -112,7 +151,10 @@ public class UsuarioPerfilDTO {
         return "UsuarioPerfilDTO{" +
                 "idUsuario=" + idUsuario +
                 ", nombre='" + nombre + '\'' +
+                ", apellidoPaterno='" + apellidoPaterno + '\'' +
+                ", correoElectronico='" + correoElectronico + '\'' +
                 ", carrera='" + carrera + '\'' +
+                ", genero='" + genero + '\'' +
                 '}';
     }
 }

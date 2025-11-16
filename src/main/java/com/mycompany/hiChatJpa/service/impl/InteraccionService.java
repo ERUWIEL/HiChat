@@ -1,4 +1,3 @@
-
 package com.mycompany.hiChatJpa.service.impl;
 
 import com.mycompany.hiChatJpa.dao.IBloqueoDAO;
@@ -23,8 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * Implementación de la capa de servicio para la entidad interaccion
- * 
+ * Implementación de la capa de servicio para Interacción
  * @author gatog
  */
 public class InteraccionService implements IInteraccionService {
@@ -46,11 +44,6 @@ public class InteraccionService implements IInteraccionService {
     /**
      * Da un like a un usuario
      * Si el usuario receptor también dio like, se genera automáticamente un match
-     * 
-     * @param idUsuarioEmisor ID del usuario que da el like
-     * @param idUsuarioReceptor ID del usuario que recibe el like
-     * @return true si se crea un match, false si solo se registra el like
-     * @throws Exception si hay error en la validación
      */
     @Override
     public boolean darLike(Long idUsuarioEmisor, Long idUsuarioReceptor) throws Exception {
@@ -110,18 +103,14 @@ public class InteraccionService implements IInteraccionService {
         if (likeRecíproco) {
             // ============ CREAR MATCH ============
             crearMatch(usuarioEmisor, usuarioReceptor);
-            return true; // Se creó un match
+            return true;
         }
 
-        return false; // No se creó match, solo like
+        return false;
     }
 
     /**
      * Da un dislike a un usuario
-     * 
-     * @param idUsuarioEmisor ID del usuario que da el dislike
-     * @param idUsuarioReceptor ID del usuario que recibe el dislike
-     * @throws Exception si hay error en la validación
      */
     @Override
     public void darDislike(Long idUsuarioEmisor, Long idUsuarioReceptor) throws Exception {
@@ -175,11 +164,6 @@ public class InteraccionService implements IInteraccionService {
 
     /**
      * Bloquea a un usuario
-     * Después de bloquear, el chat se deshabilita para ambos
-     * 
-     * @param idUsuarioBloqueador ID del usuario que bloquea
-     * @param idUsuarioBloqueado ID del usuario a bloquear
-     * @throws Exception si hay error en la validación
      */
     @Override
     public void bloquearUsuario(Long idUsuarioBloqueador, Long idUsuarioBloqueado) throws Exception {
@@ -231,12 +215,8 @@ public class InteraccionService implements IInteraccionService {
 
     /**
      * Desbloquea a un usuario
-     * Verifica que exista un bloqueo previo
-     * 
-     * @param idUsuarioBloqueador ID del usuario que desbloquea
-     * @param idUsuarioBloqueado ID del usuario a desbloquear
-     * @throws Exception si hay error en la validación
      */
+    @Override
     public void desbloquearUsuario(Long idUsuarioBloqueador, Long idUsuarioBloqueado) throws Exception {
         // ============ VALIDACIONES ============
         if (idUsuarioBloqueador == null || idUsuarioBloqueador <= 0) {
@@ -269,7 +249,6 @@ public class InteraccionService implements IInteraccionService {
             .findFirst()
             .orElse(null);
 
-        // Validar que exista el bloqueo
         if (bloqueoAEliminar == null) {
             throw new Exception("No existe un bloqueo previo con este usuario.");
         }
@@ -280,11 +259,6 @@ public class InteraccionService implements IInteraccionService {
 
     /**
      * Crea un match entre dos usuarios
-     * Valida que no exista un match previo
-     * 
-     * @param usuarioA Primer usuario
-     * @param usuarioB Segundo usuario
-     * @throws Exception si hay error
      */
     private void crearMatch(Usuario usuarioA, Usuario usuarioB) throws Exception {
         // Validar que no exista un match previo
@@ -319,11 +293,7 @@ public class InteraccionService implements IInteraccionService {
     }
 
     /**
-     * Valida que no exista un bloqueo entre dos usuarios en ambas direcciones
-     * 
-     * @param usuarioA Primer usuario
-     * @param usuarioB Segundo usuario
-     * @throws Exception si existe un bloqueo
+     * Valida que no exista un bloqueo entre dos usuarios
      */
     private void validarNoExistaBloqueo(Usuario usuarioA, Usuario usuarioB) throws Exception {
         // Validar si A bloqueó a B
@@ -347,10 +317,6 @@ public class InteraccionService implements IInteraccionService {
 
     /**
      * Deshabilita el chat entre dos usuarios después de un bloqueo
-     * Elimina los chats comunes entre los dos usuarios
-     * 
-     * @param usuarioBloqueador Usuario que bloquea
-     * @param usuarioBloqueado Usuario bloqueado
      */
     private void deshabilitarChatEntre(Usuario usuarioBloqueador, Usuario usuarioBloqueado) {
         try {
@@ -370,9 +336,7 @@ public class InteraccionService implements IInteraccionService {
                 }
             }
         } catch (Exception e) {
-            // Log del error (en producción, usar un logger)
             System.err.println("Error al deshabilitar chat: " + e.getMessage());
         }
     }
 }
-

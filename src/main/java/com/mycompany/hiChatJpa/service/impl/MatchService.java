@@ -1,23 +1,69 @@
 package com.mycompany.hiChatJpa.service.impl;
 
 import com.mycompany.hiChatJpa.dao.IMatchDAO;
+import com.mycompany.hiChatJpa.dao.IUsuarioDAO;
 import com.mycompany.hiChatJpa.dao.impl.MatchDAO;
+import com.mycompany.hiChatJpa.dao.impl.UsuarioDAO;
+import com.mycompany.hiChatJpa.dto.MatchDTO;
+import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
 import com.mycompany.hiChatJpa.entitys.Match;
 import com.mycompany.hiChatJpa.entitys.Usuario;
 import com.mycompany.hiChatJpa.service.IMatchService;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Implementación de la capa de servicio para la entidad interaccion author
- * gatog
+ * Implementación de la capa de servicio para Match
+ * @author gatog
  */
 public class MatchService implements IMatchService {
 
     private final IMatchDAO matchDAO;
+    private final IUsuarioDAO usuarioDAO;
 
     public MatchService() {
         this.matchDAO = new MatchDAO();
+        this.usuarioDAO = new UsuarioDAO();
+    }
+
+    /**
+     * Convierte Usuario a UsuarioPerfilDTO
+     */
+    private UsuarioPerfilDTO usuarioADTO(Usuario usuario) {
+        if (usuario == null) return null;
+
+        Integer edad = null;
+        if (usuario.getFechaNacimiento() != null) {
+            edad = Period.between(usuario.getFechaNacimiento(), LocalDate.now()).getYears();
+        }
+
+        UsuarioPerfilDTO dto = new UsuarioPerfilDTO();
+        dto.setIdUsuario(usuario.getIdUsuario());
+        dto.setNombre(usuario.getNombre());
+        dto.setApellidoPaterno(usuario.getApellidoPaterno());
+        dto.setCarrera(usuario.getCarrera());
+        dto.setBiografia(usuario.getBiografia());
+        dto.setUrlFotoPerfil(usuario.getUrlFotoPerfil());
+        dto.setGenero(usuario.getGenero() != null ? usuario.getGenero().toString() : null);
+        dto.setEdad(edad);
+        return dto;
+    }
+
+    /**
+     * Convierte Match a MatchDTO
+     */
+    private MatchDTO matchADTO(Match match) {
+        if (match == null) return null;
+
+        MatchDTO dto = new MatchDTO();
+        dto.setIdMatch(match.getIdMatch());
+        dto.setUsuarioA(usuarioADTO(match.getUsuarioA()));
+        dto.setUsuarioB(usuarioADTO(match.getUsuarioB()));
+        dto.setFechaMatch(match.getFechaMatch());
+        dto.setIdChat(match.getChat() != null ? match.getChat().getIdChat() : null);
+        return dto;
     }
 
     /**
@@ -25,28 +71,33 @@ public class MatchService implements IMatchService {
      * Retorna los matches donde el usuario participa (como usuarioA o usuarioB)
      * Ordena los matches por fecha (más recientes primero)
      * 
-     * @param usuario Usuario del cual obtener los matches
-     * @return Lista de matches del usuario ordenados por fecha descendente
+     * @param idUsuario ID del usuario del cual obtener los matches
+     * @return Lista de MatchDTO ordenados por fecha descendente
      * @throws Exception si hay error en la validación
      */
-    public List<Match> mostrarMatches(Usuario usuario) throws Exception {
+    @Override
+    public List<MatchDTO> mostrarMatches(Long idUsuario) throws Exception {
         // ============ VALIDACIONES ============
-        if (usuario == null || usuario.getIdUsuario() == null) {
-            throw new Exception("Usuario inválido.");
-        }
-        if (usuario.getIdUsuario() <= 0) {
+        if (idUsuario == null || idUsuario <= 0) {
             throw new Exception("ID del usuario inválido.");
         }
+
+        // Verificar que el usuario existe
+        Usuario usuario = usuarioDAO.buscar(idUsuario);
+        if (usuario == null) {
+            throw new Exception("El usuario no existe.");
+        }
+
         // ============ OBTENER MATCHES COMO USUARIO A ============
         List<Match> matchesComoA = matchDAO.buscarPorUsuarioA(usuario);
         if (matchesComoA == null) {
-            matchesComoA = List.of(); // Lista vacía
+            matchesComoA = List.of();
         }
 
         // ============ OBTENER MATCHES COMO USUARIO B ============
         List<Match> matchesComoB = matchDAO.buscarPorUsuarioB(usuario);
         if (matchesComoB == null) {
-            matchesComoB = List.of(); // Lista vacía
+            matchesComoB = List.of();
         }
 
         // ============ COMBINAR AMBOS RESULTADOS ============
@@ -65,9 +116,11 @@ public class MatchService implements IMatchService {
         }
 
         // ============ ORDENAR POR FECHA (MÁS RECIENTES PRIMERO) ============
-        List<Match> matchesOrdenados = todosLosMatches.stream()
+        List<MatchDTO> matchesOrdenados = todosLosMatches.stream()
             .sorted((m1, m2) -> m2.getFechaMatch().compareTo(m1.getFechaMatch()))
+            .map(this::matchADTO)
             .collect(Collectors.toList());
+
         return matchesOrdenados;
     }
 }

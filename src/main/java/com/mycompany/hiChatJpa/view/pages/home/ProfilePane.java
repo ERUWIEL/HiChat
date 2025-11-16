@@ -1,6 +1,8 @@
 
 package com.mycompany.hiChatJpa.view.pages.home;
 
+import com.mycompany.hiChatJpa.dto.ActualizarUsuarioDTO;
+import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
 import com.mycompany.hiChatJpa.entitys.Usuario;
 import com.mycompany.hiChatJpa.service.IUsuarioService;
 import com.mycompany.hiChatJpa.service.impl.UsuarioService;
@@ -16,27 +18,26 @@ import javax.swing.JPanel;
  */
 public class ProfilePane extends javax.swing.JPanel {
     
-    private Usuario usuarioActual;
+    private UsuarioPerfilDTO usuarioActual;
     private IUsuarioService usuarioService;
-    private JPanel panelPrincipal;
-    private Usuario usuario;
+    private UsuarioPerfilDTO usuario;
     
     /**
      * Creates new form LoginPane
      * @param panel
      */
-    public ProfilePane(JPanel panel, Usuario usuario) {
-        this.panelPrincipal = panel;
+    public ProfilePane(JPanel panel, UsuarioPerfilDTO usuarioParam) {
         this.usuarioService = new UsuarioService();
-        this.usuario = usuario;
+        this.usuarioActual = usuarioParam;
         
         initComponents();
+        configurarPerfil(usuarioParam);
     }
     /**
      * Configura el perfil del usuario actual
      * @param usuario Usuario a mostrar
      */
-    public void configurarPerfil(Usuario usuario) {
+    public void configurarPerfil(UsuarioPerfilDTO usuario) {
         
         this.usuarioActual = usuario;
 
@@ -48,11 +49,13 @@ public class ProfilePane extends javax.swing.JPanel {
             }
             LabelUserName1.setText(nombreCompleto);
 
-            // Fecha de nacimiento
+            // Fecha de nacimiento y edad
             if (usuario.getFechaNacimiento() != null) {
                 String fechaFormato = usuario.getFechaNacimiento().toString();
                 int edad = calcularEdad(usuario.getFechaNacimiento());
                 FchNacLabel.setText(fechaFormato + " (" + edad + " años)");
+            } else if (usuario.getEdad() != null) {
+                FchNacLabel.setText(usuario.getEdad() + " años");
             } else {
                 FchNacLabel.setText("No especificado");
             }
@@ -61,9 +64,9 @@ public class ProfilePane extends javax.swing.JPanel {
             if (usuario.getGenero() != null) {
                 String genero = usuario.getGenero().toString();
                 genero = genero.charAt(0) + genero.substring(1).toLowerCase();
-                VolverLabel.setText(genero);
+                GeneroLabel.setText(genero);
             } else {
-                VolverLabel.setText("No especificado");
+                GeneroLabel.setText("No especificado");
             }
 
             // Carrera
@@ -75,7 +78,7 @@ public class ProfilePane extends javax.swing.JPanel {
 
             // Biografía
             if (usuario.getBiografia() != null && !usuario.getBiografia().isEmpty()) {
-                BiografiaLabel.setText(usuario.getBiografia());
+                textFieldPanel1.setMessage(usuario.getBiografia());
             } else {
                 BiografiaLabel.setText("Sin biografía");
             }
@@ -134,8 +137,6 @@ public class ProfilePane extends javax.swing.JPanel {
         GuardarLabel = new javax.swing.JLabel();
         panelRound5 = new com.mycompany.hiChatJpa.view.components.PanelRound();
         FchNacLabel = new javax.swing.JLabel();
-        PanelVolver = new com.mycompany.hiChatJpa.view.components.PanelRound();
-        VolverLabel = new javax.swing.JLabel();
         FchNacLabel1 = new javax.swing.JLabel();
         CarreraLabel1 = new javax.swing.JLabel();
         GeneroLabel3 = new javax.swing.JLabel();
@@ -191,7 +192,7 @@ public class ProfilePane extends javax.swing.JPanel {
         );
 
         add(panelRound2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 10, 130, 130));
-        add(textFieldPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 380, -1, 60));
+        add(textFieldPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, -1, 60));
 
         BiografiaLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
         BiografiaLabel.setForeground(new java.awt.Color(204, 204, 204));
@@ -323,41 +324,6 @@ public class ProfilePane extends javax.swing.JPanel {
 
         add(panelRound5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 340, 30));
 
-        PanelVolver.setBackground(new java.awt.Color(102, 51, 255));
-        PanelVolver.setRoundBottomLeft(100);
-        PanelVolver.setRoundBottomRight(100);
-        PanelVolver.setRoundTopLeft(100);
-        PanelVolver.setRoundTopRight(100);
-
-        VolverLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
-        VolverLabel.setForeground(new java.awt.Color(204, 204, 204));
-        VolverLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        VolverLabel.setText("< BACK");
-        VolverLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                VolverLabelMouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout PanelVolverLayout = new javax.swing.GroupLayout(PanelVolver);
-        PanelVolver.setLayout(PanelVolverLayout);
-        PanelVolverLayout.setHorizontalGroup(
-            PanelVolverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelVolverLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(VolverLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        PanelVolverLayout.setVerticalGroup(
-            PanelVolverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelVolverLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(VolverLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        add(PanelVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 90, 30));
-
         FchNacLabel1.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
         FchNacLabel1.setForeground(new java.awt.Color(204, 204, 204));
         FchNacLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -377,14 +343,6 @@ public class ProfilePane extends javax.swing.JPanel {
         add(GeneroLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 260, 180, 20));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void VolverLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_VolverLabelMouseClicked
-        if (panelPrincipal != null) {
-            panelPrincipal.removeAll();
-            panelPrincipal.revalidate();
-            panelPrincipal.repaint();
-        }
-    }//GEN-LAST:event_VolverLabelMouseClicked
-
     private void GuardarLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GuardarLabelMouseClicked
         if (usuarioActual == null) {
             JOptionPane.showMessageDialog(this, "No hay usuario cargado", "Error", JOptionPane.ERROR_MESSAGE);
@@ -399,14 +357,17 @@ public class ProfilePane extends javax.swing.JPanel {
         }
 
         try {
-            // Actualizar la biografía en el objeto usuario
-            usuarioActual.setBiografia(nuevaBiografia);
+            // Crear DTO para actualizar
+            ActualizarUsuarioDTO actualizarDTO = new ActualizarUsuarioDTO();
+            actualizarDTO.setIdUsuario(usuarioActual.getIdUsuario());
+            actualizarDTO.setBiografia(nuevaBiografia);
             
             // Guardar en la base de datos
-            usuarioService.actualizarUsuario(usuarioActual);
+            usuarioService.actualizarUsuario(actualizarDTO);
             
-            // Actualizar la etiqueta de biografía
-            //textFieldPanel1.setText(nuevaBiografia);
+            // Actualizar la biografía en el DTO local
+            usuarioActual.setBiografia(nuevaBiografia);
+            textFieldPanel1.setMessage(nuevaBiografia);
             
             JOptionPane.showMessageDialog(this, "Biografía actualizada correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
@@ -428,8 +389,6 @@ public class ProfilePane extends javax.swing.JPanel {
     private javax.swing.JLabel GuardarLabel;
     private javax.swing.JLabel LabelUserName1;
     private com.mycompany.hiChatJpa.view.components.PanelRound PanelActualizar;
-    private com.mycompany.hiChatJpa.view.components.PanelRound PanelVolver;
-    private javax.swing.JLabel VolverLabel;
     private com.mycompany.hiChatJpa.view.components.PanelRound panelRound1;
     private com.mycompany.hiChatJpa.view.components.PanelRound panelRound2;
     private com.mycompany.hiChatJpa.view.components.PanelRound panelRound3;

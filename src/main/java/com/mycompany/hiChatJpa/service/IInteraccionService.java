@@ -1,8 +1,9 @@
 package com.mycompany.hiChatJpa.service;
 
-
 /**
- * interfaz que define los metodos crud de una interaccion
+ * Interfaz de servicio para Interacción
+ * Utiliza IDs de usuarios para las operaciones
+ *
  * @author gatog
  */
 public interface IInteraccionService {
@@ -36,4 +37,14 @@ public interface IInteraccionService {
      * @throws Exception si hay error en la validación
      */
     void bloquearUsuario(Long idUsuarioBloqueador, Long idUsuarioBloqueado) throws Exception;
+
+    /**
+     * Desbloquea a un usuario
+     * Verifica que exista un bloqueo previo
+     * 
+     * @param idUsuarioBloqueador ID del usuario que desbloquea
+     * @param idUsuarioBloqueado ID del usuario a desbloquear
+     * @throws Exception si hay error en la validación
+     */
+    void desbloquearUsuario(Long idUsuarioBloqueador, Long idUsuarioBloqueado) throws Exception;
 }
