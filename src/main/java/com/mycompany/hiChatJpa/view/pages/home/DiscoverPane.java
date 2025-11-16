@@ -1,11 +1,15 @@
 package com.mycompany.hiChatJpa.view.pages.home;
 
+import com.mycompany.hiChatJpa.config.CloudinaryUtil;
 import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
 import com.mycompany.hiChatJpa.entitys.Usuario;
 import com.mycompany.hiChatJpa.service.IUsuarioService;
 import com.mycompany.hiChatJpa.service.impl.UsuarioService;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -14,10 +18,11 @@ import javax.swing.JPanel;
  * @author gatog
  */
 public class DiscoverPane extends javax.swing.JPanel {
+
     private UsuarioPerfilDTO currentUser;
     private final IUsuarioService USUARIO_SERVICE;
     private Iterator<UsuarioPerfilDTO> PRETENDIENTES;
-    
+
     /**
      * Creates new form LoginPane
      *
@@ -141,9 +146,21 @@ public class DiscoverPane extends javax.swing.JPanel {
         try {
             this.currentUser = PRETENDIENTES.next();
             this.username.setText(currentUser.getNombre() + " " + currentUser.getApellidoPaterno());
+            changeImg();
         } catch (NoSuchElementException ex) {
             this.userCard.setVisible(false);
             JOptionPane.showMessageDialog(null, "it seems like theres nobody to judge", "soo sorry :(", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private void changeImg() {
+        try {
+            String transformedURL = CloudinaryUtil.getInstance().generarUrlTransformada("hichat/perfiles/usuario_1" , 100, 100);
+            URL url = new URL(transformedURL);
+            ImageIcon icono = new ImageIcon(url);
+            imgLabel.setIcon(icono);
+        } catch (MalformedURLException e) {
+            System.out.println("Error al cargar imagen: " + e.getMessage());
         }
     }
 

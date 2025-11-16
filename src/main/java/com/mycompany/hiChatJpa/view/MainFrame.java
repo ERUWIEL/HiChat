@@ -1,6 +1,5 @@
 package com.mycompany.hiChatJpa.view;
 
-import com.mycompany.hiChatJpa.view.pages.home.HomePane;
 import com.mycompany.hiChatJpa.view.pages.login.LoginPane;
 import com.mycompany.hiChatJpa.view.pages.restorePassword.RestorePswChangePane;
 import com.mycompany.hiChatJpa.view.pages.restorePassword.RestorePswConfirmUserPane;
@@ -130,7 +129,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, viewName);
-    }    
+    }
+
     /**
      * metodo publico que permite refrescar todas las ventanas
      */
