@@ -3,7 +3,9 @@ package com.mycompany.hiChatJpa.view.pages.home;
 import com.mycompany.hiChatJpa.config.CloudinaryUtil;
 import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
 import com.mycompany.hiChatJpa.entitys.Usuario;
+import com.mycompany.hiChatJpa.service.IInteraccionService;
 import com.mycompany.hiChatJpa.service.IUsuarioService;
+import com.mycompany.hiChatJpa.service.impl.InteraccionService;
 import com.mycompany.hiChatJpa.service.impl.UsuarioService;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -20,7 +22,9 @@ import javax.swing.JPanel;
 public class DiscoverPane extends javax.swing.JPanel {
 
     private UsuarioPerfilDTO currentUser;
+    private UsuarioPerfilDTO loggedUser;
     private final IUsuarioService USUARIO_SERVICE;
+    private final IInteraccionService INTERACCION_SERVICE;
     private Iterator<UsuarioPerfilDTO> PRETENDIENTES;
 
     /**
@@ -31,7 +35,9 @@ public class DiscoverPane extends javax.swing.JPanel {
      */
     public DiscoverPane(JPanel panel, UsuarioPerfilDTO usuario) {
         initComponents();
+        this.loggedUser = usuario;
         this.USUARIO_SERVICE = new UsuarioService();
+        this.INTERACCION_SERVICE = new InteraccionService();
         try {
             this.PRETENDIENTES = USUARIO_SERVICE.listarUsuarios().iterator();
             loadNext();
@@ -79,7 +85,7 @@ public class DiscoverPane extends javax.swing.JPanel {
         });
         likePane.add(heartLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 70, 70));
 
-        add(likePane, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 380, 70, 70));
+        add(likePane, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 410, 70, 70));
 
         dislikePanel.setBackground(new java.awt.Color(55, 65, 81));
         dislikePanel.setRoundBottomLeft(360);
@@ -99,7 +105,7 @@ public class DiscoverPane extends javax.swing.JPanel {
         });
         dislikePanel.add(dislikeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 70, 70));
 
-        add(dislikePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 380, 70, 70));
+        add(dislikePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 410, 70, 70));
 
         userCard.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -132,16 +138,36 @@ public class DiscoverPane extends javax.swing.JPanel {
         add(userCard, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 380, 400));
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * metodo que permite dar like ala vez que carga al siguente pretendiente
+     * @param evt 
+     */
     private void heartLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_heartLabelMouseClicked
-        System.out.println("Le diste like a : " + this.currentUser.getNombre());
+        try {
+            INTERACCION_SERVICE.darLike(loggedUser.getIdUsuario(), currentUser.getIdUsuario());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "that action cant be done rn", "soo sorry :(", JOptionPane.INFORMATION_MESSAGE);
+        }
         loadNext();
     }//GEN-LAST:event_heartLabelMouseClicked
 
+    /**
+     * metodo que permite dar dislike ala vez que carga al siguente pretendiente
+     * @param evt 
+     */
     private void dislikeLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dislikeLabelMouseClicked
-        System.out.println("Le diste dislike a : " + this.currentUser.getNombre());
+        try {
+            INTERACCION_SERVICE.darDislike(loggedUser.getIdUsuario(), currentUser.getIdUsuario());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "that action cant be done rn", "soo sorry :(", JOptionPane.INFORMATION_MESSAGE);
+        }
         loadNext();
     }//GEN-LAST:event_dislikeLabelMouseClicked
 
+    
+    /**
+     * metodo de utileria que cambia la tarjeta de presentacion de los pretendientes
+     */
     private void loadNext() {
         try {
             this.currentUser = PRETENDIENTES.next();
@@ -153,9 +179,12 @@ public class DiscoverPane extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * metodo de utileria que cambia la foto del perfil mostrado
+     */
     private void changeImg() {
         try {
-            String transformedURL = CloudinaryUtil.getInstance().generarUrlTransformada("hichat/perfiles/usuario_1" , 100, 100);
+            String transformedURL = CloudinaryUtil.getInstance().generarUrlTransformada("hichat/perfiles/usuario_1", 360, 360);
             URL url = new URL(transformedURL);
             ImageIcon icono = new ImageIcon(url);
             imgLabel.setIcon(icono);
