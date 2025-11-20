@@ -1,7 +1,7 @@
 
 package com.mycompany.hiChatJpa.view.pages.home;
 
-import com.mycompany.hiChatJpa.view.MainFrame;
+import javax.swing.JPanel;
 
 /**
  *
@@ -11,9 +11,9 @@ public class ChatPane extends javax.swing.JPanel {
     
     /**
      * Creates new form LoginPane
-     * @param frame
+     * @param panel
      */
-    public ChatPane(MainFrame frame) {
+    public ChatPane(JPanel panel) {
         initComponents();
     }
 
@@ -26,22 +26,42 @@ public class ChatPane extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        tittleLabel = new javax.swing.JLabel();
+        panelRound1 = new com.mycompany.hiChatJpa.view.components.PanelRound();
+
         setBackground(new java.awt.Color(22, 16, 34));
         setPreferredSize(new java.awt.Dimension(400, 600));
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        tittleLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 18)); // NOI18N
+        tittleLabel.setForeground(new java.awt.Color(255, 255, 255));
+        tittleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        tittleLabel.setText("option not supported yet");
+        add(tittleLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 148, 270, 40));
+
+        panelRound1.setBackground(new java.awt.Color(0, 102, 204));
+        panelRound1.setRoundBottomLeft(100);
+        panelRound1.setRoundBottomRight(100);
+        panelRound1.setRoundTopLeft(100);
+        panelRound1.setRoundTopRight(100);
+
+        javax.swing.GroupLayout panelRound1Layout = new javax.swing.GroupLayout(panelRound1);
+        panelRound1.setLayout(panelRound1Layout);
+        panelRound1Layout.setHorizontalGroup(
+            panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 290, Short.MAX_VALUE)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 470, Short.MAX_VALUE)
+        panelRound1Layout.setVerticalGroup(
+            panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 60, Short.MAX_VALUE)
         );
+
+        add(panelRound1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 140, 290, 60));
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.mycompany.hiChatJpa.view.components.PanelRound panelRound1;
+    private javax.swing.JLabel tittleLabel;
     // End of variables declaration//GEN-END:variables
 }

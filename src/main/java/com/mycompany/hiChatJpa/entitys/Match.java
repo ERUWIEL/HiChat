@@ -23,18 +23,19 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "matches")
+
 @NamedQueries({
     @NamedQuery(
-        name = "Match.findAll",
-        query = "SELECT m FROM Match m ORDER BY m.fechaMatch DESC"
+            name = "Match.findAll",
+            query = "SELECT m FROM Match m ORDER BY m.fechaMatch DESC"
     ),
     @NamedQuery(
-        name = "Match.findByUsuarioA",
-        query = "SELECT m FROM Match m WHERE m.usuarioA = :usuario ORDER BY m.fechaMatch DESC"
+            name = "Match.findByUsuarioA",
+            query = "SELECT m FROM Match m WHERE m.usuarioA = :usuarioA ORDER BY m.fechaMatch DESC"
     ),
     @NamedQuery(
-        name = "Match.findByUsuarioB",
-        query = "SELECT m FROM Match m WHERE m.usuarioB = :usuario ORDER BY m.fechaMatch DESC"
+            name = "Match.findByUsuarioB",
+            query = "SELECT m FROM Match m WHERE m.usuarioB = :usuarioB ORDER BY m.fechaMatch DESC"
     )
 })
 public class Match implements Serializable {

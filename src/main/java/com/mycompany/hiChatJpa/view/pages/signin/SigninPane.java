@@ -2,6 +2,7 @@
 package com.mycompany.hiChatJpa.view.pages.signin;
 
 import com.mycompany.hiChatJpa.view.MainFrame;
+import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
 
 /**
  *
@@ -42,10 +43,12 @@ public class SigninPane extends javax.swing.JPanel {
         usernameLabel = new javax.swing.JLabel();
         createAccountLabel = new javax.swing.JLabel();
         dataPane = new javax.swing.JPanel();
-        usernameLabel1 = new javax.swing.JLabel();
-        textFieldPanel1 = new com.mycompany.hiChatJpa.view.components.TextFieldPanel();
-        usernameLabel2 = new javax.swing.JLabel();
-        textFieldPanel2 = new com.mycompany.hiChatJpa.view.components.TextFieldPanel();
+        userNameLabel = new javax.swing.JLabel();
+        userNameTxt = new TextFieldPanel(TextFieldPanel.NAME_REGEX, "invalid name format");
+        userLastNameLabel = new javax.swing.JLabel();
+        userLastNameTxt = new TextFieldPanel(TextFieldPanel.NAME_REGEX, "invalid lastname format");
+        userSecondLastNameLabel = new javax.swing.JLabel();
+        userSecondLastNameTxt = new TextFieldPanel(TextFieldPanel.NAME_REGEX, "invalid second lastname format");
         continuePane = new com.mycompany.hiChatJpa.view.components.PanelRound();
         continueLabel = new javax.swing.JLabel();
         messageLabel = new javax.swing.JLabel();
@@ -188,19 +191,32 @@ public class SigninPane extends javax.swing.JPanel {
         dataPane.setOpaque(false);
         dataPane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        usernameLabel1.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
-        usernameLabel1.setForeground(new java.awt.Color(204, 204, 204));
-        usernameLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        usernameLabel1.setText("last name");
-        dataPane.add(usernameLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 360, 20));
-        dataPane.add(textFieldPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, -1, -1));
+        userNameLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        userNameLabel.setForeground(new java.awt.Color(204, 204, 204));
+        userNameLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        userNameLabel.setText("name");
+        dataPane.add(userNameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 360, 20));
 
-        usernameLabel2.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
-        usernameLabel2.setForeground(new java.awt.Color(204, 204, 204));
-        usernameLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        usernameLabel2.setText("name");
-        dataPane.add(usernameLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 360, 20));
-        dataPane.add(textFieldPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+        userNameTxt.setMessage("enter your name");
+        dataPane.add(userNameTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+
+        userLastNameLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        userLastNameLabel.setForeground(new java.awt.Color(204, 204, 204));
+        userLastNameLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        userLastNameLabel.setText("last name");
+        dataPane.add(userLastNameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 360, 20));
+
+        userLastNameTxt.setMessage("enter your lastname");
+        dataPane.add(userLastNameTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, -1, -1));
+
+        userSecondLastNameLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        userSecondLastNameLabel.setForeground(new java.awt.Color(204, 204, 204));
+        userSecondLastNameLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        userSecondLastNameLabel.setText("second last name");
+        dataPane.add(userSecondLastNameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 360, 20));
+
+        userSecondLastNameTxt.setMessage("enter your second lastname (optional)");
+        dataPane.add(userSecondLastNameTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, -1, -1));
 
         continuePane.setBackground(new java.awt.Color(108, 43, 238));
         continuePane.setRoundBottomLeft(25);
@@ -334,11 +350,13 @@ public class SigninPane extends javax.swing.JPanel {
     private javax.swing.JLabel messageLabel;
     private javax.swing.JLabel returnButton;
     private javax.swing.JPanel stepsPane;
-    private com.mycompany.hiChatJpa.view.components.TextFieldPanel textFieldPanel1;
-    private com.mycompany.hiChatJpa.view.components.TextFieldPanel textFieldPanel2;
     private javax.swing.JLabel tittleLabel;
+    private javax.swing.JLabel userLastNameLabel;
+    private com.mycompany.hiChatJpa.view.components.TextFieldPanel userLastNameTxt;
+    private javax.swing.JLabel userNameLabel;
+    private com.mycompany.hiChatJpa.view.components.TextFieldPanel userNameTxt;
+    private javax.swing.JLabel userSecondLastNameLabel;
+    private com.mycompany.hiChatJpa.view.components.TextFieldPanel userSecondLastNameTxt;
     private javax.swing.JLabel usernameLabel;
-    private javax.swing.JLabel usernameLabel1;
-    private javax.swing.JLabel usernameLabel2;
     // End of variables declaration//GEN-END:variables
 }

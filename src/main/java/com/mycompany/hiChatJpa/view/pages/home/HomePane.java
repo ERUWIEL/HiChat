@@ -1,10 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package com.mycompany.hiChatJpa.view.pages.home;
 
+import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
+import com.mycompany.hiChatJpa.entitys.Usuario;
 import com.mycompany.hiChatJpa.view.MainFrame;
+import java.awt.CardLayout;
 
 /**
  *
@@ -12,15 +11,28 @@ import com.mycompany.hiChatJpa.view.MainFrame;
  */
 public class HomePane extends javax.swing.JPanel {
 
-    private final  MainFrame FATHER;
-    
+    private final MainFrame FATHER;
+    private final UsuarioPerfilDTO user;
+    private String currentStatus;
+
     /**
      * Creates new form HomePane
+     *
      * @param frame
+     * @param user
      */
-    public HomePane(MainFrame frame) {
+    public HomePane(MainFrame frame, UsuarioPerfilDTO user) {
         this.FATHER = frame;
+        this.user = user;
         initComponents();
+        
+        contentPane.add(new DiscoverPane(contentPane, user), "DISCOVER");
+        contentPane.add(new MatchPane(contentPane), "MATCH");
+        contentPane.add(new ChatPane(contentPane), "CHAT");
+        contentPane.add(new ProfilePane(contentPane,user), "PROFILE");
+
+        this.currentStatus = "DISCOVER";
+        discoverLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/purple-discover.png")));
     }
 
     /**
@@ -36,35 +48,75 @@ public class HomePane extends javax.swing.JPanel {
         tittleLabel = new javax.swing.JLabel();
         settingsLabel = new javax.swing.JLabel();
         contentPane = new javax.swing.JPanel();
+        dashboard = new javax.swing.JPanel();
+        discoverLabel = new javax.swing.JLabel();
+        matchLabel = new javax.swing.JLabel();
+        chatLabel = new javax.swing.JLabel();
+        profileLabel = new javax.swing.JLabel();
 
         backgroundPane.setBackground(new java.awt.Color(22, 16, 34));
         backgroundPane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tittleLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 18)); // NOI18N
         tittleLabel.setForeground(new java.awt.Color(255, 255, 255));
-        tittleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        tittleLabel.setText("HiChat!");
-        backgroundPane.add(tittleLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 100, 60));
+        tittleLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        tittleLabel.setText("Welcome!  " + user.getNombre());
+        backgroundPane.add(tittleLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, 240, 60));
 
         settingsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         settingsLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/white-settings.png"))); // NOI18N
         settingsLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        settingsLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                settingsLabelMouseClicked(evt);
+            }
+        });
         backgroundPane.add(settingsLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 0, 40, 60));
 
-        contentPane.setOpaque(false);
+        contentPane.setBackground(new java.awt.Color(204, 255, 102));
+        contentPane.setLayout(new java.awt.CardLayout());
+        backgroundPane.add(contentPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 400, 480));
 
-        javax.swing.GroupLayout contentPaneLayout = new javax.swing.GroupLayout(contentPane);
-        contentPane.setLayout(contentPaneLayout);
-        contentPaneLayout.setHorizontalGroup(
-            contentPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        contentPaneLayout.setVerticalGroup(
-            contentPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 470, Short.MAX_VALUE)
-        );
+        dashboard.setOpaque(false);
+        dashboard.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        backgroundPane.add(contentPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 400, 470));
+        discoverLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/grey-discover.png"))); // NOI18N
+        discoverLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        discoverLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                discoverLabelMouseClicked(evt);
+            }
+        });
+        dashboard.add(discoverLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, 50, 40));
+
+        matchLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/grey-heart.png"))); // NOI18N
+        matchLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        matchLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                matchLabelMouseClicked(evt);
+            }
+        });
+        dashboard.add(matchLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 10, 50, 40));
+
+        chatLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/grey-chat.png"))); // NOI18N
+        chatLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chatLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                chatLabelMouseClicked(evt);
+            }
+        });
+        dashboard.add(chatLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 10, 50, 40));
+
+        profileLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/grey-profile.png"))); // NOI18N
+        profileLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        profileLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                profileLabelMouseClicked(evt);
+            }
+        });
+        dashboard.add(profileLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 10, 50, 40));
+
+        backgroundPane.add(dashboard, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 400, 60));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -78,10 +130,66 @@ public class HomePane extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void discoverLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_discoverLabelMouseClicked
+        if (!"DISCOVER".equals(currentStatus)) {
+            disableAll();
+            discoverLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/purple-discover.png")));
+            currentStatus = "DISCOVER";
+            showInternView();
+        }
+    }//GEN-LAST:event_discoverLabelMouseClicked
+
+    private void matchLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_matchLabelMouseClicked
+        if (!"MATCH".equals(currentStatus)) {
+            disableAll();
+            matchLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/purple-heart.png")));
+            currentStatus = "MATCH";
+            showInternView();
+        }
+    }//GEN-LAST:event_matchLabelMouseClicked
+
+    private void chatLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chatLabelMouseClicked
+        if (!"CHAT".equals(currentStatus)) {
+            disableAll();
+            chatLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/purple-chat.png")));
+            currentStatus = "CHAT";
+            showInternView();
+        }
+    }//GEN-LAST:event_chatLabelMouseClicked
+
+    private void profileLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profileLabelMouseClicked
+        if (!"PROFILE".equals(currentStatus)) {
+            disableAll();
+            profileLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/purple-profile.png")));
+            currentStatus = "PROFILE";
+            showInternView();
+        }
+    }//GEN-LAST:event_profileLabelMouseClicked
+
+    private void settingsLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_settingsLabelMouseClicked
+        FATHER.showView(MainFrame.LOGIN_VIEW);
+    }//GEN-LAST:event_settingsLabelMouseClicked
+
+    public final void showInternView() {
+        CardLayout cl = (CardLayout) contentPane.getLayout();
+        cl.show(contentPane, currentStatus);
+    }
+
+    private void disableAll() {
+        discoverLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/grey-discover.png")));
+        matchLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/grey-heart.png")));
+        chatLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/grey-chat.png")));
+        profileLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/grey-profile.png")));
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel backgroundPane;
+    private javax.swing.JLabel chatLabel;
     private javax.swing.JPanel contentPane;
+    private javax.swing.JPanel dashboard;
+    private javax.swing.JLabel discoverLabel;
+    private javax.swing.JLabel matchLabel;
+    private javax.swing.JLabel profileLabel;
     private javax.swing.JLabel settingsLabel;
     private javax.swing.JLabel tittleLabel;
     // End of variables declaration//GEN-END:variables

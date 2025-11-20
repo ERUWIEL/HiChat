@@ -1,21 +1,118 @@
 
 package com.mycompany.hiChatJpa.view.pages.home;
 
-import com.mycompany.hiChatJpa.view.MainFrame;
+import com.mycompany.hiChatJpa.dto.ActualizarUsuarioDTO;
+import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
+import com.mycompany.hiChatJpa.entitys.Usuario;
+import com.mycompany.hiChatJpa.service.IUsuarioService;
+import com.mycompany.hiChatJpa.service.impl.UsuarioService;
+import java.time.LocalDate;
+import java.time.Period;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
  * @author gatog
  */
 public class ProfilePane extends javax.swing.JPanel {
-
+    
+    private UsuarioPerfilDTO usuarioActual;
+    private IUsuarioService usuarioService;
+    private UsuarioPerfilDTO usuario;
     
     /**
      * Creates new form LoginPane
-     * @param frame
+     * @param panel
      */
-    public ProfilePane(MainFrame frame) {
+    public ProfilePane(JPanel panel, UsuarioPerfilDTO usuarioParam) {
+        this.usuarioService = new UsuarioService();
+        this.usuarioActual = usuarioParam;
+        
         initComponents();
+        configurarPerfil(usuarioParam);
+    }
+    /**
+     * Configura el perfil del usuario actual
+     * @param usuario Usuario a mostrar
+     */
+    public void configurarPerfil(UsuarioPerfilDTO usuario) {
+        
+        this.usuarioActual = usuario;
+
+        if (usuario != null) {
+            // Nombre completo
+            String nombreCompleto = usuario.getNombre() + " " + usuario.getApellidoPaterno();
+            if (usuario.getApellidoMaterno() != null && !usuario.getApellidoMaterno().isEmpty()) {
+                nombreCompleto += " " + usuario.getApellidoMaterno();
+            }
+            LabelUserName1.setText(nombreCompleto);
+
+            // Fecha de nacimiento y edad
+            if (usuario.getFechaNacimiento() != null) {
+                String fechaFormato = usuario.getFechaNacimiento().toString();
+                int edad = calcularEdad(usuario.getFechaNacimiento());
+                FchNacLabel.setText(fechaFormato + " (" + edad + " años)");
+            } else if (usuario.getEdad() != null) {
+                FchNacLabel.setText(usuario.getEdad() + " años");
+            } else {
+                FchNacLabel.setText("No especificado");
+            }
+
+            // Género
+            if (usuario.getGenero() != null) {
+                String genero = usuario.getGenero().toString();
+                genero = genero.charAt(0) + genero.substring(1).toLowerCase();
+                GeneroLabel.setText(genero);
+            } else {
+                GeneroLabel.setText("No especificado");
+            }
+
+            // Carrera
+            if (usuario.getCarrera() != null && !usuario.getCarrera().isEmpty()) {
+                CarreraLabel.setText(usuario.getCarrera());
+            } else {
+                CarreraLabel.setText("No especificado");
+            }
+
+            // Biografía
+            if (usuario.getBiografia() != null && !usuario.getBiografia().isEmpty()) {
+                textFieldPanel1.setMessage(usuario.getBiografia());
+            } else {
+                BiografiaLabel.setText("Sin biografía");
+            }
+
+            // Foto de perfil
+            if (usuario.getUrlFotoPerfil() != null && !usuario.getUrlFotoPerfil().isEmpty()) {
+                cargarFotoPerfil(usuario.getUrlFotoPerfil());
+            }
+        }
+    }
+
+    /**
+     * Carga y muestra la foto de perfil
+     * @param urlFoto URL de la foto
+     */
+    private void cargarFotoPerfil(String urlFoto) {
+        try {
+            ImageIcon icon = new ImageIcon(urlFoto);
+            // Redimensionar la imagen a 130x130
+            java.awt.Image img = icon.getImage().getScaledInstance(130, 130, java.awt.Image.SCALE_SMOOTH);
+            ImageIcon iconRedimensionado = new ImageIcon(img);
+            panelRound2.setIcon(iconRedimensionado);
+        } catch (Exception e) {
+            System.err.println("Error cargando foto: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Calcula la edad a partir de la fecha de nacimiento
+     * @param fechaNacimiento Fecha de nacimiento
+     * @return Edad en años
+     */
+    private int calcularEdad(LocalDate fechaNacimiento) {
+        return Period.between(fechaNacimiento, LocalDate.now()).getYears();
     }
 
     /**
@@ -27,22 +124,276 @@ public class ProfilePane extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        panelRound1 = new com.mycompany.hiChatJpa.view.components.PanelRound();
+        CarreraLabel = new javax.swing.JLabel();
+        panelRound2 = new com.mycompany.hiChatJpa.view.components.PanelRound();
+        textFieldPanel1 = new com.mycompany.hiChatJpa.view.components.TextFieldPanel();
+        BiografiaLabel = new javax.swing.JLabel();
+        panelRound3 = new com.mycompany.hiChatJpa.view.components.PanelRound();
+        LabelUserName1 = new javax.swing.JLabel();
+        panelRound4 = new com.mycompany.hiChatJpa.view.components.PanelRound();
+        GeneroLabel = new javax.swing.JLabel();
+        PanelActualizar = new com.mycompany.hiChatJpa.view.components.PanelRound();
+        GuardarLabel = new javax.swing.JLabel();
+        panelRound5 = new com.mycompany.hiChatJpa.view.components.PanelRound();
+        FchNacLabel = new javax.swing.JLabel();
+        FchNacLabel1 = new javax.swing.JLabel();
+        CarreraLabel1 = new javax.swing.JLabel();
+        GeneroLabel3 = new javax.swing.JLabel();
+
         setBackground(new java.awt.Color(22, 16, 34));
         setPreferredSize(new java.awt.Dimension(400, 600));
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        panelRound1.setBackground(new java.awt.Color(102, 51, 255));
+        panelRound1.setRoundBottomLeft(100);
+        panelRound1.setRoundBottomRight(100);
+        panelRound1.setRoundTopLeft(100);
+        panelRound1.setRoundTopRight(100);
+
+        CarreraLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        CarreraLabel.setForeground(new java.awt.Color(204, 204, 204));
+        CarreraLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        CarreraLabel.setText("USER CARRERA");
+
+        javax.swing.GroupLayout panelRound1Layout = new javax.swing.GroupLayout(panelRound1);
+        panelRound1.setLayout(panelRound1Layout);
+        panelRound1Layout.setHorizontalGroup(
+            panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelRound1Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addComponent(CarreraLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(131, Short.MAX_VALUE))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 470, Short.MAX_VALUE)
+        panelRound1Layout.setVerticalGroup(
+            panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelRound1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(CarreraLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        add(panelRound1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, 340, 30));
+
+        panelRound2.setRoundBottomLeft(360);
+        panelRound2.setRoundBottomRight(360);
+        panelRound2.setRoundTopLeft(360);
+        panelRound2.setRoundTopRight(360);
+
+        javax.swing.GroupLayout panelRound2Layout = new javax.swing.GroupLayout(panelRound2);
+        panelRound2.setLayout(panelRound2Layout);
+        panelRound2Layout.setHorizontalGroup(
+            panelRound2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 130, Short.MAX_VALUE)
+        );
+        panelRound2Layout.setVerticalGroup(
+            panelRound2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 130, Short.MAX_VALUE)
+        );
+
+        add(panelRound2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 10, 130, 130));
+        add(textFieldPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, -1, 60));
+
+        BiografiaLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        BiografiaLabel.setForeground(new java.awt.Color(204, 204, 204));
+        BiografiaLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        BiografiaLabel.setText("Biografia");
+        add(BiografiaLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 180, 20));
+
+        panelRound3.setBackground(new java.awt.Color(0, 102, 204));
+        panelRound3.setRoundBottomLeft(100);
+        panelRound3.setRoundBottomRight(100);
+        panelRound3.setRoundTopLeft(100);
+        panelRound3.setRoundTopRight(100);
+
+        LabelUserName1.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 18)); // NOI18N
+        LabelUserName1.setForeground(new java.awt.Color(255, 255, 255));
+        LabelUserName1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        LabelUserName1.setText("USER NAME");
+
+        javax.swing.GroupLayout panelRound3Layout = new javax.swing.GroupLayout(panelRound3);
+        panelRound3.setLayout(panelRound3Layout);
+        panelRound3Layout.setHorizontalGroup(
+            panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelRound3Layout.createSequentialGroup()
+                .addGap(82, 82, 82)
+                .addComponent(LabelUserName1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(82, Short.MAX_VALUE))
+        );
+        panelRound3Layout.setVerticalGroup(
+            panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelRound3Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(LabelUserName1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        add(panelRound3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 340, 40));
+
+        panelRound4.setBackground(new java.awt.Color(102, 51, 255));
+        panelRound4.setRoundBottomLeft(100);
+        panelRound4.setRoundBottomRight(100);
+        panelRound4.setRoundTopLeft(100);
+        panelRound4.setRoundTopRight(100);
+
+        GeneroLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        GeneroLabel.setForeground(new java.awt.Color(204, 204, 204));
+        GeneroLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        GeneroLabel.setText("USER GENERO");
+
+        javax.swing.GroupLayout panelRound4Layout = new javax.swing.GroupLayout(panelRound4);
+        panelRound4.setLayout(panelRound4Layout);
+        panelRound4Layout.setHorizontalGroup(
+            panelRound4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelRound4Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(GeneroLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(130, Short.MAX_VALUE))
+        );
+        panelRound4Layout.setVerticalGroup(
+            panelRound4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelRound4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(GeneroLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        add(panelRound4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 340, 30));
+
+        PanelActualizar.setBackground(new java.awt.Color(102, 51, 255));
+        PanelActualizar.setRoundBottomLeft(100);
+        PanelActualizar.setRoundBottomRight(100);
+        PanelActualizar.setRoundTopLeft(100);
+        PanelActualizar.setRoundTopRight(100);
+
+        GuardarLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        GuardarLabel.setForeground(new java.awt.Color(204, 204, 204));
+        GuardarLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        GuardarLabel.setText("SAVE");
+        GuardarLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                GuardarLabelMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout PanelActualizarLayout = new javax.swing.GroupLayout(PanelActualizar);
+        PanelActualizar.setLayout(PanelActualizarLayout);
+        PanelActualizarLayout.setHorizontalGroup(
+            PanelActualizarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelActualizarLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(GuardarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        PanelActualizarLayout.setVerticalGroup(
+            PanelActualizarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelActualizarLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(GuardarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        add(PanelActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 30, 70, 30));
+
+        panelRound5.setBackground(new java.awt.Color(102, 51, 255));
+        panelRound5.setRoundBottomLeft(100);
+        panelRound5.setRoundBottomRight(100);
+        panelRound5.setRoundTopLeft(100);
+        panelRound5.setRoundTopRight(100);
+
+        FchNacLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        FchNacLabel.setForeground(new java.awt.Color(204, 204, 204));
+        FchNacLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        FchNacLabel.setText("USER EDAD");
+
+        javax.swing.GroupLayout panelRound5Layout = new javax.swing.GroupLayout(panelRound5);
+        panelRound5.setLayout(panelRound5Layout);
+        panelRound5Layout.setHorizontalGroup(
+            panelRound5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelRound5Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(FchNacLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(133, Short.MAX_VALUE))
+        );
+        panelRound5Layout.setVerticalGroup(
+            panelRound5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelRound5Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(FchNacLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        add(panelRound5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 340, 30));
+
+        FchNacLabel1.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        FchNacLabel1.setForeground(new java.awt.Color(204, 204, 204));
+        FchNacLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        FchNacLabel1.setText("Edad");
+        add(FchNacLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 210, 180, 20));
+
+        CarreraLabel1.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        CarreraLabel1.setForeground(new java.awt.Color(204, 204, 204));
+        CarreraLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        CarreraLabel1.setText("Carrera");
+        add(CarreraLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 310, 180, 20));
+
+        GeneroLabel3.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        GeneroLabel3.setForeground(new java.awt.Color(204, 204, 204));
+        GeneroLabel3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        GeneroLabel3.setText("Genero");
+        add(GeneroLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 260, 180, 20));
     }// </editor-fold>//GEN-END:initComponents
+
+    private void GuardarLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GuardarLabelMouseClicked
+        if (usuarioActual == null) {
+            JOptionPane.showMessageDialog(this, "No hay usuario cargado", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String nuevaBiografia = textFieldPanel1.getText().trim();
+
+        if (nuevaBiografia.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La biografía no puede estar vacía", "Validación", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            // Crear DTO para actualizar
+            ActualizarUsuarioDTO actualizarDTO = new ActualizarUsuarioDTO();
+            actualizarDTO.setIdUsuario(usuarioActual.getIdUsuario());
+            actualizarDTO.setBiografia(nuevaBiografia);
+            
+            // Guardar en la base de datos
+            usuarioService.actualizarUsuario(actualizarDTO);
+            
+            // Actualizar la biografía en el DTO local
+            usuarioActual.setBiografia(nuevaBiografia);
+            textFieldPanel1.setMessage(nuevaBiografia);
+            
+            JOptionPane.showMessageDialog(this, "Biografía actualizada correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            System.err.println("Error guardando biografía: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_GuardarLabelMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel BiografiaLabel;
+    private javax.swing.JLabel CarreraLabel;
+    private javax.swing.JLabel CarreraLabel1;
+    private javax.swing.JLabel FchNacLabel;
+    private javax.swing.JLabel FchNacLabel1;
+    private javax.swing.JLabel GeneroLabel;
+    private javax.swing.JLabel GeneroLabel3;
+    private javax.swing.JLabel GuardarLabel;
+    private javax.swing.JLabel LabelUserName1;
+    private com.mycompany.hiChatJpa.view.components.PanelRound PanelActualizar;
+    private com.mycompany.hiChatJpa.view.components.PanelRound panelRound1;
+    private com.mycompany.hiChatJpa.view.components.PanelRound panelRound2;
+    private com.mycompany.hiChatJpa.view.components.PanelRound panelRound3;
+    private com.mycompany.hiChatJpa.view.components.PanelRound panelRound4;
+    private com.mycompany.hiChatJpa.view.components.PanelRound panelRound5;
+    private com.mycompany.hiChatJpa.view.components.TextFieldPanel textFieldPanel1;
     // End of variables declaration//GEN-END:variables
 }

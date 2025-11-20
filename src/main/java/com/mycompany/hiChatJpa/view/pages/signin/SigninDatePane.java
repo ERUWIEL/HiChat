@@ -2,6 +2,7 @@
 package com.mycompany.hiChatJpa.view.pages.signin;
 
 import com.mycompany.hiChatJpa.view.MainFrame;
+import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
 
 /**
  *
@@ -47,9 +48,9 @@ public class SigninDatePane extends javax.swing.JPanel {
         logInLabel = new javax.swing.JLabel();
         dataPane = new javax.swing.JPanel();
         usernameLabel1 = new javax.swing.JLabel();
-        textFieldPanel1 = new com.mycompany.hiChatJpa.view.components.TextFieldPanel();
+        textFieldPanel1 = new TextFieldPanel(TextFieldPanel.EMAIL_REGEX, "invalid email format");
         usernameLabel2 = new javax.swing.JLabel();
-        textFieldPanel2 = new com.mycompany.hiChatJpa.view.components.TextFieldPanel();
+        textFieldPanel2 = new TextFieldPanel(TextFieldPanel.DATE_REGEX, "invalid date format");
 
         setPreferredSize(new java.awt.Dimension(400, 600));
 
@@ -241,8 +242,10 @@ public class SigninDatePane extends javax.swing.JPanel {
         usernameLabel1.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
         usernameLabel1.setForeground(new java.awt.Color(204, 204, 204));
         usernameLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        usernameLabel1.setText("last name");
+        usernameLabel1.setText("Email");
         dataPane.add(usernameLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 360, 20));
+
+        textFieldPanel1.setMessage("enter your email");
         dataPane.add(textFieldPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, -1, -1));
 
         usernameLabel2.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
@@ -250,6 +253,8 @@ public class SigninDatePane extends javax.swing.JPanel {
         usernameLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         usernameLabel2.setText("your birthday");
         dataPane.add(usernameLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 360, 20));
+
+        textFieldPanel2.setMessage("enter your date (AAAA-MM-DD)");
         dataPane.add(textFieldPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
 
         javax.swing.GroupLayout backgroundPaneLayout = new javax.swing.GroupLayout(backgroundPane);

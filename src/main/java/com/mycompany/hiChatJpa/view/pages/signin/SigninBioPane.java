@@ -2,6 +2,7 @@
 package com.mycompany.hiChatJpa.view.pages.signin;
 
 import com.mycompany.hiChatJpa.view.MainFrame;
+import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
 
 /**
  *
@@ -48,7 +49,8 @@ public class SigninBioPane extends javax.swing.JPanel {
         dataPane = new javax.swing.JPanel();
         usernameLabel1 = new javax.swing.JLabel();
         usernameLabel2 = new javax.swing.JLabel();
-        textFieldPanel2 = new com.mycompany.hiChatJpa.view.components.TextFieldPanel();
+        textFieldPanel2 = new TextFieldPanel(TextFieldPanel.NAME_REGEX, "invalid major format");
+        textFieldPanel1 = new TextFieldPanel(TextFieldPanel.BIOGRAPHY_REGEX, "STOP YAPPING!! to long biography");
 
         setPreferredSize(new java.awt.Dimension(400, 600));
 
@@ -246,9 +248,14 @@ public class SigninBioPane extends javax.swing.JPanel {
         usernameLabel2.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
         usernameLabel2.setForeground(new java.awt.Color(204, 204, 204));
         usernameLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        usernameLabel2.setText("password");
+        usernameLabel2.setText("Major");
         dataPane.add(usernameLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 360, 20));
+
+        textFieldPanel2.setMessage("enter your major (Ej. Engenier)");
         dataPane.add(textFieldPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+
+        textFieldPanel1.setMessage("enter something creative!");
+        dataPane.add(textFieldPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
 
         javax.swing.GroupLayout backgroundPaneLayout = new javax.swing.GroupLayout(backgroundPane);
         backgroundPane.setLayout(backgroundPaneLayout);
@@ -270,7 +277,9 @@ public class SigninBioPane extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(logInLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(dataPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(backgroundPaneLayout.createSequentialGroup()
+                .addComponent(dataPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         backgroundPaneLayout.setVerticalGroup(
             backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -332,6 +341,7 @@ public class SigninBioPane extends javax.swing.JPanel {
     private javax.swing.JLabel messageLabel;
     private javax.swing.JLabel returnButton;
     private javax.swing.JPanel stepsPane;
+    private com.mycompany.hiChatJpa.view.components.TextFieldPanel textFieldPanel1;
     private com.mycompany.hiChatJpa.view.components.TextFieldPanel textFieldPanel2;
     private javax.swing.JLabel tittleLabel;
     private javax.swing.JLabel usernameLabel;

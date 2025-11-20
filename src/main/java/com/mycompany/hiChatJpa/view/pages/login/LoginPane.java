@@ -1,8 +1,16 @@
-
 package com.mycompany.hiChatJpa.view.pages.login;
 
+import com.mycompany.hiChatJpa.dto.LoginDTO;
+import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
+import com.mycompany.hiChatJpa.entitys.Usuario;
+import com.mycompany.hiChatJpa.service.IUsuarioService;
+import com.mycompany.hiChatJpa.service.impl.UsuarioService;
 import com.mycompany.hiChatJpa.view.MainFrame;
 import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
+import com.mycompany.hiChatJpa.view.pages.home.HomePane;
+import java.awt.CardLayout;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -10,14 +18,21 @@ import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
  */
 public class LoginPane extends javax.swing.JPanel {
 
+    private final JPanel CONTENT_PANE;
     private final MainFrame FATHER;
-    
+    private final IUsuarioService USUARIO_SERVICE;
+
     /**
      * Creates new form LoginPane
-     * @param frame
+     *
+     * @param father
+     * @param content
      */
-    public LoginPane(MainFrame frame) {
-        this.FATHER = frame;
+    public LoginPane(MainFrame father, JPanel content) {
+        this.FATHER = father;
+        this.CONTENT_PANE = content;
+        this.USUARIO_SERVICE = new UsuarioService();
+
         initComponents();
     }
 
@@ -37,7 +52,7 @@ public class LoginPane extends javax.swing.JPanel {
         usernameLabel = new javax.swing.JLabel();
         userInputPane = new TextFieldPanel(TextFieldPanel.EMAIL_REGEX, "invalid type of email");
         passwordLabel = new javax.swing.JLabel();
-        passwordInputPane = new com.mycompany.hiChatJpa.view.components.TextFieldPanel();
+        passwordInputPane = new TextFieldPanel(TextFieldPanel.PASSWORD_REGEX, "invalid password format to looong");
         forgotPasswordLabel = new javax.swing.JLabel();
         actionsPane = new javax.swing.JPanel();
         signInPane = new com.mycompany.hiChatJpa.view.components.PanelRound();
@@ -68,8 +83,10 @@ public class LoginPane extends javax.swing.JPanel {
         usernameLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
         usernameLabel.setForeground(new java.awt.Color(204, 204, 204));
         usernameLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        usernameLabel.setText("Email or Username");
+        usernameLabel.setText("Email");
         dataPane.add(usernameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 360, 20));
+
+        userInputPane.setMessage("enter your email");
         dataPane.add(userInputPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
 
         passwordLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
@@ -77,6 +94,8 @@ public class LoginPane extends javax.swing.JPanel {
         passwordLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         passwordLabel.setText("Password");
         dataPane.add(passwordLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 85, 360, 20));
+
+        passwordInputPane.setMessage("enter your password");
         dataPane.add(passwordInputPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
 
         forgotPasswordLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 14)); // NOI18N
@@ -118,15 +137,14 @@ public class LoginPane extends javax.swing.JPanel {
         signInPane.setLayout(signInPaneLayout);
         signInPaneLayout.setHorizontalGroup(
             signInPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 340, Short.MAX_VALUE)
-            .addGroup(signInPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(signInLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE))
+            .addComponent(signInLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
         );
         signInPaneLayout.setVerticalGroup(
             signInPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
-            .addGroup(signInPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(signInLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE))
+            .addGroup(signInPaneLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(signInLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+                .addGap(16, 16, 16))
         );
 
         actionsPane.add(signInPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 15, 340, 60));
@@ -173,7 +191,23 @@ public class LoginPane extends javax.swing.JPanel {
     }//GEN-LAST:event_forgotPasswordLabelMouseClicked
 
     private void signInLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signInLabelMouseClicked
-        FATHER.showView(MainFrame.HOME_DISCOVER_VIEW);
+        String email = userInputPane.getText();
+        String password = passwordInputPane.getText();
+        
+        // Crear LoginDTO en lugar de Usuario
+        LoginDTO loginDTO = new LoginDTO(email, password);
+
+        try {
+            // Retorna UsuarioPerfilDTO en lugar de Usuario
+            UsuarioPerfilDTO userMatched = USUARIO_SERVICE.iniciarSesion(loginDTO);
+            CONTENT_PANE.add(new HomePane(FATHER, userMatched), "HOME_VIEW");
+            CardLayout cl = (CardLayout) CONTENT_PANE.getLayout();
+            cl.show(CONTENT_PANE, "HOME_VIEW");
+        } catch (Exception ex) {
+            System.out.println(ex.getCause());
+            System.out.println(ex.getMessage());
+            JOptionPane.showMessageDialog(FATHER, "email or password dont match with a real user", "login error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_signInLabelMouseClicked
 
 

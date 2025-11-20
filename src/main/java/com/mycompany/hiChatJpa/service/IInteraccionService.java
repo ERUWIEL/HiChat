@@ -1,12 +1,9 @@
 package com.mycompany.hiChatJpa.service;
 
-import com.mycompany.hiChatJpa.entitys.Interaccion;
-import com.mycompany.hiChatJpa.entitys.TipoInteraccion;
-import com.mycompany.hiChatJpa.entitys.Usuario;
-import java.util.List;
-
 /**
- * interfaz que define los metodos crud de una interaccion
+ * Interfaz de servicio para Interacción
+ * Utiliza IDs de usuarios para las operaciones
+ *
  * @author gatog
  */
 public interface IInteraccionService {

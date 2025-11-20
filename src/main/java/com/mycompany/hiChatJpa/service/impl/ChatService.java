@@ -4,22 +4,28 @@ package com.mycompany.hiChatJpa.service.impl;
 import com.mycompany.hiChatJpa.dao.IBloqueoDAO;
 import com.mycompany.hiChatJpa.dao.IChatDAO;
 import com.mycompany.hiChatJpa.dao.IMensajeDAO;
+import com.mycompany.hiChatJpa.dao.IUsuarioDAO;
 import com.mycompany.hiChatJpa.dao.impl.BloqueoDAO;
 import com.mycompany.hiChatJpa.dao.impl.ChatDAO;
 import com.mycompany.hiChatJpa.dao.impl.MensajeDAO;
+import com.mycompany.hiChatJpa.dao.impl.UsuarioDAO;
+import com.mycompany.hiChatJpa.dto.ChatConMensajesDTO;
+import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
 import com.mycompany.hiChatJpa.entitys.Bloqueo;
 import com.mycompany.hiChatJpa.entitys.Chat;
 import com.mycompany.hiChatJpa.entitys.Mensaje;
 import com.mycompany.hiChatJpa.entitys.Usuario;
 import com.mycompany.hiChatJpa.service.IChatService;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
 /**
- * Implementación de la capa de servicio para la entidad service
+ * Implementación de la capa de servicio para Chat
  * @author gatog
  */
 public class ChatService implements IChatService {
@@ -27,18 +33,83 @@ public class ChatService implements IChatService {
     private final IChatDAO chatDAO;
     private final IMensajeDAO mensajeDAO;
     private final IBloqueoDAO bloqueoDAO;
+    private final IUsuarioDAO usuarioDAO;
 
     public ChatService() {
         this.chatDAO = new ChatDAO();
         this.mensajeDAO = new MensajeDAO();
         this.bloqueoDAO = new BloqueoDAO();
+        this.usuarioDAO = new UsuarioDAO();
     }
+
+    /**
+     * Convierte Usuario a UsuarioPerfilDTO
+     */
+    private UsuarioPerfilDTO usuarioADTO(Usuario usuario) {
+        if (usuario == null) return null;
+
+        Integer edad = null;
+        if (usuario.getFechaNacimiento() != null) {
+            edad = Period.between(usuario.getFechaNacimiento(), LocalDate.now()).getYears();
+        }
+
+        UsuarioPerfilDTO dto = new UsuarioPerfilDTO();
+        dto.setIdUsuario(usuario.getIdUsuario());
+        dto.setNombre(usuario.getNombre());
+        dto.setApellidoPaterno(usuario.getApellidoPaterno());
+        dto.setCarrera(usuario.getCarrera());
+        dto.setBiografia(usuario.getBiografia());
+        dto.setUrlFotoPerfil(usuario.getUrlFotoPerfil());
+        dto.setGenero(usuario.getGenero() != null ? usuario.getGenero().toString() : null);
+        dto.setEdad(edad);
+        return dto;
+    }
+
+    /**
+     * Convierte Chat a ChatConMensajesDTO
+     */
+    private ChatConMensajesDTO chatADTO(Chat chat) {
+        if (chat == null) return null;
+
+        List<UsuarioPerfilDTO> participantesDTO = chat.getParticipantes().stream()
+            .map(this::usuarioADTO)
+            .collect(Collectors.toList());
+
+        LocalDateTime fechaUltimoMensaje = LocalDateTime.now();
+        String ultimoMensaje = "";
+        Boolean hayNoLeidos = false;
+
+        if (chat.getMensajes() != null && !chat.getMensajes().isEmpty()) {
+            Mensaje ultimo = chat.getMensajes().stream()
+                .max((m1, m2) -> m1.getFechaEnvio().compareTo(m2.getFechaEnvio()))
+                .orElse(null);
+
+            if (ultimo != null) {
+                fechaUltimoMensaje = ultimo.getFechaEnvio();
+                ultimoMensaje = ultimo.getContenido().length() > 50 ?
+                    ultimo.getContenido().substring(0, 50) + "..." :
+                    ultimo.getContenido();
+            }
+
+            hayNoLeidos = chat.getMensajes().stream()
+                .anyMatch(m -> !m.getEstaVisto());
+        }
+
+        ChatConMensajesDTO dto = new ChatConMensajesDTO();
+        dto.setIdChat(chat.getIdChat());
+        dto.setNombre(chat.getNombre());
+        dto.setIdMatch(chat.getMatch() != null ? chat.getMatch().getIdMatch() : null);
+        dto.setParticipantes(participantesDTO);
+        dto.setTotalMensajes(chat.getMensajes() != null ? chat.getMensajes().size() : 0);
+        dto.setUltimoMensaje(ultimoMensaje);
+        dto.setFechaUltimoMensaje(fechaUltimoMensaje);
+        dto.setHayNoLeidos(hayNoLeidos);
+
+        return dto;
+    }
+
     /**
      * Obtiene la fecha del último mensaje en un chat
-     * Si no hay mensajes, retorna la fecha actual
-     * 
-     * @param chat Chat
-     * @return LocalDateTime del último mensaje
      */
     private LocalDateTime obtenerFechaUltimoMensaje(Chat chat) {
         if (chat.getMensajes() == null || chat.getMensajes().isEmpty()) {
@@ -50,18 +121,12 @@ public class ChatService implements IChatService {
             .max(LocalDateTime::compareTo)
             .orElse(LocalDateTime.now());
     }
-    
+
     /**
      * Cambia el alias (nombre) de un chat
-     * Valida que el chat exista y que el nuevo nombre sea válido
-     * 
-     * @param chatId ID del chat a modificar
-     * @param nuevoNombre Nuevo nombre para el chat
-     * @throws Exception si hay error en la validación
      */
+    @Override
     public void cambiarAliasDelChat(Long chatId, String nuevoNombre) throws Exception {
-        
-        String nombreLimpio = nuevoNombre.trim();
         // Validar ID del chat
         if (chatId == null || chatId <= 0) {
             throw new Exception("ID del chat inválido.");
@@ -90,16 +155,6 @@ public class ChatService implements IChatService {
             throw new Exception("El nuevo nombre es igual al actual.");
         }
 
-        // Validar que no exista otro chat con el mismo nombre
-        List<Chat> chatsConNombre = chatDAO.buscarPorNombre(nombreLimpio);
-        boolean nombreEnUso = chatsConNombre.stream()
-            .anyMatch(c -> !c.getIdChat().equals(chatId) && 
-                          c.getNombre().equalsIgnoreCase(nombreLimpio));
-        
-        if (nombreEnUso) {
-            throw new Exception("Ya existe otro chat con ese nombre.");
-        }
-
         // Actualizar el nombre
         chatExistente.setNombre(nuevoNombre);
         chatDAO.actualizar(chatExistente);
@@ -107,20 +162,18 @@ public class ChatService implements IChatService {
 
     /**
      * Carga todos los chats de un usuario
-     * Retorna los chats donde el usuario es participante
-     * 
-     * @param usuario Usuario del cual cargar chats
-     * @return Lista de chats del usuario
-     * @throws Exception si hay error
      */
-    public List<Chat> cargarChatsDelUsuario(Usuario usuario) throws Exception {
-        // Validar usuario
-        if (usuario == null || usuario.getIdUsuario() == null) {
-            throw new Exception("Usuario inválido.");
+    @Override
+    public List<ChatConMensajesDTO> cargarChatsDelUsuario(Long idUsuario) throws Exception {
+        // Validar ID del usuario
+        if (idUsuario == null || idUsuario <= 0) {
+            throw new Exception("ID del usuario inválido.");
         }
 
-        if (usuario.getIdUsuario() <= 0) {
-            throw new Exception("ID del usuario inválido.");
+        // Verificar que el usuario existe
+        Usuario usuario = usuarioDAO.buscar(idUsuario);
+        if (usuario == null) {
+            throw new Exception("El usuario no existe.");
         }
 
         // Obtener chats del usuario
@@ -136,89 +189,71 @@ public class ChatService implements IChatService {
             throw new Exception("Demasiados chats. Se limita a 100.");
         }
 
-        // Ordenar por última actividad (si es posible con los datos disponibles)
-        // Los chats más recientes primero
-        List<Chat> chatsOrdenados = chatsDelUsuario.stream()
+        // Ordenar por última actividad (más recientes primero)
+        List<ChatConMensajesDTO> chatsOrdenados = chatsDelUsuario.stream()
             .sorted((c1, c2) -> {
-                // Obtener el último mensaje de cada chat
                 LocalDateTime fecha1 = obtenerFechaUltimoMensaje(c1);
                 LocalDateTime fecha2 = obtenerFechaUltimoMensaje(c2);
-                
-                // Ordenar descendente (más recientes primero)
                 return fecha2.compareTo(fecha1);
             })
+            .map(this::chatADTO)
             .collect(Collectors.toList());
 
         return chatsOrdenados;
     }
 
     /**
-     * Envía un mensaje en un chat validando bloqueos y otros criterios
-     * Valida que:
-     * - El chat exista
-     * - El mensaje sea válido
-     * - El usuario emisor sea participante del chat
-     * - No exista bloqueo entre participantes
-     * 
-     * @param chat Chat donde enviar el mensaje
-     * @param mensaje Mensaje a enviar
-     * @throws Exception si hay error en la validación
+     * Envía un mensaje en un chat validando bloqueos
      */
-    public void mandarMensaje(Chat chat, Mensaje mensaje) throws Exception {
+    @Override
+    public void mandarMensaje(Long idChat, Long idUsuarioEmisor, String contenidoMensaje) throws Exception {
         // ============ VALIDACIONES DEL CHAT ============
-        if (chat == null || chat.getIdChat() == null) {
-            throw new Exception("El chat es inválido.");
+        if (idChat == null || idChat <= 0) {
+            throw new Exception("El ID del chat es inválido.");
         }
 
-        // Verificar que el chat existe
-        Chat chatExistente = chatDAO.buscar(chat.getIdChat());
+        Chat chatExistente = chatDAO.buscar(idChat);
         if (chatExistente == null) {
             throw new Exception("El chat no existe.");
         }
 
-        // ============ VALIDACIONES DEL MENSAJE ============
-        if (mensaje == null) {
-            throw new Exception("El mensaje no puede ser nulo.");
+        // ============ VALIDACIONES DEL USUARIO EMISOR ============
+        if (idUsuarioEmisor == null || idUsuarioEmisor <= 0) {
+            throw new Exception("El ID del usuario emisor es inválido.");
         }
 
-        if (mensaje.getContenido() == null || mensaje.getContenido().trim().isEmpty()) {
+        Usuario usuarioEmisor = usuarioDAO.buscar(idUsuarioEmisor);
+        if (usuarioEmisor == null) {
+            throw new Exception("El usuario emisor no existe.");
+        }
+
+        // ============ VALIDACIONES DEL MENSAJE ============
+        if (contenidoMensaje == null || contenidoMensaje.trim().isEmpty()) {
             throw new Exception("El contenido del mensaje no puede estar vacío.");
         }
 
-        String contenido = mensaje.getContenido().trim();
+        String contenido = contenidoMensaje.trim();
 
-        // Validar longitud del mensaje
         if (contenido.length() > 5000) {
             throw new Exception("El mensaje no puede exceder 5000 caracteres.");
         }
 
-        // ============ VALIDACIONES DEL EMISOR ============
-        if (mensaje.getUsuarioEmisor() == null || mensaje.getUsuarioEmisor().getIdUsuario() == null) {
-            throw new Exception("Debe especificar el usuario emisor.");
-        }
-
-        Long idEmisor = mensaje.getUsuarioEmisor().getIdUsuario();
-
         // Verificar que el emisor es participante del chat
         boolean esParticipante = chatExistente.getParticipantes().stream()
-            .anyMatch(u -> u.getIdUsuario().equals(idEmisor));
+            .anyMatch(u -> u.getIdUsuario().equals(idUsuarioEmisor));
 
         if (!esParticipante) {
             throw new Exception("El usuario no es participante de este chat.");
         }
 
         // ============ VALIDACIONES DE BLOQUEOS ============
-        // Obtener otros participantes del chat
         Set<Usuario> otrosParticipantes = chatExistente.getParticipantes().stream()
-            .filter(u -> !u.getIdUsuario().equals(idEmisor))
+            .filter(u -> !u.getIdUsuario().equals(idUsuarioEmisor))
             .collect(Collectors.toSet());
-
-        // Validar que no exista bloqueo con ningún otro participante
-        Usuario emisor = mensaje.getUsuarioEmisor();
 
         for (Usuario otroParticipante : otrosParticipantes) {
             // Verificar si el emisor bloqueó a este participante
-            List<Bloqueo> bloqueosDelEmisor = bloqueoDAO.buscarPorBloqueador(emisor);
+            List<Bloqueo> bloqueosDelEmisor = bloqueoDAO.buscarPorBloqueador(usuarioEmisor);
             boolean emisorBloqueaAlOtro = bloqueosDelEmisor.stream()
                 .anyMatch(b -> b.getUsuarioBloqueado().getIdUsuario()
                     .equals(otroParticipante.getIdUsuario()));
@@ -231,20 +266,22 @@ public class ChatService implements IChatService {
             List<Bloqueo> bloqueosDelOtro = bloqueoDAO.buscarPorBloqueador(otroParticipante);
             boolean otroBloquealEmisor = bloqueosDelOtro.stream()
                 .anyMatch(b -> b.getUsuarioBloqueado().getIdUsuario()
-                    .equals(idEmisor));
+                    .equals(idUsuarioEmisor));
 
             if (otroBloquealEmisor) {
                 throw new Exception("No puedes enviar mensajes. Uno de los participantes te ha bloqueado.");
             }
         }
 
-        // ============ ACTUALIZAR DATOS DEL MENSAJE ============
-        mensaje.setChat(chatExistente);
-        mensaje.setContenido(contenido);
-        mensaje.setFechaEnvio(LocalDateTime.now());
-        mensaje.setEstaVisto(false);
+        // ============ CREAR Y GUARDAR EL MENSAJE ============
+        Mensaje mensaje = new Mensaje.Builder()
+            .chat(chatExistente)
+            .usuarioEmisor(usuarioEmisor)
+            .contenido(contenido)
+            .fechaEnvio(LocalDateTime.now())
+            .estaVisto(false)
+            .build();
 
-        // ============ GUARDAR EL MENSAJE ============
         mensajeDAO.insertar(mensaje);
     }
     /**

@@ -1,20 +1,49 @@
-
 package com.mycompany.hiChatJpa.view.pages.home;
 
-import com.mycompany.hiChatJpa.view.MainFrame;
+import com.mycompany.hiChatJpa.config.CloudinaryUtil;
+import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
+import com.mycompany.hiChatJpa.entitys.Usuario;
+import com.mycompany.hiChatJpa.service.IInteraccionService;
+import com.mycompany.hiChatJpa.service.IUsuarioService;
+import com.mycompany.hiChatJpa.service.impl.InteraccionService;
+import com.mycompany.hiChatJpa.service.impl.UsuarioService;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
  * @author gatog
  */
 public class DiscoverPane extends javax.swing.JPanel {
-    
+
+    private UsuarioPerfilDTO currentUser;
+    private UsuarioPerfilDTO loggedUser;
+    private final IUsuarioService USUARIO_SERVICE;
+    private final IInteraccionService INTERACCION_SERVICE;
+    private Iterator<UsuarioPerfilDTO> PRETENDIENTES;
+
     /**
      * Creates new form LoginPane
-     * @param frame
+     *
+     * @param panel
+     * @param usuario
      */
-    public DiscoverPane(MainFrame frame) {
+    public DiscoverPane(JPanel panel, UsuarioPerfilDTO usuario) {
         initComponents();
+        this.loggedUser = usuario;
+        this.USUARIO_SERVICE = new UsuarioService();
+        this.INTERACCION_SERVICE = new InteraccionService();
+        try {
+            this.PRETENDIENTES = USUARIO_SERVICE.listarUsuarios().iterator();
+            loadNext();
+        } catch (Exception ex) {
+
+        }
     }
 
     /**
@@ -26,22 +55,151 @@ public class DiscoverPane extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        likePane = new com.mycompany.hiChatJpa.view.components.PanelRound();
+        heartLabel = new javax.swing.JLabel();
+        dislikePanel = new com.mycompany.hiChatJpa.view.components.PanelRound();
+        dislikeLabel = new javax.swing.JLabel();
+        userCard = new javax.swing.JPanel();
+        username = new javax.swing.JLabel();
+        imgLabel = new javax.swing.JLabel();
+
         setBackground(new java.awt.Color(22, 16, 34));
         setPreferredSize(new java.awt.Dimension(400, 600));
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        likePane.setBackground(new java.awt.Color(55, 65, 81));
+        likePane.setRoundBottomLeft(360);
+        likePane.setRoundBottomRight(360);
+        likePane.setRoundTopLeft(360);
+        likePane.setRoundTopRight(360);
+        likePane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        heartLabel.setBackground(new java.awt.Color(55, 65, 81));
+        heartLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        heartLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/blue-heart.png"))); // NOI18N
+        heartLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        heartLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                heartLabelMouseClicked(evt);
+            }
+        });
+        likePane.add(heartLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 70, 70));
+
+        add(likePane, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 410, 70, 70));
+
+        dislikePanel.setBackground(new java.awt.Color(55, 65, 81));
+        dislikePanel.setRoundBottomLeft(360);
+        dislikePanel.setRoundBottomRight(360);
+        dislikePanel.setRoundTopLeft(360);
+        dislikePanel.setRoundTopRight(360);
+        dislikePanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        dislikeLabel.setBackground(new java.awt.Color(55, 65, 81));
+        dislikeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        dislikeLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/red-cancel.png"))); // NOI18N
+        dislikeLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        dislikeLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                dislikeLabelMouseClicked(evt);
+            }
+        });
+        dislikePanel.add(dislikeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 70, 70));
+
+        add(dislikePanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 410, 70, 70));
+
+        userCard.setBackground(new java.awt.Color(0, 0, 0));
+
+        username.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 18)); // NOI18N
+        username.setForeground(new java.awt.Color(255, 255, 255));
+        username.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        username.setText("name");
+
+        javax.swing.GroupLayout userCardLayout = new javax.swing.GroupLayout(userCard);
+        userCard.setLayout(userCardLayout);
+        userCardLayout.setHorizontalGroup(
+            userCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(userCardLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(imgLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, userCardLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 470, Short.MAX_VALUE)
+        userCardLayout.setVerticalGroup(
+            userCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(userCardLayout.createSequentialGroup()
+                .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(imgLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
+                .addContainerGap())
         );
+
+        add(userCard, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 380, 400));
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * metodo que permite dar like ala vez que carga al siguente pretendiente
+     * @param evt 
+     */
+    private void heartLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_heartLabelMouseClicked
+        try {
+            INTERACCION_SERVICE.darLike(loggedUser.getIdUsuario(), currentUser.getIdUsuario());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "that action cant be done rn", "soo sorry :(", JOptionPane.INFORMATION_MESSAGE);
+        }
+        loadNext();
+    }//GEN-LAST:event_heartLabelMouseClicked
+
+    /**
+     * metodo que permite dar dislike ala vez que carga al siguente pretendiente
+     * @param evt 
+     */
+    private void dislikeLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dislikeLabelMouseClicked
+        try {
+            INTERACCION_SERVICE.darDislike(loggedUser.getIdUsuario(), currentUser.getIdUsuario());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "that action cant be done rn", "soo sorry :(", JOptionPane.INFORMATION_MESSAGE);
+        }
+        loadNext();
+    }//GEN-LAST:event_dislikeLabelMouseClicked
+
+    
+    /**
+     * metodo de utileria que cambia la tarjeta de presentacion de los pretendientes
+     */
+    private void loadNext() {
+        try {
+            this.currentUser = PRETENDIENTES.next();
+            this.username.setText(currentUser.getNombre() + " " + currentUser.getApellidoPaterno());
+            changeImg();
+        } catch (NoSuchElementException ex) {
+            this.userCard.setVisible(false);
+            JOptionPane.showMessageDialog(null, "it seems like theres nobody to judge", "soo sorry :(", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    /**
+     * metodo de utileria que cambia la foto del perfil mostrado
+     */
+    private void changeImg() {
+        try {
+            String transformedURL = CloudinaryUtil.getInstance().generarUrlTransformada("hichat/perfiles/usuario_1", 360, 360);
+            URL url = new URL(transformedURL);
+            ImageIcon icono = new ImageIcon(url);
+            imgLabel.setIcon(icono);
+        } catch (MalformedURLException e) {
+            System.out.println("Error al cargar imagen: " + e.getMessage());
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel dislikeLabel;
+    private com.mycompany.hiChatJpa.view.components.PanelRound dislikePanel;
+    private javax.swing.JLabel heartLabel;
+    private javax.swing.JLabel imgLabel;
+    private com.mycompany.hiChatJpa.view.components.PanelRound likePane;
+    private javax.swing.JPanel userCard;
+    private javax.swing.JLabel username;
     // End of variables declaration//GEN-END:variables
 }

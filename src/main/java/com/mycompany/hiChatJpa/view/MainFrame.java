@@ -1,15 +1,16 @@
 package com.mycompany.hiChatJpa.view;
 
-import com.mycompany.hiChatJpa.view.pages.home.HomePane;
 import com.mycompany.hiChatJpa.view.pages.login.LoginPane;
 import com.mycompany.hiChatJpa.view.pages.restorePassword.RestorePswChangePane;
 import com.mycompany.hiChatJpa.view.pages.restorePassword.RestorePswConfirmUserPane;
 import com.mycompany.hiChatJpa.view.pages.restorePassword.RestorePswUserPane;
+
 import com.mycompany.hiChatJpa.view.pages.signin.SigninBioPane;
 import com.mycompany.hiChatJpa.view.pages.signin.SigninDatePane;
 import com.mycompany.hiChatJpa.view.pages.signin.SigninPane;
 import com.mycompany.hiChatJpa.view.pages.signin.SigninPasswordPane;
 import com.mycompany.hiChatJpa.view.pages.signin.SigninPicturePane;
+
 import java.awt.CardLayout;
 import javax.swing.ImageIcon;
 import com.formdev.flatlaf.FlatDarkLaf;
@@ -26,55 +27,33 @@ public class MainFrame extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainFrame.class.getName());
 
     public static final String LOGIN_VIEW = "LOG_IN";
-    //pantallas del sign up
     public static final String SIGNIN_VIEW = "SIGN_IN";
     public static final String SIGNIN_DATE_VIEW = "SIGN_IN_DATE";
     public static final String SIGNIN_PASSWORD_VIEW = "SIGN_IN_PASSWORD";
     public static final String SIGNIN_BIO_VIEW = "SIGN_IN_BIO";
     public static final String SIGNIN_PICTURE_VIEW = "SIGN_IN_PICTURE";
-
-    //pantallas de recuperacion de contrasena
     public static final String RSPSW_VIEW = "RESTORE_PASSWORD";
     public static final String RSPSW_CONFIRM_USER_VIEW = "RESTORE_PASSWORD_CONFIRMUSER";
     public static final String RSPSW_CHANGE_VIEW = "RESTORE_PASSWORD_CHANGE";
 
-    //pantallas de inicio
-    public static final String HOME_DISCOVER_VIEW = "HOME_DISCOVER_VIEW";
+    private LoginPane loginPane;
+    private SigninPane signinPane;
+    private SigninDatePane signinDatePane;
+    private SigninPasswordPane signinPasswordPane;
+    private SigninBioPane signinBioPane;
+    private SigninPicturePane signinPicturePane;
+    private RestorePswUserPane restorePswPane;
+    private RestorePswConfirmUserPane restorePswUserPane;
+    private RestorePswChangePane restorePswChangePane;
 
     /**
      * Creates new form frmPrincipal
      */
     public MainFrame() {
-        try {
-            java.net.URL iconURL = getClass().getResource("/icons/main-logo-yellow.png");
-            UIManager.setLookAndFeel(new FlatDarkLaf());
-            UIManager.put("TitlePane.background", new Color(40, 42, 54)); // Dracula
-            UIManager.put("TitlePane.foreground", Color.WHITE);
-            if (iconURL != null) {
-                ImageIcon icon = new ImageIcon(iconURL);
-                setIconImage(icon.getImage());
-            } else {
-                System.err.println("No se encontró el ícono");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        configWindow();
         initComponents();
-        //inicializacion de las ventanas
-        contentPanel.add(new LoginPane(this), LOGIN_VIEW);
-        contentPanel.add(new SigninPane(this), SIGNIN_VIEW);
-        contentPanel.add(new SigninDatePane(this), SIGNIN_DATE_VIEW);
-        contentPanel.add(new SigninPasswordPane(this), SIGNIN_PASSWORD_VIEW);
-        contentPanel.add(new SigninBioPane(this), SIGNIN_BIO_VIEW);
-        contentPanel.add(new SigninPicturePane(this), SIGNIN_PICTURE_VIEW);
-
-        contentPanel.add(new RestorePswUserPane(this), RSPSW_VIEW);
-        contentPanel.add(new RestorePswConfirmUserPane(this), RSPSW_CONFIRM_USER_VIEW);
-        contentPanel.add(new RestorePswChangePane(this), RSPSW_CHANGE_VIEW);
-
-        contentPanel.add(new HomePane(this), HOME_DISCOVER_VIEW);
-
+        resetViews();
+        setViews();
         showView(LOGIN_VIEW);
     }
 
@@ -144,11 +123,70 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public final void showView(String viewName) {
         System.out.println("mostrando " + viewName);
+        if (LOGIN_VIEW.equals(viewName)) {
+            resetViews();
+        }
 
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, viewName);
     }
 
+    /**
+     * metodo publico que permite refrescar todas las ventanas
+     */
+    public final void resetViews() {
+        System.out.println("reiniciando instancias");
+        contentPanel.removeAll();
+        loginPane = new LoginPane(this, contentPanel);
+        signinPane = new SigninPane(this);
+        signinDatePane = new SigninDatePane(this);
+        signinPasswordPane = new SigninPasswordPane(this);
+        signinBioPane = new SigninBioPane(this);
+        signinPicturePane = new SigninPicturePane(this);
+        restorePswPane = new RestorePswUserPane(this);
+        restorePswUserPane = new RestorePswConfirmUserPane(this);
+        restorePswChangePane = new RestorePswChangePane(this);
+
+        setViews();
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+
+    /**
+     * metodo que permite personalizar la aparencia de la ventana en el sistema
+     */
+    private void configWindow() {
+        try {
+            java.net.URL iconURL = getClass().getResource("/icons/main-logo-yellow.png");
+            UIManager.setLookAndFeel(new FlatDarkLaf());
+            UIManager.put("TitlePane.background", new Color(40, 42, 54)); // Dracula
+            UIManager.put("TitlePane.foreground", Color.WHITE);
+            if (iconURL != null) {
+                ImageIcon icon = new ImageIcon(iconURL);
+                setIconImage(icon.getImage());
+            } else {
+                System.err.println("No se encontró el ícono");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * metodo que permite agregar instancias de los paneles al cardlayout
+     */
+    private void setViews() {
+        //inicializacion de las ventanas
+        contentPanel.add(loginPane, LOGIN_VIEW);
+        contentPanel.add(signinPane, SIGNIN_VIEW);
+        contentPanel.add(signinDatePane, SIGNIN_DATE_VIEW);
+        contentPanel.add(signinPasswordPane, SIGNIN_PASSWORD_VIEW);
+        contentPanel.add(signinBioPane, SIGNIN_BIO_VIEW);
+        contentPanel.add(signinPicturePane, SIGNIN_PICTURE_VIEW);
+        contentPanel.add(restorePswPane, RSPSW_VIEW);
+        contentPanel.add(restorePswUserPane, RSPSW_CONFIRM_USER_VIEW);
+        contentPanel.add(restorePswChangePane, RSPSW_CHANGE_VIEW);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel contentPanel;
