@@ -1,7 +1,12 @@
 
 package com.mycompany.hiChatJpa.view.pages.signin;
 
+import com.mycompany.hiChatJpa.dao.IUsuarioDAO;
+import com.mycompany.hiChatJpa.dao.impl.UsuarioDAO;
+import com.mycompany.hiChatJpa.entitys.Usuario;
+import com.mycompany.hiChatJpa.holder.RegistroDTOHolder;
 import com.mycompany.hiChatJpa.view.MainFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -10,6 +15,7 @@ import com.mycompany.hiChatJpa.view.MainFrame;
 public class SigninPicturePane extends javax.swing.JPanel {
 
     private final MainFrame FATHER;
+    private IUsuarioDAO usuarioDAO;
     
     /**
      * Creates new form SigninPane
@@ -17,6 +23,7 @@ public class SigninPicturePane extends javax.swing.JPanel {
      */
     public SigninPicturePane(MainFrame frame) {
         this.FATHER  =  frame;
+        this.usuarioDAO = new UsuarioDAO();
         initComponents();
     }
 
@@ -315,9 +322,104 @@ public class SigninPicturePane extends javax.swing.JPanel {
     }//GEN-LAST:event_logInLabelMouseClicked
 
     private void continueLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_continueLabelMouseClicked
-        FATHER.showView(MainFrame.LOGIN_VIEW);
+        // Obtener el DTO del holder
+        RegistroDTO dto = RegistroDTOHolder.getRegistroDTO();
+        
+        // Validar que todos los datos estén completos
+        if (dto.getNombre() == null || dto.getNombre().isEmpty() ||
+            dto.getApellidoPaterno() == null || dto.getApellidoPaterno().isEmpty() ||
+            dto.getCorreoElectronico() == null || dto.getCorreoElectronico().isEmpty() ||
+            dto.getFechaNacimiento() == null ||
+            dto.getContrasena() == null || dto.getContrasena().isEmpty() ||
+            dto.getCarrera() == null || dto.getCarrera().isEmpty() ||
+            dto.getBiografia() == null || dto.getBiografia().isEmpty()) {
+            
+            JOptionPane.showMessageDialog(this, 
+                "Por favor completa todos los pasos anteriores", 
+                "Datos incompletos", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // Mostrar un diálogo de confirmación
+        int confirm = JOptionPane.showConfirmDialog(this,
+            "¿Estás seguro de completar el registro?\n\n" +
+            "Email: " + dto.getCorreoElectronico() + "\n" +
+            "Nombre: " + dto.getNombre() + " " + dto.getApellidoPaterno(),
+            "Confirmar Registro",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE);
+        
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+        
+        // Cambiar el cursor a "esperando"
+        continueLabel.setEnabled(false);
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        
+        try {
+            // Validar que el email no exista en la base de datos
+            Usuario usuarioExistente = UsuarioDAO.buscarPorCorreo(dto.getCorreoElectronico());
+            if (usuarioExistente != null) {
+                JOptionPane.showMessageDialog(this,
+                    "El correo electrónico ya está registrado",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Convertir DTO a Usuario
+            Usuario usuario = convertirDTOaEntity(dto);
+            
+            // Guardar en la base de datos
+            usuarioDAO.insertar(usuario);
+            
+            // Mostrar mensaje de éxito
+            JOptionPane.showMessageDialog(this,
+                "¡Registro exitoso! Bienvenido a HiChat!",
+                "Éxito",
+                JOptionPane.INFORMATION_MESSAGE);
+            
+            // Limpiar los datos después de registro exitoso
+            RegistroDTOHolder.clearRegistroDTO();
+            
+            // Ir a la pantalla de login
+            FATHER.showView(MainFrame.LOGIN_VIEW);
+            
+        } catch (Exception e) {
+            System.err.println("Error al registrar usuario: " + e.getMessage());
+            e.printStackTrace();
+            
+            JOptionPane.showMessageDialog(this,
+                "Error al registrar usuario: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        } finally {
+            // Restaurar el cursor
+            this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+            continueLabel.setEnabled(true);
+        }
+        
     }//GEN-LAST:event_continueLabelMouseClicked
 
+    /**
+     * Convierte un RegistroDTO a una entidad Usuario
+     */
+    private Usuario convertirDTOaEntity(RegistroDTO dto) {
+        Usuario usuario = new Usuario();
+        usuario.setNombre(dto.getNombre());
+        usuario.setApellidoPaterno(dto.getApellidoPaterno());
+        usuario.setApellidoMaterno(dto.getApellidoMaterno());
+        usuario.setCorreoElectronico(dto.getCorreoElectronico());
+        usuario.setContrasena(dto.getContrasena()); // TODO: Considerar encriptar
+        usuario.setFechaNacimiento(dto.getFechaNacimiento());
+        usuario.setCarrera(dto.getCarrera());
+        usuario.setBiografia(dto.getBiografia());
+        usuario.setGenero(dto.getGenero());
+        
+        return usuario;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel backgroundPane;

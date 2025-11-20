@@ -1,8 +1,11 @@
 
 package com.mycompany.hiChatJpa.view.pages.signin;
 
+import com.mycompany.hiChatJpa.dto.RegistroDTO;
+import com.mycompany.hiChatJpa.holder.RegistroDTOHolder;
 import com.mycompany.hiChatJpa.view.MainFrame;
 import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -310,6 +313,22 @@ public class SigninPasswordPane extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        loadStep3Data();
+    }
+
+    /**
+     * Carga los datos guardados del Paso 3 en los campos de texto
+     */
+    private void loadStep3Data() {
+        RegistroDTO dto = RegistroDTOHolder.getRegistroDTO();
+        if (dto.getContrasena() != null) {
+            //textFieldPanel2.setText(dto.getContrasena());
+            //textFieldPanel1.setText(dto.getContrasena());
+        }
+    }
     private void returnButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_returnButtonMouseClicked
         FATHER.showView(MainFrame.SIGNIN_DATE_VIEW);
     }//GEN-LAST:event_returnButtonMouseClicked
@@ -319,6 +338,41 @@ public class SigninPasswordPane extends javax.swing.JPanel {
     }//GEN-LAST:event_logInLabelMouseClicked
 
     private void continueLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_continueLabelMouseClicked
+        String password = textFieldPanel2.getText().trim();
+        String confirmPassword = textFieldPanel1.getText().trim();
+        
+        // Validar que los campos no estén vacíos
+        if (password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La contraseña es requerida", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (confirmPassword.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Confirma la contraseña", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Validar formato
+        if (!textFieldPanel1.isValid() || !textFieldPanel2.isValid()) {
+            JOptionPane.showMessageDialog(this, "La contraseña es muy larga", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Validar que las contraseñas coincidan
+        if (!password.equals(confirmPassword)) {
+            JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Validar longitud mínima
+        if (password.length() < 6) {
+            JOptionPane.showMessageDialog(this, "La contraseña debe tener al menos 6 caracteres", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Guardar los datos en el DTO
+        RegistroDTO dto = RegistroDTOHolder.getRegistroDTO();
+        dto.setContrasena(password);
+        
         FATHER.showView(MainFrame.SIGNIN_BIO_VIEW);
     }//GEN-LAST:event_continueLabelMouseClicked
 

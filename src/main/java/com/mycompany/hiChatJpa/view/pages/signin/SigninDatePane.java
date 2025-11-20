@@ -1,8 +1,12 @@
 
 package com.mycompany.hiChatJpa.view.pages.signin;
 
+import com.mycompany.hiChatJpa.dto.RegistroDTO;
+import com.mycompany.hiChatJpa.holder.RegistroDTOHolder;
 import com.mycompany.hiChatJpa.view.MainFrame;
 import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
+import java.time.LocalDate;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -309,7 +313,25 @@ public class SigninDatePane extends javax.swing.JPanel {
             .addComponent(backgroundPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+    
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        loadStep2Data();
+    }
 
+    /**
+     * Carga los datos guardados del Paso 2 en los campos de texto
+     */
+    private void loadStep2Data() {
+        RegistroDTO dto = RegistroDTOHolder.getRegistroDTO();
+        if (dto.getCorreoElectronico() != null) {
+            //textFieldPanel1.setText(dto.getCorreoElectronico());
+        }
+        if (dto.getFechaNacimiento() != null) {
+            //textFieldPanel2.setText(dto.getFechaNacimiento().toString());
+        }
+    }
     private void returnButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_returnButtonMouseClicked
         FATHER.showView(MainFrame.SIGNIN_VIEW);
     }//GEN-LAST:event_returnButtonMouseClicked
@@ -319,8 +341,39 @@ public class SigninDatePane extends javax.swing.JPanel {
     }//GEN-LAST:event_logInLabelMouseClicked
 
     private void continueLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_continueLabelMouseClicked
-        FATHER.showView(MainFrame.SIGNIN_PASSWORD_VIEW
-        );
+        String email = textFieldPanel1.getText().trim();
+        String fechaStr = textFieldPanel2.getText().trim();
+        
+        // Validar que los campos no estén vacíos
+        if (email.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El email es requerido", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (fechaStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La fecha de nacimiento es requerida", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Validar formato
+        if (!textFieldPanel1.isValid() || !textFieldPanel2.isValid()) {
+            JOptionPane.showMessageDialog(this, "Formato inválido", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        try {
+            // Parsear la fecha (formato: YYYY-MM-DD)
+            LocalDate fecha = LocalDate.parse(fechaStr);
+            
+            // Guardar los datos en el DTO
+            RegistroDTO dto = RegistroDTOHolder.getRegistroDTO();
+            dto.setCorreoElectronico(email);
+            dto.setFechaNacimiento(fecha);
+            
+            // Ir al siguiente paso
+            FATHER.showView(MainFrame.SIGNIN_PASSWORD_VIEW);
+        } catch (java.time.format.DateTimeParseException e) {
+            JOptionPane.showMessageDialog(this, "Formato de fecha inválido. Usa YYYY-MM-DD", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_continueLabelMouseClicked
 
 

@@ -1,8 +1,11 @@
 
 package com.mycompany.hiChatJpa.view.pages.signin;
 
+import com.mycompany.hiChatJpa.dto.RegistroDTO;
+import com.mycompany.hiChatJpa.holder.RegistroDTOHolder;
 import com.mycompany.hiChatJpa.view.MainFrame;
 import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -312,6 +315,24 @@ public class SigninBioPane extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        loadStep4Data();
+    }
+
+    /**
+     * Carga los datos guardados del Paso 4 en los campos de texto
+     */
+    private void loadStep4Data() {
+        RegistroDTO dto = RegistroDTOHolder.getRegistroDTO();
+        if (dto.getCarrera() != null) {
+            //textFieldPanel2.setText(dto.getCarrera());
+        }
+        if (dto.getBiografia() != null) {
+            //textFieldPanel1.setText(dto.getBiografia());
+        }
+    }
     private void returnButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_returnButtonMouseClicked
         FATHER.showView(MainFrame.SIGNIN_PASSWORD_VIEW);
     }//GEN-LAST:event_returnButtonMouseClicked
@@ -321,6 +342,29 @@ public class SigninBioPane extends javax.swing.JPanel {
     }//GEN-LAST:event_logInLabelMouseClicked
 
     private void continueLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_continueLabelMouseClicked
+        String carrera = textFieldPanel2.getText().trim();
+        String biografia = textFieldPanel1.getText().trim();
+        
+        // Validar que los campos no estén vacíos
+        if (carrera.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La carrera es requerida", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (biografia.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La biografía es requerida", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Validar formato
+        if (!textFieldPanel1.isValid() || !textFieldPanel2.isValid()) {
+            JOptionPane.showMessageDialog(this, "Formato inválido", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Guardar los datos en el DTO
+        RegistroDTO dto = RegistroDTOHolder.getRegistroDTO();
+        dto.setCarrera(carrera);
+        dto.setBiografia(biografia);
         FATHER.showView(MainFrame.SIGNIN_PICTURE_VIEW);
     }//GEN-LAST:event_continueLabelMouseClicked
 

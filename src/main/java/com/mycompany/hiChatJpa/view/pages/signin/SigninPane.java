@@ -1,8 +1,11 @@
 
 package com.mycompany.hiChatJpa.view.pages.signin;
 
+import com.mycompany.hiChatJpa.dto.RegistroDTO;
+import com.mycompany.hiChatJpa.holder.RegistroDTOHolder;
 import com.mycompany.hiChatJpa.view.MainFrame;
 import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -320,7 +323,27 @@ public class SigninPane extends javax.swing.JPanel {
             .addComponent(backgroundPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        loadStep1Data();
+    }
+    /**
+     * Carga los datos guardados del Paso 1 en los campos de texto
+     */
+    private void loadStep1Data() {
+        RegistroDTO dto = RegistroDTOHolder.getRegistroDTO();
+        if (dto.getNombre() != null) {
+           // userNameTxt.setText(dto.getNombre());
+        }
+        if (dto.getApellidoPaterno() != null) {
+            //userLastNameTxt.setText(dto.getApellidoPaterno());
+        }
+        if (dto.getApellidoMaterno() != null) {
+            //userSecondLastNameTxt.setText(dto.getApellidoMaterno());
+        }
+    }
     private void returnButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_returnButtonMouseClicked
         FATHER.showView(MainFrame.LOGIN_VIEW);
     }//GEN-LAST:event_returnButtonMouseClicked
@@ -330,6 +353,31 @@ public class SigninPane extends javax.swing.JPanel {
     }//GEN-LAST:event_logInLabelMouseClicked
 
     private void continueLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_continueLabelMouseClicked
+        String nombre = userNameTxt.getText().trim();
+        String apellidoPaterno = userLastNameTxt.getText().trim();
+        String apellidoMaterno = userSecondLastNameTxt.getText().trim();
+        
+        // Validar que los campos no estén vacíos
+        if (nombre.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El nombre es requerido", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (apellidoPaterno.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El apellido es requerido", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Validar formato con TextFieldPanel
+        if (!userNameTxt.isValid() || !userLastNameTxt.isValid()) {
+            JOptionPane.showMessageDialog(this, "Formato inválido en los nombres", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Guardar los datos en el DTO
+        RegistroDTO dto = RegistroDTOHolder.getRegistroDTO();
+        dto.setNombre(nombre);
+        dto.setApellidoPaterno(apellidoPaterno);
+        dto.setApellidoMaterno(apellidoMaterno);
         FATHER.showView(MainFrame.SIGNIN_DATE_VIEW);
     }//GEN-LAST:event_continueLabelMouseClicked
 
