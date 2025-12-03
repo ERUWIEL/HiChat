@@ -7,8 +7,6 @@ import com.mycompany.hiChatJpa.exceptions.PersistenceException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -20,7 +18,6 @@ import java.util.List;
  */
 public class UsuarioDAO implements IUsuarioDAO {
     
-    private static final Logger logger = LoggerFactory.getLogger(UsuarioDAO.class);
     private static final int MAX_RESULTS = 100;
     
     /**
@@ -39,14 +36,11 @@ public class UsuarioDAO implements IUsuarioDAO {
             em.persist(usuario);
             
             em.getTransaction().commit();
-            logger.info("Usuario insertado correctamente: {}", usuario.getCorreoElectronico());
             
         } catch (Exception e) {
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
-                logger.error("Rollback ejecutado en inserción de usuario", e);
             }
-            logger.error("Error al insertar usuario", e);
             throw new PersistenceException("insertar", "No se pudo insertar el usuario", e);
         } finally {
             if (em != null) {
@@ -71,14 +65,11 @@ public class UsuarioDAO implements IUsuarioDAO {
             em.merge(usuario);
             
             em.getTransaction().commit();
-            logger.info("Usuario actualizado correctamente: {}", usuario.getCorreoElectronico());
             
         } catch (Exception e) {
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
-                logger.error("Rollback ejecutado en actualización de usuario", e);
             }
-            logger.error("Error al actualizar usuario", e);
             throw new PersistenceException("actualizar", "No se pudo actualizar el usuario", e);
         } finally {
             if (em != null) {
@@ -103,9 +94,6 @@ public class UsuarioDAO implements IUsuarioDAO {
             Usuario usuario = em.find(Usuario.class, id);
             if (usuario != null) {
                 em.remove(usuario);
-                logger.info("Usuario eliminado correctamente: ID {}", id);
-            } else {
-                logger.warn("Intento de eliminar usuario inexistente: ID {}", id);
             }
             
             em.getTransaction().commit();
@@ -113,9 +101,7 @@ public class UsuarioDAO implements IUsuarioDAO {
         } catch (Exception e) {
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
-                logger.error("Rollback ejecutado en eliminación de usuario", e);
             }
-            logger.error("Error al eliminar usuario con ID: {}", id, e);
             throw new PersistenceException("eliminar", "No se pudo eliminar el usuario", e);
         } finally {
             if (em != null) {
@@ -136,17 +122,10 @@ public class UsuarioDAO implements IUsuarioDAO {
         try {
             em = JpaUtil.getEntityManager();
             Usuario usuario = em.find(Usuario.class, id);
-            
-            if (usuario != null) {
-                logger.debug("Usuario encontrado: ID {}", id);
-            } else {
-                logger.debug("Usuario no encontrado: ID {}", id);
-            }
-            
+                        
             return usuario;
             
         } catch (Exception e) {
-            logger.error("Error al buscar usuario por ID: {}", id, e);
             throw new PersistenceException("buscar", "No se pudo buscar el usuario", e);
         } finally {
             if (em != null) {
@@ -169,12 +148,10 @@ public class UsuarioDAO implements IUsuarioDAO {
             query.setMaxResults(MAX_RESULTS);
             
             List<Usuario> usuarios = query.getResultList();
-            logger.debug("Se listaron {} usuarios", usuarios.size());
             
             return usuarios;
             
         } catch (Exception e) {
-            logger.error("Error al listar usuarios", e);
             throw new PersistenceException("listar", "No se pudo obtener la lista de usuarios", e);
         } finally {
             if (em != null) {
@@ -199,15 +176,12 @@ public class UsuarioDAO implements IUsuarioDAO {
             
             try {
                 Usuario usuario = query.getSingleResult();
-                logger.debug("Usuario encontrado por correo: {}", correo);
                 return usuario;
             } catch (NoResultException e) {
-                logger.debug("Usuario no encontrado por correo: {}", correo);
                 return null;
             }
             
         } catch (Exception e) {
-            logger.error("Error al buscar usuario por correo: {}", correo, e);
             throw new PersistenceException("buscarPorCorreo", "No se pudo buscar el usuario por correo", e);
         } finally {
             if (em != null) {
@@ -234,16 +208,11 @@ public class UsuarioDAO implements IUsuarioDAO {
             query.setMaxResults(MAX_RESULTS);
             
             List<Usuario> usuarios = query.getResultList();
-            logger.debug("Se encontraron {} usuarios con nombre: {} {}", 
-                    usuarios.size(), nombre, apellidoPaterno);
             
             return usuarios;
             
         } catch (Exception e) {
-            logger.error("Error al buscar usuarios por nombre completo: {} {}", 
-                    nombre, apellidoPaterno, e);
-            throw new PersistenceException("buscarPorNombreCompleto", 
-                    "No se pudo buscar usuarios por nombre", e);
+            throw new PersistenceException("buscarPorNombreCompleto","No se pudo buscar usuarios por nombre", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();

@@ -7,8 +7,6 @@ import com.mycompany.hiChatJpa.dao.impl.FotoDAO;
 import com.mycompany.hiChatJpa.dao.impl.UsuarioDAO;
 import com.mycompany.hiChatJpa.entitys.Foto;
 import com.mycompany.hiChatJpa.entitys.Usuario;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.List;
@@ -20,7 +18,6 @@ import java.util.List;
  */
 public class FotoService {
 
-    private static final Logger logger = LoggerFactory.getLogger(FotoService.class);
     private final IFotoDAO fotoDAO;
     private final IUsuarioDAO usuarioDAO;
     private final CloudinaryUtil cloudinary;
@@ -72,7 +69,6 @@ public class FotoService {
                     .build();
 
             fotoDAO.insertar(foto);
-            logger.info("Foto creada en BD con ID: {}", foto.getIdFoto());
 
             // 2. Subir imagen a Cloudinary usando el ID de la foto
             String urlCloudinary = cloudinary.subirFotoGaleria(
@@ -84,12 +80,9 @@ public class FotoService {
             // 3. Actualizar la URL en la base de datos
             foto.setUrlFoto(urlCloudinary);
             fotoDAO.actualizar(foto);
-
-            logger.info("✓ Foto guardada exitosamente: {}", urlCloudinary);
             return foto;
 
         } catch (Exception e) {
-            logger.error("Error al agregar foto de galería", e);
             throw new Exception("No se pudo guardar la foto: " + e.getMessage(), e);
         }
     }
@@ -125,12 +118,9 @@ public class FotoService {
             // Actualizar URL en el usuario
             usuario.setUrlFotoPerfil(urlCloudinary);
             usuarioDAO.actualizar(usuario);
-
-            logger.info("✓ Foto de perfil actualizada: {}", urlCloudinary);
             return urlCloudinary;
 
         } catch (Exception e) {
-            logger.error("Error al actualizar foto de perfil", e);
             throw new Exception("No se pudo actualizar la foto de perfil: " + e.getMessage(), e);
         }
     }
@@ -158,17 +148,10 @@ public class FotoService {
             Long idUsuario = foto.getUsuario().getIdUsuario();
             boolean eliminadaCloudinary = cloudinary.eliminarFotoGaleria(idUsuario, idFoto);
 
-            if (!eliminadaCloudinary) {
-                logger.warn("No se pudo eliminar la imagen de Cloudinary, continuando...");
-            }
-
             // 2. Eliminar de la base de datos
             fotoDAO.eliminar(idFoto);
 
-            logger.info("✓ Foto eliminada: ID {}", idFoto);
-
         } catch (Exception e) {
-            logger.error("Error al eliminar foto", e);
             throw new Exception("No se pudo eliminar la foto: " + e.getMessage(), e);
         }
     }

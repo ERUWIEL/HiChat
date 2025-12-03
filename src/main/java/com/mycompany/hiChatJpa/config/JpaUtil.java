@@ -3,8 +3,7 @@ package com.mycompany.hiChatJpa.config;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 /**
  * clase que nos permitira usar el patron singleton implementando logs de
@@ -14,7 +13,6 @@ import org.slf4j.LoggerFactory;
  */
 public class JpaUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(JpaUtil.class);
     private static final String PERSISTENCE_UNIT = "HiChatPU";
 
     private static EntityManagerFactory emf;
@@ -33,11 +31,8 @@ public class JpaUtil {
             synchronized (JpaUtil.class) {
                 if (emf == null) {
                     try {
-                        logger.info("Inicializando EntityManagerFactory...");
                         emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
-                        logger.info("EntityManagerFactory inicializado correctamente");
                     } catch (Exception e) {
-                        logger.error("Error al inicializar EntityManagerFactory", e);
                         throw new RuntimeException("No se pudo inicializar la conexión a la base de datos", e);
                     }
                 }
@@ -57,7 +52,6 @@ public class JpaUtil {
         if (em == null || !em.isOpen()) {
             em = getEntityManagerFactory().createEntityManager();
             threadLocal.set(em);
-            logger.debug("EntityManager creado para el hilo: {}", Thread.currentThread().getName());
         }
 
         return em;
@@ -73,13 +67,11 @@ public class JpaUtil {
                 if (em.isOpen()) {
                     if (em.getTransaction().isActive()) {
                         em.getTransaction().rollback();
-                        logger.warn("Se hizo rollback de una transacción activa al cerrar EntityManager");
                     }
                     em.close();
-                    logger.debug("EntityManager cerrado para el hilo: {}", Thread.currentThread().getName());
                 }
             } catch (Exception e) {
-                logger.error("Error al cerrar EntityManager", e);
+                
             } finally {
                 threadLocal.remove();
             }
@@ -93,7 +85,6 @@ public class JpaUtil {
         EntityManager em = getEntityManager();
         if (!em.getTransaction().isActive()) {
             em.getTransaction().begin();
-            logger.debug("Transacción iniciada");
         }
     }
 
@@ -104,7 +95,6 @@ public class JpaUtil {
         EntityManager em = getEntityManager();
         if (em.getTransaction().isActive()) {
             em.getTransaction().commit();
-            logger.debug("Transacción confirmada");
         }
     }
 
@@ -115,7 +105,6 @@ public class JpaUtil {
         EntityManager em = getEntityManager();
         if (em.getTransaction().isActive()) {
             em.getTransaction().rollback();
-            logger.debug("Transacción revertida");
         }
     }
 
@@ -127,10 +116,8 @@ public class JpaUtil {
             closeEntityManager();
             if (emf != null && emf.isOpen()) {
                 emf.close();
-                logger.info("EntityManagerFactory cerrado");
             }
         } catch (Exception e) {
-            logger.error("Error al cerrar EntityManagerFactory", e);
         }
     }
 }

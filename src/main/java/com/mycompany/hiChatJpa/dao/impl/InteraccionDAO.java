@@ -9,16 +9,13 @@ import com.mycompany.hiChatJpa.exceptions.PersistenceException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * clase que permite manupular las interacciones
  * @author gatog
  */
 public class InteraccionDAO implements IInteraccionDAO {
-
-    private static final Logger logger = LoggerFactory.getLogger(InteraccionDAO.class);
+    
     private static final int MAX_RESULTS = 100;
 
     /**
@@ -37,15 +34,11 @@ public class InteraccionDAO implements IInteraccionDAO {
             em.persist(interaccion);
 
             em.getTransaction().commit();
-            logger.info("Interacción insertada correctamente: Emisor={} Receptor={}", 
-                        interaccion.getUsuarioEmisor().getIdUsuario(), interaccion.getUsuarioReceptor().getIdUsuario());
 
         } catch (Exception e) {
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
-                logger.error("Rollback ejecutado en inserción de interacción", e);
             }
-            logger.error("Error al insertar interacción", e);
             throw new PersistenceException("insertar", "No se pudo insertar la interacción", e);
         } finally {
             if (em != null) {
@@ -70,14 +63,11 @@ public class InteraccionDAO implements IInteraccionDAO {
             em.merge(interaccion);
 
             em.getTransaction().commit();
-            logger.info("Interacción actualizada correctamente: ID {}", interaccion.getIdInteraccion());
 
         } catch (Exception e) {
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
-                logger.error("Rollback ejecutado en actualización de interacción", e);
             }
-            logger.error("Error al actualizar interacción", e);
             throw new PersistenceException("actualizar", "No se pudo actualizar la interacción", e);
         } finally {
             if (em != null) {
@@ -102,9 +92,6 @@ public class InteraccionDAO implements IInteraccionDAO {
             Interaccion interaccion = em.find(Interaccion.class, id);
             if (interaccion != null) {
                 em.remove(interaccion);
-                logger.info("Interacción eliminada correctamente: ID {}", id);
-            } else {
-                logger.warn("Intento de eliminar interacción inexistente: ID {}", id);
             }
 
             em.getTransaction().commit();
@@ -112,9 +99,7 @@ public class InteraccionDAO implements IInteraccionDAO {
         } catch (Exception e) {
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
-                logger.error("Rollback ejecutado en eliminación de interacción", e);
             }
-            logger.error("Error al eliminar interacción con ID: {}", id, e);
             throw new PersistenceException("eliminar", "No se pudo eliminar la interacción", e);
         } finally {
             if (em != null) {
@@ -136,16 +121,9 @@ public class InteraccionDAO implements IInteraccionDAO {
             em = JpaUtil.getEntityManager();
             Interaccion interaccion = em.find(Interaccion.class, id);
 
-            if (interaccion != null) {
-                logger.debug("Interacción encontrada: ID {}", id);
-            } else {
-                logger.debug("Interacción no encontrada: ID {}", id);
-            }
-
             return interaccion;
 
         } catch (Exception e) {
-            logger.error("Error al buscar interacción por ID: {}", id, e);
             throw new PersistenceException("buscar", "No se pudo buscar la interacción", e);
         } finally {
             if (em != null) {
@@ -168,12 +146,10 @@ public class InteraccionDAO implements IInteraccionDAO {
             query.setMaxResults(MAX_RESULTS);
 
             List<Interaccion> interacciones = query.getResultList();
-            logger.debug("Se listaron {} interacciones", interacciones.size());
 
             return interacciones;
 
         } catch (Exception e) {
-            logger.error("Error al listar interacciones", e);
             throw new PersistenceException("listar", "No se pudo obtener la lista de interacciones", e);
         } finally {
             if (em != null) {
@@ -198,15 +174,10 @@ public class InteraccionDAO implements IInteraccionDAO {
             query.setMaxResults(MAX_RESULTS);
 
             List<Interaccion> interacciones = query.getResultList();
-            logger.debug("Se encontraron {} interacciones emitidas por el usuario ID {}", 
-                         interacciones.size(), usuario.getIdUsuario());
-
             return interacciones;
 
         } catch (Exception e) {
-            logger.error("Error al buscar interacciones por emisor ID: {}", usuario.getIdUsuario(), e);
-            throw new PersistenceException("buscarPorEmisor", 
-                                           "No se pudieron buscar las interacciones por emisor", e);
+            throw new PersistenceException("buscarPorEmisor", "No se pudieron buscar las interacciones por emisor", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();
@@ -230,15 +201,10 @@ public class InteraccionDAO implements IInteraccionDAO {
             query.setMaxResults(MAX_RESULTS);
 
             List<Interaccion> interacciones = query.getResultList();
-            logger.debug("Se encontraron {} interacciones recibidas por el usuario ID {}", 
-                         interacciones.size(), usuario.getIdUsuario());
-
             return interacciones;
 
         } catch (Exception e) {
-            logger.error("Error al buscar interacciones por receptor ID: {}", usuario.getIdUsuario(), e);
-            throw new PersistenceException("buscarPorReceptor", 
-                                           "No se pudieron buscar las interacciones por receptor", e);
+            throw new PersistenceException("buscarPorReceptor","No se pudieron buscar las interacciones por receptor", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();
@@ -262,15 +228,10 @@ public class InteraccionDAO implements IInteraccionDAO {
             query.setMaxResults(MAX_RESULTS);
 
             List<Interaccion> interacciones = query.getResultList();
-            logger.debug("Se encontraron {} interacciones del tipo {}", 
-                         interacciones.size(), tipo);
-
             return interacciones;
 
         } catch (Exception e) {
-            logger.error("Error al buscar interacciones por tipo {}", tipo, e);
-            throw new PersistenceException("buscarPorTipo", 
-                                           "No se pudieron buscar las interacciones por tipo", e);
+            throw new PersistenceException("buscarPorTipo", "No se pudieron buscar las interacciones por tipo", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();

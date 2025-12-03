@@ -3,8 +3,6 @@ package com.mycompany.hiChatJpa.config;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import io.github.cdimascio.dotenv.Dotenv;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,8 +15,7 @@ import java.util.Map;
  * @author gatog
  */
 public class CloudinaryUtil {
-
-    private static final Logger logger = LoggerFactory.getLogger(CloudinaryUtil.class);
+    
     private static CloudinaryUtil instance;
     private final Cloudinary cloudinary;
 
@@ -45,12 +42,7 @@ public class CloudinaryUtil {
 
             this.cloudinary = new Cloudinary(cloudinaryUrl);
             
-            // Confirmar conexión
-            logger.info("✓ Cloudinary conectado exitosamente");
-            logger.debug("Cloud Name: {}", cloudinary.config.cloudName);
-
         } catch (Exception e) {
-            logger.error("Error al inicializar Cloudinary", e);
             throw new RuntimeException("No se pudo conectar con Cloudinary", e);
         }
     }
@@ -92,11 +84,9 @@ public class CloudinaryUtil {
             Map resultado = cloudinary.uploader().upload(new File(rutaArchivo), params);
             String url = (String) resultado.get("secure_url");
             
-            logger.info("✓ Imagen subida exitosamente: {}", url);
             return url;
 
         } catch (IOException e) {
-            logger.error("Error al subir imagen: {}", rutaArchivo, e);
             throw new IOException("No se pudo subir la imagen: " + e.getMessage(), e);
         }
     }
@@ -165,11 +155,9 @@ public class CloudinaryUtil {
             Map resultado = cloudinary.uploader().upload(new File(rutaArchivo), params);
             String url = (String) resultado.get("secure_url");
             
-            logger.info("✓ Imagen actualizada: {}", url);
             return url;
 
         } catch (IOException e) {
-            logger.error("Error al actualizar imagen: {}", publicId, e);
             throw new IOException("No se pudo actualizar la imagen: " + e.getMessage(), e);
         }
     }
@@ -190,18 +178,10 @@ public class CloudinaryUtil {
             Map resultado = cloudinary.uploader().destroy(publicId, params);
             String result = (String) resultado.get("result");
             
-            boolean exitoso = "ok".equals(result);
-            
-            if (exitoso) {
-                logger.info("✓ Imagen eliminada: {}", publicId);
-            } else {
-                logger.warn("⚠ No se pudo eliminar la imagen: {}", publicId);
-            }
-            
+            boolean exitoso = "ok".equals(result);           
             return exitoso;
 
         } catch (IOException e) {
-            logger.error("Error al eliminar imagen: {}", publicId, e);
             throw new IOException("No se pudo eliminar la imagen: " + e.getMessage(), e);
         }
     }
@@ -247,12 +227,10 @@ public class CloudinaryUtil {
             );
 
             Map detalles = cloudinary.api().resource(publicId, params);
-            logger.debug("Detalles obtenidos para: {}", publicId);
             
             return detalles;
 
         } catch (Exception e) {
-            logger.error("Error al obtener detalles de: {}", publicId, e);
             throw new Exception("No se pudieron obtener los detalles de la imagen", e);
         }
     }
@@ -287,11 +265,9 @@ public class CloudinaryUtil {
                     .transformation(transformacion)
                     .generate(publicId);
             
-            logger.debug("URL transformada generada: {}", url);
             return url;
 
         } catch (Exception e) {
-            logger.error("Error al generar URL transformada", e);
             return null;
         }
     }
@@ -354,8 +330,6 @@ public class CloudinaryUtil {
     public Cloudinary getCloudinary() {
         return cloudinary;
     }
-
-    // ============ CONSTANTES PÚBLICAS ============
     
     public static String getFolderPerfil() {
         return FOLDER_PERFIL;

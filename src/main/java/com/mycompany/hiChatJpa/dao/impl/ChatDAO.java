@@ -8,8 +8,6 @@ import com.mycompany.hiChatJpa.exceptions.PersistenceException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * clase dao que permite manupular los chats
@@ -17,7 +15,6 @@ import org.slf4j.LoggerFactory;
  */
 public class ChatDAO implements IChatDAO {
 
-    private static final Logger logger = LoggerFactory.getLogger(ChatDAO.class);
     private static final int MAX_RESULTS = 100;
 
     /**
@@ -36,14 +33,11 @@ public class ChatDAO implements IChatDAO {
             em.persist(chat);
 
             em.getTransaction().commit();
-            logger.info("Chat insertado correctamente: {}", chat.getNombre());
 
         } catch (Exception e) {
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
-                logger.error("Rollback ejecutado en inserción de chat", e);
             }
-            logger.error("Error al insertar chat", e);
             throw new PersistenceException("insertar", "No se pudo insertar el chat", e);
         } finally {
             if (em != null) {
@@ -68,14 +62,11 @@ public class ChatDAO implements IChatDAO {
             em.merge(chat);
 
             em.getTransaction().commit();
-            logger.info("Chat actualizado correctamente: ID {}", chat.getIdChat());
 
         } catch (Exception e) {
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
-                logger.error("Rollback ejecutado en actualización de chat", e);
             }
-            logger.error("Error al actualizar chat", e);
             throw new PersistenceException("actualizar", "No se pudo actualizar el chat", e);
         } finally {
             if (em != null) {
@@ -100,9 +91,6 @@ public class ChatDAO implements IChatDAO {
             Chat chat = em.find(Chat.class, id);
             if (chat != null) {
                 em.remove(chat);
-                logger.info("Chat eliminado correctamente: ID {}", id);
-            } else {
-                logger.warn("Intento de eliminar chat inexistente: ID {}", id);
             }
 
             em.getTransaction().commit();
@@ -110,9 +98,7 @@ public class ChatDAO implements IChatDAO {
         } catch (Exception e) {
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
-                logger.error("Rollback ejecutado en eliminación de chat", e);
             }
-            logger.error("Error al eliminar chat con ID: {}", id, e);
             throw new PersistenceException("eliminar", "No se pudo eliminar el chat", e);
         } finally {
             if (em != null) {
@@ -133,17 +119,9 @@ public class ChatDAO implements IChatDAO {
         try {
             em = JpaUtil.getEntityManager();
             Chat chat = em.find(Chat.class, id);
-
-            if (chat != null) {
-                logger.debug("Chat encontrado: ID {}", id);
-            } else {
-                logger.debug("Chat no encontrado: ID {}", id);
-            }
-
             return chat;
 
         } catch (Exception e) {
-            logger.error("Error al buscar chat por ID: {}", id, e);
             throw new PersistenceException("buscar", "No se pudo buscar el chat", e);
         } finally {
             if (em != null) {
@@ -166,12 +144,10 @@ public class ChatDAO implements IChatDAO {
             query.setMaxResults(MAX_RESULTS);
 
             List<Chat> chats = query.getResultList();
-            logger.debug("Se listaron {} chats", chats.size());
 
             return chats;
 
         } catch (Exception e) {
-            logger.error("Error al listar chats", e);
             throw new PersistenceException("listar", "No se pudo listar los chats", e);
         } finally {
             if (em != null) {
@@ -196,14 +172,10 @@ public class ChatDAO implements IChatDAO {
             query.setMaxResults(MAX_RESULTS);
 
             List<Chat> chats = query.getResultList();
-            logger.debug("Se encontraron {} chats con nombre similar a '{}'", chats.size(), nombre);
-
             return chats;
 
         } catch (Exception e) {
-            logger.error("Error al buscar chats por nombre '{}'", nombre, e);
-            throw new PersistenceException("buscarPorNombre", 
-                                           "No se pudieron buscar los chats por nombre", e);
+            throw new PersistenceException("buscarPorNombre","No se pudieron buscar los chats por nombre", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();
@@ -225,16 +197,12 @@ public class ChatDAO implements IChatDAO {
             TypedQuery<Chat> query = em.createNamedQuery("Chat.findByParticipante", Chat.class);
             query.setParameter("usuario", usuario);
             query.setMaxResults(MAX_RESULTS);
-
             List<Chat> chats = query.getResultList();
-            logger.debug("Se encontraron {} chats del usuario ID {}", chats.size(), usuario.getIdUsuario());
 
             return chats;
 
         } catch (Exception e) {
-            logger.error("Error al buscar chats por participante ID: {}", usuario.getIdUsuario(), e);
-            throw new PersistenceException("buscarPorParticipante", 
-                                           "No se pudieron buscar los chats por participante", e);
+            throw new PersistenceException("buscarPorParticipante","No se pudieron buscar los chats por participante", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();
