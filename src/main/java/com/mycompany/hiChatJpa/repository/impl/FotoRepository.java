@@ -1,7 +1,6 @@
 
 package com.mycompany.hiChatJpa.repository.impl;
 
-import com.mycompany.hiChatJpa.config.JpaUtil;
 import com.mycompany.hiChatJpa.entitys.Foto;
 import com.mycompany.hiChatJpa.entitys.Usuario;
 import com.mycompany.hiChatJpa.exceptions.EntityNotFoundException;
@@ -122,22 +121,14 @@ public class FotoRepository implements IFotoRepository {
      */
     @Override
     public List<Foto> buscarPorUsuario(Usuario usuario) {
-        EntityManager em = null;
         try {
-            em = JpaUtil.getEntityManager();
-            TypedQuery<Foto> query = em.createNamedQuery("Foto.findByUsuario", Foto.class);
+            TypedQuery<Foto> query = entityManager.createNamedQuery("Foto.findByUsuario", Foto.class);
             query.setParameter("usuario", usuario);
             query.setMaxResults(MAX_RESULTS);
-
             List<Foto> fotos = query.getResultList();
             return fotos;
-
         } catch (Exception e) {
             throw new RepositoryException("buscarPorUsuario", "No se pudieron buscar las fotos por usuario", e);
-        } finally {
-            if (em != null) {
-                JpaUtil.closeEntityManager();
-            }
         }
     }
 
@@ -149,22 +140,14 @@ public class FotoRepository implements IFotoRepository {
      */
     @Override
     public List<Foto> buscarPorDescripcion(String descripcion) {
-        EntityManager em = null;
         try {
-            em = JpaUtil.getEntityManager();
-            TypedQuery<Foto> query = em.createNamedQuery("Foto.findByDescripcion", Foto.class);
+            TypedQuery<Foto> query = entityManager.createNamedQuery("Foto.findByDescripcion", Foto.class);
             query.setParameter("descripcion", "%" + descripcion + "%");
             query.setMaxResults(MAX_RESULTS);
-
             List<Foto> fotos = query.getResultList();
             return fotos;
-
         } catch (Exception e) {
             throw new RepositoryException("buscarPorDescripcion","No se pudieron buscar las fotos por descripción", e);
-        } finally {
-            if (em != null) {
-                JpaUtil.closeEntityManager();
-            }
         }
     }
 }

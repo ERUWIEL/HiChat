@@ -41,11 +41,6 @@ public class UsuarioService implements IUsuarioService {
         this.interaccionDAO = new InteraccionRepository();
     }
 
-    // ==================== MÉTODOS PRIVADOS DE VALIDACIÓN ====================
-
-    /**
-     * Convierte un Usuario a UsuarioPerfilDTO
-     */
     private UsuarioPerfilDTO usuarioADTO(Usuario usuario) {
         if (usuario == null) return null;
         

@@ -1,8 +1,8 @@
 package com.mycompany.hiChatJpa.repository.impl;
 
-import com.mycompany.hiChatJpa.config.JpaUtil;
 import com.mycompany.hiChatJpa.entitys.Bloqueo;
 import com.mycompany.hiChatJpa.entitys.Usuario;
+import com.mycompany.hiChatJpa.exceptions.EntityNotFoundException;
 import com.mycompany.hiChatJpa.exceptions.RepositoryException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -16,32 +16,26 @@ import com.mycompany.hiChatJpa.repository.IBloqueoRepository;
  */
 public class BloqueoRepository implements IBloqueoRepository {
     private static final int MAX_RESULTS = 100;
-
+    private final EntityManager entityManager;
+    
+    public BloqueoRepository(EntityManager em){
+        this.entityManager = em;
+    }
+    
     /**
      * Inserta un nuevo bloqueo en la base de datos.
      * 
      * @param b Bloqueo a insertar
+     * @return 
      * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
-    public void insertar(Bloqueo b) {
-        EntityManager em = null;
+    public boolean insertar(Bloqueo b) {
         try {
-            em = JpaUtil.getEntityManager();
-            em.getTransaction().begin();
-
-            em.persist(b);
-
-            em.getTransaction().commit();
+            entityManager.persist(b);
+            return true;
         } catch (Exception e) {
-            if (em != null && em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
             throw new RepositoryException("insertar", "No se pudo insertar el bloqueo", e);
-        } finally {
-            if (em != null) {
-                JpaUtil.closeEntityManager();
-            }
         }
     }
 
@@ -49,28 +43,16 @@ public class BloqueoRepository implements IBloqueoRepository {
      * Actualiza un bloqueo existente.
      * 
      * @param e Bloqueo con los datos actualizados
+     * @return 
      * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
-    public void actualizar(Bloqueo e) {
-        EntityManager em = null;
+    public boolean actualizar(Bloqueo e) {
         try {
-            em = JpaUtil.getEntityManager();
-            em.getTransaction().begin();
-
-            em.merge(e);
-
-            em.getTransaction().commit();
-
+            entityManager.merge(e);
+            return true;
         } catch (Exception ex) {
-            if (em != null && em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
             throw new RepositoryException("actualizar", "No se pudo actualizar el bloqueo", ex);
-        } finally {
-            if (em != null) {
-                JpaUtil.closeEntityManager();
-            }
         }
     }
 
@@ -78,30 +60,21 @@ public class BloqueoRepository implements IBloqueoRepository {
      * Elimina un bloqueo por su ID.
      * 
      * @param id ID del bloqueo a eliminar
+     * @return 
      * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
-    public void eliminar(Long id) {
-        EntityManager em = null;
+    public boolean eliminar(Long id) {
         try {
-            em = JpaUtil.getEntityManager();
-            em.getTransaction().begin();
-
-            Bloqueo bloqueo = em.find(Bloqueo.class, id);
+            Bloqueo bloqueo = entityManager.find(Bloqueo.class, id);
             if (bloqueo != null) {
-                em.remove(bloqueo);
+                entityManager.remove(bloqueo);
+                return true;
+            } else {
+                throw new EntityNotFoundException("no se encontro el bloqueo");
             }
-            em.getTransaction().commit();
-
         } catch (Exception e) {
-            if (em != null && em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
             throw new RepositoryException("eliminar", "No se pudo eliminar el bloqueo", e);
-        } finally {
-            if (em != null) {
-                JpaUtil.closeEntityManager();
-            }
         }
     }
 
@@ -113,18 +86,11 @@ public class BloqueoRepository implements IBloqueoRepository {
      */
     @Override
     public Bloqueo buscar(Long id) {
-        EntityManager em = null;
         try {
-            em = JpaUtil.getEntityManager();
-            Bloqueo bloqueo = em.find(Bloqueo.class, id);
+            Bloqueo bloqueo = entityManager.find(Bloqueo.class, id);
             return bloqueo;
-
         } catch (Exception e) {
             throw new RepositoryException("buscar", "No se pudo buscar el bloqueo", e);
-        } finally {
-            if (em != null) {
-                JpaUtil.closeEntityManager();
-            }
         }
     }
 
@@ -135,22 +101,13 @@ public class BloqueoRepository implements IBloqueoRepository {
      */
     @Override
     public List<Bloqueo> listar() {
-        EntityManager em = null;
         try {
-            em = JpaUtil.getEntityManager();
-            TypedQuery<Bloqueo> query = em.createNamedQuery("Bloqueo.findAll", Bloqueo.class);
+            TypedQuery<Bloqueo> query = entityManager.createNamedQuery("Bloqueo.findAll", Bloqueo.class);
             query.setMaxResults(MAX_RESULTS);
-
             List<Bloqueo> bloqueos = query.getResultList();
-
             return bloqueos;
-
         } catch (Exception e) {
             throw new RepositoryException("listar", "No se pudo listar los bloqueos", e);
-        } finally {
-            if (em != null) {
-                JpaUtil.closeEntityManager();
-            }
         }
     }
 
@@ -162,22 +119,14 @@ public class BloqueoRepository implements IBloqueoRepository {
      */
     @Override
     public List<Bloqueo> buscarPorBloqueador(Usuario usuario) {
-        EntityManager em = null;
         try {
-            em = JpaUtil.getEntityManager();
-            TypedQuery<Bloqueo> query = em.createNamedQuery("Bloqueo.findByBloqueador", Bloqueo.class);
+            TypedQuery<Bloqueo> query = entityManager.createNamedQuery("Bloqueo.findByBloqueador", Bloqueo.class);
             query.setParameter("bloqueador", usuario);
             query.setMaxResults(MAX_RESULTS);
             List<Bloqueo> bloqueos = query.getResultList();
-
             return bloqueos;
-
         } catch (Exception e) {
             throw new RepositoryException("buscarPorBloqueador","No se pudieron buscar los bloqueos por bloqueador", e);
-        } finally {
-            if (em != null) {
-                JpaUtil.closeEntityManager();
-            }
         }
     }
 
@@ -189,22 +138,14 @@ public class BloqueoRepository implements IBloqueoRepository {
      */
     @Override
     public List<Bloqueo> buscarPorBloqueado(Usuario usuario) {
-        EntityManager em = null;
         try {
-            em = JpaUtil.getEntityManager();
-            TypedQuery<Bloqueo> query = em.createNamedQuery("Bloqueo.findByBloqueado", Bloqueo.class);
+            TypedQuery<Bloqueo> query = entityManager.createNamedQuery("Bloqueo.findByBloqueado", Bloqueo.class);
             query.setParameter("bloqueado", usuario);
             query.setMaxResults(MAX_RESULTS);
             List<Bloqueo> bloqueos = query.getResultList();
-
             return bloqueos;
-
         } catch (Exception e) {
             throw new RepositoryException("buscarPorBloqueado","No se pudieron buscar los bloqueos por bloqueado", e);
-        } finally {
-            if (em != null) {
-                JpaUtil.closeEntityManager();
-            }
         }
     }
 }

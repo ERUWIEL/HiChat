@@ -1,6 +1,5 @@
 package com.mycompany.hiChatJpa.repository.impl;
 
-import com.mycompany.hiChatJpa.config.JpaUtil;
 import com.mycompany.hiChatJpa.entitys.Interaccion;
 import com.mycompany.hiChatJpa.entitys.TipoInteraccion;
 import com.mycompany.hiChatJpa.entitys.Usuario;
