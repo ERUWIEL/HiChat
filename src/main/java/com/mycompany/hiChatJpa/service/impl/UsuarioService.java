@@ -1,11 +1,8 @@
 package com.mycompany.hiChatJpa.service.impl;
 
-import com.mycompany.hiChatJpa.dao.IBloqueoDAO;
-import com.mycompany.hiChatJpa.dao.IInteraccionDAO;
-import com.mycompany.hiChatJpa.dao.IUsuarioDAO;
-import com.mycompany.hiChatJpa.dao.impl.BloqueoDAO;
-import com.mycompany.hiChatJpa.dao.impl.InteraccionDAO;
-import com.mycompany.hiChatJpa.dao.impl.UsuarioDAO;
+import com.mycompany.hiChatJpa.repository.impl.BloqueoRepository;
+import com.mycompany.hiChatJpa.repository.impl.InteraccionRepository;
+import com.mycompany.hiChatJpa.repository.impl.UsuarioRepository;
 import com.mycompany.hiChatJpa.dto.ActualizarUsuarioDTO;
 import com.mycompany.hiChatJpa.dto.LoginDTO;
 import com.mycompany.hiChatJpa.dto.RegistroDTO;
@@ -21,6 +18,9 @@ import java.time.Period;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import com.mycompany.hiChatJpa.repository.IUsuarioRepository;
+import com.mycompany.hiChatJpa.repository.IInteraccionRepository;
+import com.mycompany.hiChatJpa.repository.IBloqueoRepository;
 
 /**
  * Implementación de la capa de servicio para Usuario
@@ -28,17 +28,17 @@ import java.util.stream.Collectors;
  */
 public class UsuarioService implements IUsuarioService {
 
-    private final IUsuarioDAO usuarioDAO;
-    private final IBloqueoDAO bloqueoDAO;
-    private final IInteraccionDAO interaccionDAO;
+    private final IUsuarioRepository usuarioDAO;
+    private final IBloqueoRepository bloqueoDAO;
+    private final IInteraccionRepository interaccionDAO;
 
     private static final String EMAIL_PATTERN = "^[A-Za-z0-9+_.-]+@(.+)$";
     private static final Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 
     public UsuarioService() {
-        this.usuarioDAO = new UsuarioDAO();
-        this.bloqueoDAO = new BloqueoDAO();
-        this.interaccionDAO = new InteraccionDAO();
+        this.usuarioDAO = new UsuarioRepository();
+        this.bloqueoDAO = new BloqueoRepository();
+        this.interaccionDAO = new InteraccionRepository();
     }
 
     // ==================== MÉTODOS PRIVADOS DE VALIDACIÓN ====================

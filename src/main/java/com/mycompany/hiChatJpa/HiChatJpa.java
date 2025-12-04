@@ -1,10 +1,12 @@
 package com.mycompany.hiChatJpa;
 
+import com.mycompany.hiChatJpa.config.CloudinaryUtil;
 import com.mycompany.hiChatJpa.config.JpaUtil;
 import com.mycompany.hiChatJpa.dto.RegistroDTO;
 import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
 import com.mycompany.hiChatJpa.service.impl.InteraccionService;
 import com.mycompany.hiChatJpa.service.impl.UsuarioService;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,20 @@ public class HiChatJpa {
     private static InteraccionService interaccionService = new InteraccionService();
 
     public static void main(String[] args) {
+        
+        CloudinaryUtil cl = CloudinaryUtil.getInstance();
+        long ln = (long) 1;
+        try {
+            cl.subirFotoPerfil("\"C:\\Users\\gatog\\Pictures\\Screenshots\\Screenshot 2025-10-31 094652.png\"", ln);
+        } catch (IOException ex) {
+            System.getLogger(HiChatJpa.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        
+        System.exit(0);
+        
+        
+        
+        
         try {
             System.out.println("========== INICIANDO CARGA DE DATOS ==========\n");
 

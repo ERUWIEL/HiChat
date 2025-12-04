@@ -1,49 +1,43 @@
 
-package com.mycompany.hiChatJpa.dao.impl;
+package com.mycompany.hiChatJpa.repository.impl;
 
 import com.mycompany.hiChatJpa.config.JpaUtil;
-import com.mycompany.hiChatJpa.dao.IFotoDAO;
 import com.mycompany.hiChatJpa.entitys.Foto;
 import com.mycompany.hiChatJpa.entitys.Usuario;
-import com.mycompany.hiChatJpa.exceptions.PersistenceException;
+import com.mycompany.hiChatJpa.exceptions.EntityNotFoundException;
+import com.mycompany.hiChatJpa.exceptions.RepositoryException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
+import com.mycompany.hiChatJpa.repository.IFotoRepository;
 
 /**
  * clase que permite manupular las fotos
  * @author gatog
  */
-public class FotoDAO implements IFotoDAO {
+public class FotoRepository implements IFotoRepository {
 
     private static final int MAX_RESULTS = 100;
-
+    private final EntityManager entityManager;
+    
+    public FotoRepository(EntityManager em){
+        this.entityManager = em;
+    }
+    
     /**
      * Inserta una nueva foto en la base de datos.
      * 
      * @param foto Foto a insertar
-     * @throws PersistenceException si ocurre un error en la operación
+     * @return 
+     * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
-    public void insertar(Foto foto) {
-        EntityManager em = null;
+    public boolean insertar(Foto foto) {
         try {
-            em = JpaUtil.getEntityManager();
-            em.getTransaction().begin();
-
-            em.persist(foto);
-
-            em.getTransaction().commit();
-
+            entityManager.persist(foto);
+            return true;
         } catch (Exception e) {
-            if (em != null && em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            throw new PersistenceException("insertar", "No se pudo insertar la foto", e);
-        } finally {
-            if (em != null) {
-                JpaUtil.closeEntityManager();
-            }
+            throw new RepositoryException("insertar", "No se pudo insertar la foto", e);
         }
     }
 
@@ -51,28 +45,16 @@ public class FotoDAO implements IFotoDAO {
      * Actualiza los datos de una foto existente.
      * 
      * @param foto Foto con los datos actualizados
-     * @throws PersistenceException si ocurre un error en la operación
+     * @return 
+     * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
-    public void actualizar(Foto foto) {
-        EntityManager em = null;
+    public boolean actualizar(Foto foto) {
         try {
-            em = JpaUtil.getEntityManager();
-            em.getTransaction().begin();
-
-            em.merge(foto);
-
-            em.getTransaction().commit();
-
+            entityManager.merge(foto);
+            return true;
         } catch (Exception e) {
-            if (em != null && em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            throw new PersistenceException("actualizar", "No se pudo actualizar la foto", e);
-        } finally {
-            if (em != null) {
-                JpaUtil.closeEntityManager();
-            }
+            throw new RepositoryException("actualizar", "No se pudo actualizar la foto", e);
         }
     }
 
@@ -80,34 +62,25 @@ public class FotoDAO implements IFotoDAO {
      * Elimina una foto por su ID.
      * 
      * @param id ID de la foto a eliminar
-     * @throws PersistenceException si ocurre un error en la operación
+     * @return 
+     * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
-    public void eliminar(Long id) {
-        EntityManager em = null;
+    public boolean eliminar(Long id) {
         try {
-            em = JpaUtil.getEntityManager();
-            em.getTransaction().begin();
-
-            Foto foto = em.find(Foto.class, id);
+            Foto foto = entityManager.find(Foto.class, id);
             if (foto != null) {
-                em.remove(foto);
-            } 
-
-            em.getTransaction().commit();
-
+                entityManager.remove(foto);
+                return true;
+            } else {
+                throw new EntityNotFoundException("no se pudo encontrar la foto");
+            }
         } catch (Exception e) {
-            if (em != null && em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            throw new PersistenceException("eliminar", "No se pudo eliminar la foto", e);
-        } finally {
-            if (em != null) {
-                JpaUtil.closeEntityManager();
-            }
+            throw new RepositoryException("eliminar", "No se pudo eliminar la foto", e);
         }
     }
-
+    
+    
     /**
      * Busca una foto por su ID.
      * 
@@ -116,18 +89,11 @@ public class FotoDAO implements IFotoDAO {
      */
     @Override
     public Foto buscar(Long id) {
-        EntityManager em = null;
         try {
-            em = JpaUtil.getEntityManager();
-            Foto foto = em.find(Foto.class, id);
+            Foto foto = entityManager.find(Foto.class, id);
             return foto;
-
         } catch (Exception e) {
-            throw new PersistenceException("buscar", "No se pudo buscar la foto", e);
-        } finally {
-            if (em != null) {
-                JpaUtil.closeEntityManager();
-            }
+            throw new RepositoryException("buscar", "No se pudo buscar la foto", e);
         }
     }
 
@@ -138,22 +104,13 @@ public class FotoDAO implements IFotoDAO {
      */
     @Override
     public List<Foto> listar() {
-        EntityManager em = null;
         try {
-            em = JpaUtil.getEntityManager();
-            TypedQuery<Foto> query = em.createNamedQuery("Foto.findAll", Foto.class);
+            TypedQuery<Foto> query = entityManager.createNamedQuery("Foto.findAll", Foto.class);
             query.setMaxResults(MAX_RESULTS);
-
             List<Foto> fotos = query.getResultList();
-
             return fotos;
-
         } catch (Exception e) {
-            throw new PersistenceException("listar", "No se pudo listar las fotos", e);
-        } finally {
-            if (em != null) {
-                JpaUtil.closeEntityManager();
-            }
+            throw new RepositoryException("listar", "No se pudo listar las fotos", e);
         }
     }
 
@@ -176,7 +133,7 @@ public class FotoDAO implements IFotoDAO {
             return fotos;
 
         } catch (Exception e) {
-            throw new PersistenceException("buscarPorUsuario", "No se pudieron buscar las fotos por usuario", e);
+            throw new RepositoryException("buscarPorUsuario", "No se pudieron buscar las fotos por usuario", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();
@@ -203,7 +160,7 @@ public class FotoDAO implements IFotoDAO {
             return fotos;
 
         } catch (Exception e) {
-            throw new PersistenceException("buscarPorDescripcion","No se pudieron buscar las fotos por descripción", e);
+            throw new RepositoryException("buscarPorDescripcion","No se pudieron buscar las fotos por descripción", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();

@@ -1,19 +1,19 @@
-package com.mycompany.hiChatJpa.dao.impl;
+package com.mycompany.hiChatJpa.repository.impl;
 
 import com.mycompany.hiChatJpa.config.JpaUtil;
-import com.mycompany.hiChatJpa.dao.IChatDAO;
 import com.mycompany.hiChatJpa.entitys.Chat;
 import com.mycompany.hiChatJpa.entitys.Usuario;
-import com.mycompany.hiChatJpa.exceptions.PersistenceException;
+import com.mycompany.hiChatJpa.exceptions.RepositoryException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
+import com.mycompany.hiChatJpa.repository.IChatRepository;
 
 /**
  * clase dao que permite manupular los chats
  * @author gatog
  */
-public class ChatDAO implements IChatDAO {
+public class ChatRepository implements IChatRepository {
 
     private static final int MAX_RESULTS = 100;
 
@@ -21,7 +21,7 @@ public class ChatDAO implements IChatDAO {
      * Inserta un nuevo chat en la base de datos.
      * 
      * @param chat Chat a insertar
-     * @throws PersistenceException si ocurre un error en la operación
+     * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
     public void insertar(Chat chat) {
@@ -38,7 +38,7 @@ public class ChatDAO implements IChatDAO {
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-            throw new PersistenceException("insertar", "No se pudo insertar el chat", e);
+            throw new RepositoryException("insertar", "No se pudo insertar el chat", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();
@@ -50,7 +50,7 @@ public class ChatDAO implements IChatDAO {
      * Actualiza un chat existente.
      * 
      * @param chat Chat con los datos actualizados
-     * @throws PersistenceException si ocurre un error en la operación
+     * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
     public void actualizar(Chat chat) {
@@ -67,7 +67,7 @@ public class ChatDAO implements IChatDAO {
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-            throw new PersistenceException("actualizar", "No se pudo actualizar el chat", e);
+            throw new RepositoryException("actualizar", "No se pudo actualizar el chat", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();
@@ -79,7 +79,7 @@ public class ChatDAO implements IChatDAO {
      * Elimina un chat por su ID.
      * 
      * @param id ID del chat a eliminar
-     * @throws PersistenceException si ocurre un error en la operación
+     * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
     public void eliminar(Long id) {
@@ -99,7 +99,7 @@ public class ChatDAO implements IChatDAO {
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-            throw new PersistenceException("eliminar", "No se pudo eliminar el chat", e);
+            throw new RepositoryException("eliminar", "No se pudo eliminar el chat", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();
@@ -122,7 +122,7 @@ public class ChatDAO implements IChatDAO {
             return chat;
 
         } catch (Exception e) {
-            throw new PersistenceException("buscar", "No se pudo buscar el chat", e);
+            throw new RepositoryException("buscar", "No se pudo buscar el chat", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();
@@ -148,7 +148,7 @@ public class ChatDAO implements IChatDAO {
             return chats;
 
         } catch (Exception e) {
-            throw new PersistenceException("listar", "No se pudo listar los chats", e);
+            throw new RepositoryException("listar", "No se pudo listar los chats", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();
@@ -175,7 +175,7 @@ public class ChatDAO implements IChatDAO {
             return chats;
 
         } catch (Exception e) {
-            throw new PersistenceException("buscarPorNombre","No se pudieron buscar los chats por nombre", e);
+            throw new RepositoryException("buscarPorNombre","No se pudieron buscar los chats por nombre", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();
@@ -202,7 +202,7 @@ public class ChatDAO implements IChatDAO {
             return chats;
 
         } catch (Exception e) {
-            throw new PersistenceException("buscarPorParticipante","No se pudieron buscar los chats por participante", e);
+            throw new RepositoryException("buscarPorParticipante","No se pudieron buscar los chats por participante", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();

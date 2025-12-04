@@ -1,9 +1,7 @@
 package com.mycompany.hiChatJpa.service.impl;
 
-import com.mycompany.hiChatJpa.dao.IMatchDAO;
-import com.mycompany.hiChatJpa.dao.IUsuarioDAO;
-import com.mycompany.hiChatJpa.dao.impl.MatchDAO;
-import com.mycompany.hiChatJpa.dao.impl.UsuarioDAO;
+import com.mycompany.hiChatJpa.repository.impl.MatchRepository;
+import com.mycompany.hiChatJpa.repository.impl.UsuarioRepository;
 import com.mycompany.hiChatJpa.dto.MatchDTO;
 import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
 import com.mycompany.hiChatJpa.entitys.Match;
@@ -13,6 +11,8 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 import java.util.stream.Collectors;
+import com.mycompany.hiChatJpa.repository.IUsuarioRepository;
+import com.mycompany.hiChatJpa.repository.IMatchRepository;
 
 /**
  * Implementación de la capa de servicio para Match
@@ -20,12 +20,12 @@ import java.util.stream.Collectors;
  */
 public class MatchService implements IMatchService {
 
-    private final IMatchDAO matchDAO;
-    private final IUsuarioDAO usuarioDAO;
+    private final IMatchRepository matchDAO;
+    private final IUsuarioRepository usuarioDAO;
 
     public MatchService() {
-        this.matchDAO = new MatchDAO();
-        this.usuarioDAO = new UsuarioDAO();
+        this.matchDAO = new MatchRepository();
+        this.usuarioDAO = new UsuarioRepository();
     }
 
     /**

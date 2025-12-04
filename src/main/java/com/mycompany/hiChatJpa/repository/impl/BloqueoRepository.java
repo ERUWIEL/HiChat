@@ -1,27 +1,27 @@
-package com.mycompany.hiChatJpa.dao.impl;
+package com.mycompany.hiChatJpa.repository.impl;
 
 import com.mycompany.hiChatJpa.config.JpaUtil;
-import com.mycompany.hiChatJpa.dao.IBloqueoDAO;
 import com.mycompany.hiChatJpa.entitys.Bloqueo;
 import com.mycompany.hiChatJpa.entitys.Usuario;
-import com.mycompany.hiChatJpa.exceptions.PersistenceException;
+import com.mycompany.hiChatJpa.exceptions.RepositoryException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
+import com.mycompany.hiChatJpa.repository.IBloqueoRepository;
 
 /**
  * clase dao que permite manipular los bloqueos
  *
  * @author gatog
  */
-public class BloqueoDAO implements IBloqueoDAO {
+public class BloqueoRepository implements IBloqueoRepository {
     private static final int MAX_RESULTS = 100;
 
     /**
      * Inserta un nuevo bloqueo en la base de datos.
      * 
      * @param b Bloqueo a insertar
-     * @throws PersistenceException si ocurre un error en la operación
+     * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
     public void insertar(Bloqueo b) {
@@ -37,7 +37,7 @@ public class BloqueoDAO implements IBloqueoDAO {
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-            throw new PersistenceException("insertar", "No se pudo insertar el bloqueo", e);
+            throw new RepositoryException("insertar", "No se pudo insertar el bloqueo", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();
@@ -49,7 +49,7 @@ public class BloqueoDAO implements IBloqueoDAO {
      * Actualiza un bloqueo existente.
      * 
      * @param e Bloqueo con los datos actualizados
-     * @throws PersistenceException si ocurre un error en la operación
+     * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
     public void actualizar(Bloqueo e) {
@@ -66,7 +66,7 @@ public class BloqueoDAO implements IBloqueoDAO {
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-            throw new PersistenceException("actualizar", "No se pudo actualizar el bloqueo", ex);
+            throw new RepositoryException("actualizar", "No se pudo actualizar el bloqueo", ex);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();
@@ -78,7 +78,7 @@ public class BloqueoDAO implements IBloqueoDAO {
      * Elimina un bloqueo por su ID.
      * 
      * @param id ID del bloqueo a eliminar
-     * @throws PersistenceException si ocurre un error en la operación
+     * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
     public void eliminar(Long id) {
@@ -97,7 +97,7 @@ public class BloqueoDAO implements IBloqueoDAO {
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-            throw new PersistenceException("eliminar", "No se pudo eliminar el bloqueo", e);
+            throw new RepositoryException("eliminar", "No se pudo eliminar el bloqueo", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();
@@ -120,7 +120,7 @@ public class BloqueoDAO implements IBloqueoDAO {
             return bloqueo;
 
         } catch (Exception e) {
-            throw new PersistenceException("buscar", "No se pudo buscar el bloqueo", e);
+            throw new RepositoryException("buscar", "No se pudo buscar el bloqueo", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();
@@ -146,7 +146,7 @@ public class BloqueoDAO implements IBloqueoDAO {
             return bloqueos;
 
         } catch (Exception e) {
-            throw new PersistenceException("listar", "No se pudo listar los bloqueos", e);
+            throw new RepositoryException("listar", "No se pudo listar los bloqueos", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();
@@ -173,7 +173,7 @@ public class BloqueoDAO implements IBloqueoDAO {
             return bloqueos;
 
         } catch (Exception e) {
-            throw new PersistenceException("buscarPorBloqueador","No se pudieron buscar los bloqueos por bloqueador", e);
+            throw new RepositoryException("buscarPorBloqueador","No se pudieron buscar los bloqueos por bloqueador", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();
@@ -200,7 +200,7 @@ public class BloqueoDAO implements IBloqueoDAO {
             return bloqueos;
 
         } catch (Exception e) {
-            throw new PersistenceException("buscarPorBloqueado","No se pudieron buscar los bloqueos por bloqueado", e);
+            throw new RepositoryException("buscarPorBloqueado","No se pudieron buscar los bloqueos por bloqueado", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();

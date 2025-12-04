@@ -1,15 +1,10 @@
 package com.mycompany.hiChatJpa.service.impl;
 
-import com.mycompany.hiChatJpa.dao.IBloqueoDAO;
-import com.mycompany.hiChatJpa.dao.IChatDAO;
-import com.mycompany.hiChatJpa.dao.IInteraccionDAO;
-import com.mycompany.hiChatJpa.dao.IMatchDAO;
-import com.mycompany.hiChatJpa.dao.IUsuarioDAO;
-import com.mycompany.hiChatJpa.dao.impl.BloqueoDAO;
-import com.mycompany.hiChatJpa.dao.impl.ChatDAO;
-import com.mycompany.hiChatJpa.dao.impl.InteraccionDAO;
-import com.mycompany.hiChatJpa.dao.impl.MatchDAO;
-import com.mycompany.hiChatJpa.dao.impl.UsuarioDAO;
+import com.mycompany.hiChatJpa.repository.impl.BloqueoRepository;
+import com.mycompany.hiChatJpa.repository.impl.ChatRepository;
+import com.mycompany.hiChatJpa.repository.impl.InteraccionRepository;
+import com.mycompany.hiChatJpa.repository.impl.MatchRepository;
+import com.mycompany.hiChatJpa.repository.impl.UsuarioRepository;
 import com.mycompany.hiChatJpa.entitys.Bloqueo;
 import com.mycompany.hiChatJpa.entitys.Chat;
 import com.mycompany.hiChatJpa.entitys.Interaccion;
@@ -20,6 +15,11 @@ import com.mycompany.hiChatJpa.service.IInteraccionService;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import com.mycompany.hiChatJpa.repository.IUsuarioRepository;
+import com.mycompany.hiChatJpa.repository.IMatchRepository;
+import com.mycompany.hiChatJpa.repository.IInteraccionRepository;
+import com.mycompany.hiChatJpa.repository.IChatRepository;
+import com.mycompany.hiChatJpa.repository.IBloqueoRepository;
 
 /**
  * Implementación de la capa de servicio para Interacción
@@ -27,18 +27,18 @@ import java.util.List;
  */
 public class InteraccionService implements IInteraccionService {
 
-    private final IInteraccionDAO interaccionDAO;
-    private final IUsuarioDAO usuarioDAO;
-    private final IMatchDAO matchDAO;
-    private final IBloqueoDAO bloqueoDAO;
-    private final IChatDAO chatDAO;
+    private final IInteraccionRepository interaccionDAO;
+    private final IUsuarioRepository usuarioDAO;
+    private final IMatchRepository matchDAO;
+    private final IBloqueoRepository bloqueoDAO;
+    private final IChatRepository chatDAO;
 
     public InteraccionService() {
-        this.interaccionDAO = new InteraccionDAO();
-        this.usuarioDAO = new UsuarioDAO();
-        this.matchDAO = new MatchDAO();
-        this.bloqueoDAO = new BloqueoDAO();
-        this.chatDAO = new ChatDAO();
+        this.interaccionDAO = new InteraccionRepository();
+        this.usuarioDAO = new UsuarioRepository();
+        this.matchDAO = new MatchRepository();
+        this.bloqueoDAO = new BloqueoRepository();
+        this.chatDAO = new ChatRepository();
     }
 
     /**

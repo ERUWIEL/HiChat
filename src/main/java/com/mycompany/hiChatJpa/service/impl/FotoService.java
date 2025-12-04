@@ -1,15 +1,15 @@
 package com.mycompany.hiChatJpa.service.impl;
 
 import com.mycompany.hiChatJpa.config.CloudinaryUtil;
-import com.mycompany.hiChatJpa.dao.IFotoDAO;
-import com.mycompany.hiChatJpa.dao.IUsuarioDAO;
-import com.mycompany.hiChatJpa.dao.impl.FotoDAO;
-import com.mycompany.hiChatJpa.dao.impl.UsuarioDAO;
+import com.mycompany.hiChatJpa.repository.impl.FotoRepository;
+import com.mycompany.hiChatJpa.repository.impl.UsuarioRepository;
 import com.mycompany.hiChatJpa.entitys.Foto;
 import com.mycompany.hiChatJpa.entitys.Usuario;
 
 import java.io.File;
 import java.util.List;
+import com.mycompany.hiChatJpa.repository.IUsuarioRepository;
+import com.mycompany.hiChatJpa.repository.IFotoRepository;
 
 /**
  * Servicio para manejar fotos con integración de Cloudinary
@@ -18,13 +18,13 @@ import java.util.List;
  */
 public class FotoService {
 
-    private final IFotoDAO fotoDAO;
-    private final IUsuarioDAO usuarioDAO;
+    private final IFotoRepository fotoDAO;
+    private final IUsuarioRepository usuarioDAO;
     private final CloudinaryUtil cloudinary;
 
     public FotoService() {
-        this.fotoDAO = new FotoDAO();
-        this.usuarioDAO = new UsuarioDAO();
+        this.fotoDAO = new FotoRepository();
+        this.usuarioDAO = new UsuarioRepository();
         this.cloudinary = CloudinaryUtil.getInstance();
     }
 

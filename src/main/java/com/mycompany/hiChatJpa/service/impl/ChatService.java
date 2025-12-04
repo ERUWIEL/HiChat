@@ -1,14 +1,10 @@
 
 package com.mycompany.hiChatJpa.service.impl;
 
-import com.mycompany.hiChatJpa.dao.IBloqueoDAO;
-import com.mycompany.hiChatJpa.dao.IChatDAO;
-import com.mycompany.hiChatJpa.dao.IMensajeDAO;
-import com.mycompany.hiChatJpa.dao.IUsuarioDAO;
-import com.mycompany.hiChatJpa.dao.impl.BloqueoDAO;
-import com.mycompany.hiChatJpa.dao.impl.ChatDAO;
-import com.mycompany.hiChatJpa.dao.impl.MensajeDAO;
-import com.mycompany.hiChatJpa.dao.impl.UsuarioDAO;
+import com.mycompany.hiChatJpa.repository.impl.BloqueoRepository;
+import com.mycompany.hiChatJpa.repository.impl.ChatRepository;
+import com.mycompany.hiChatJpa.repository.impl.MensajeRepository;
+import com.mycompany.hiChatJpa.repository.impl.UsuarioRepository;
 import com.mycompany.hiChatJpa.dto.ChatConMensajesDTO;
 import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
 import com.mycompany.hiChatJpa.entitys.Bloqueo;
@@ -23,6 +19,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import com.mycompany.hiChatJpa.repository.IUsuarioRepository;
+import com.mycompany.hiChatJpa.repository.IMensajeRepository;
+import com.mycompany.hiChatJpa.repository.IChatRepository;
+import com.mycompany.hiChatJpa.repository.IBloqueoRepository;
 
 /**
  * Implementación de la capa de servicio para Chat
@@ -30,16 +30,16 @@ import java.util.stream.Collectors;
  */
 public class ChatService implements IChatService {
 
-    private final IChatDAO chatDAO;
-    private final IMensajeDAO mensajeDAO;
-    private final IBloqueoDAO bloqueoDAO;
-    private final IUsuarioDAO usuarioDAO;
+    private final IChatRepository chatDAO;
+    private final IMensajeRepository mensajeDAO;
+    private final IBloqueoRepository bloqueoDAO;
+    private final IUsuarioRepository usuarioDAO;
 
     public ChatService() {
-        this.chatDAO = new ChatDAO();
-        this.mensajeDAO = new MensajeDAO();
-        this.bloqueoDAO = new BloqueoDAO();
-        this.usuarioDAO = new UsuarioDAO();
+        this.chatDAO = new ChatRepository();
+        this.mensajeDAO = new MensajeRepository();
+        this.bloqueoDAO = new BloqueoRepository();
+        this.usuarioDAO = new UsuarioRepository();
     }
 
     /**
