@@ -11,17 +11,17 @@ import java.util.List;
  */
 public interface IUsuarioRepository {
 
-    boolean insertar(Usuario usuario) throws RepositoryException;
+    Usuario insertar(Usuario usuario) throws RepositoryException;
 
-    boolean actualizar(Usuario usuario) throws RepositoryException;
+    Usuario actualizar(Usuario usuario) throws RepositoryException;
 
-    boolean  eliminar(Long id) throws RepositoryException;
+    Usuario eliminar(Long id) throws RepositoryException;
 
     Usuario buscar(Long id) throws RepositoryException;
-
-    List<Usuario> listar() throws RepositoryException;
-
+    
     Usuario buscarPorCorreo(String correo) throws RepositoryException;
 
-    List<Usuario> buscarPorNombreCompleto(String nombre, String apellidoPaterno) throws RepositoryException;
+    List<Usuario> listar(int limit, int offset) throws RepositoryException;
+
+    List<Usuario> buscarPorNombreCompleto(String nombre, String apellidoPaterno, int limit, int offset) throws RepositoryException;
 }

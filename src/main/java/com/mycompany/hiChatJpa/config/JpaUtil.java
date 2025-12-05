@@ -15,7 +15,7 @@ public class JpaUtil {
 
     private static final String PERSISTENCE_UNIT = "HiChatPU";
 
-    private static EntityManagerFactory emf;
+    private static volatile EntityManagerFactory emf;
     private static final ThreadLocal<EntityManager> threadLocal = new ThreadLocal<>();
 
     private JpaUtil() {
@@ -27,18 +27,20 @@ public class JpaUtil {
      * @return EntityManagerFactory
      */
     public static EntityManagerFactory getEntityManagerFactory() {
-        if (emf == null) {
+        EntityManagerFactory entityManagerFactory = JpaUtil.emf;
+        if (entityManagerFactory == null) {
             synchronized (JpaUtil.class) {
-                if (emf == null) {
+                entityManagerFactory = JpaUtil.emf;
+                if (entityManagerFactory == null) {
                     try {
-                        emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
+                        JpaUtil.emf = entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
                     } catch (Exception e) {
                         throw new RuntimeException("No se pudo inicializar la conexión a la base de datos", e);
                     }
                 }
             }
         }
-        return emf;
+        return entityManagerFactory;
     }
 
     /**
@@ -48,12 +50,10 @@ public class JpaUtil {
      */
     public static EntityManager getEntityManager() {
         EntityManager em = threadLocal.get();
-
         if (em == null || !em.isOpen()) {
             em = getEntityManagerFactory().createEntityManager();
             threadLocal.set(em);
         }
-
         return em;
     }
 
@@ -71,7 +71,7 @@ public class JpaUtil {
                     em.close();
                 }
             } catch (Exception e) {
-                
+                throw new RuntimeException("No se pudo cerrar la conexión al EntityManager", e);
             } finally {
                 threadLocal.remove();
             }
@@ -118,6 +118,7 @@ public class JpaUtil {
                 emf.close();
             }
         } catch (Exception e) {
+            throw new RuntimeException("No se pudo cerrar la conexión a la base de datos", e);
         }
     }
 }

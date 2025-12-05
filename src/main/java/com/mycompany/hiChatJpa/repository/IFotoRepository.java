@@ -12,17 +12,17 @@ import java.util.List;
  */
 public interface IFotoRepository {
     
-    boolean insertar(Foto foto) throws RepositoryException;
+    Foto insertar(Foto foto) throws RepositoryException;
 
-    boolean actualizar(Foto foto) throws RepositoryException;
+    Foto actualizar(Foto foto) throws RepositoryException;
 
-    boolean eliminar(Long id) throws RepositoryException;
+    Foto eliminar(Long id) throws RepositoryException;
 
     Foto buscar(Long id) throws RepositoryException;
 
-    List<Foto> listar() throws RepositoryException;
+    List<Foto> listar(int limit, int offset) throws RepositoryException;
 
-    List<Foto> buscarPorUsuario(Usuario usuario) throws RepositoryException;
+    List<Foto> buscarPorUsuario(Usuario usuario, int limit, int offset) throws RepositoryException;
 
-    List<Foto> buscarPorDescripcion(String descripcion) throws RepositoryException;
+    List<Foto> buscarPorDescripcion(String descripcion, int limit, int offset) throws RepositoryException;
 }

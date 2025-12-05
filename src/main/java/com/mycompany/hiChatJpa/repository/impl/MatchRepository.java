@@ -16,7 +16,6 @@ import com.mycompany.hiChatJpa.repository.IMatchRepository;
  */
 public class MatchRepository implements IMatchRepository {
 
-    private static final int MAX_RESULTS = 100;
     private final EntityManager entityManager;
     
     public MatchRepository(EntityManager em){
@@ -31,10 +30,10 @@ public class MatchRepository implements IMatchRepository {
      * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
-    public boolean insertar(Match match) {
+    public Match insertar(Match match) {
         try {
             entityManager.persist(match);
-            return true;
+            return match;
         } catch (Exception e) {
             throw new RepositoryException("insertar", "No se pudo insertar el match", e);
         }
@@ -48,10 +47,9 @@ public class MatchRepository implements IMatchRepository {
      * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
-    public boolean actualizar(Match match) {
+    public Match actualizar(Match match) {
         try {
-            entityManager.merge(match);
-            return true;
+            return entityManager.merge(match);
         } catch (Exception e) {
             throw new RepositoryException("actualizar", "No se pudo actualizar el match", e);
         }
@@ -65,16 +63,18 @@ public class MatchRepository implements IMatchRepository {
      * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
-    public boolean eliminar(Long id) {
+    public Match eliminar(Long id) {
         try {
             Match match = entityManager.find(Match.class, id);
-            if (match != null) {
-                entityManager.remove(match);
-                return true;
-            } else {
-                throw new EntityNotFoundException("no se encontro un match");
+            if (match == null) {
+                throw new EntityNotFoundException("no se encontro el match indicado");
             }
-        } catch (Exception e) {
+            
+            entityManager.remove(match);
+            return match;
+        } catch (EntityNotFoundException ex) {
+            throw ex;
+        }catch (Exception e) {
             throw new RepositoryException("eliminar", "No se pudo eliminar el match", e);
         }
     }
@@ -88,8 +88,7 @@ public class MatchRepository implements IMatchRepository {
     @Override
     public Match buscar(Long id) {
         try {
-            Match match = entityManager.find(Match.class, id);
-            return match;
+            return entityManager.find(Match.class, id);
         } catch (Exception e) {
             throw new RepositoryException("buscar", "No se pudo buscar el match", e);
         }
@@ -98,15 +97,18 @@ public class MatchRepository implements IMatchRepository {
     /**
      * Lista todos los matches (máximo 100 registros).
      *
+     * @param limit
+     * @param offset
      * @return Lista de matches
      */
     @Override
-    public List<Match> listar() {
+    public List<Match> listar(int limit, int offset) throws RepositoryException{
         try {
             TypedQuery<Match> query = entityManager.createNamedQuery("Match.findAll", Match.class);
-            query.setMaxResults(MAX_RESULTS);
-            List<Match> matches = query.getResultList();
-            return matches;
+            query.setMaxResults(limit);
+            query.setFirstResult(offset);
+            
+            return query.getResultList();
         } catch (Exception e) {
             throw new RepositoryException("listar", "No se pudo obtener la lista de matches", e);
         }
@@ -116,16 +118,19 @@ public class MatchRepository implements IMatchRepository {
      * Busca los matches donde el usuario participa como UsuarioA.
      *
      * @param usuario Usuario que actúa como UsuarioA
+     * @param limit
+     * @param offset
      * @return Lista de matches asociados
      */
     @Override
-    public List<Match> buscarPorUsuarioA(Usuario usuario) {
+    public List<Match> buscarPorUsuarioA(Usuario usuario, int limit, int offset) throws RepositoryException {
         try {
             TypedQuery<Match> query = entityManager.createNamedQuery("Match.findByUsuarioA", Match.class);
             query.setParameter("usuarioA", usuario);
-            query.setMaxResults(MAX_RESULTS);
-            List<Match> matches = query.getResultList();
-            return matches;
+            query.setMaxResults(limit);
+            query.setFirstResult(offset);
+            
+            return query.getResultList();
         } catch (Exception e) {
             throw new RepositoryException("buscarPorUsuarioA", "No se pudieron buscar los matches por UsuarioA", e);
         }
@@ -135,16 +140,19 @@ public class MatchRepository implements IMatchRepository {
      * Busca los matches donde el usuario participa como UsuarioB.
      *
      * @param usuario Usuario que actúa como UsuarioB
+     * @param limit
+     * @param offset
      * @return Lista de matches asociados
      */
     @Override
-    public List<Match> buscarPorUsuarioB(Usuario usuario) {
+    public List<Match> buscarPorUsuarioB(Usuario usuario, int limit, int offset) throws RepositoryException {
         try {
             TypedQuery<Match> query = entityManager.createNamedQuery("Match.findByUsuarioB", Match.class);
             query.setParameter("usuarioB", usuario);
-            query.setMaxResults(MAX_RESULTS);
-            List<Match> matches = query.getResultList();
-            return matches;
+            query.setMaxResults(limit);
+            query.setFirstResult(offset);
+            
+            return query.getResultList();
         } catch (Exception e) {
             throw new RepositoryException("buscarPorUsuarioB", "No se pudieron buscar los matches por UsuarioB", e);
         }

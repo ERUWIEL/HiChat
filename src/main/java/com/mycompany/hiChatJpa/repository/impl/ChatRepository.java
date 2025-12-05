@@ -16,7 +16,6 @@ import com.mycompany.hiChatJpa.repository.IChatRepository;
  */
 public class ChatRepository implements IChatRepository {
 
-    private static final int MAX_RESULTS = 100;
     private final EntityManager entityManager;
 
     public ChatRepository(EntityManager em) {
@@ -31,10 +30,10 @@ public class ChatRepository implements IChatRepository {
      * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
-    public boolean insertar(Chat chat) {
+    public Chat insertar(Chat chat) throws RepositoryException {
         try {
             entityManager.persist(chat);
-            return true;
+            return chat;
         } catch (Exception e) {
             throw new RepositoryException("insertar", "No se pudo insertar el chat", e);
         }
@@ -44,14 +43,13 @@ public class ChatRepository implements IChatRepository {
      * Actualiza un chat existente.
      *
      * @param chat Chat con los datos actualizados
-     * @return 
+     * @return
      * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
-    public boolean actualizar(Chat chat) {
+    public Chat actualizar(Chat chat) throws RepositoryException {
         try {
-            entityManager.merge(chat);
-            return true;
+            return entityManager.merge(chat);
         } catch (Exception e) {
             throw new RepositoryException("actualizar", "No se pudo actualizar el chat", e);
         }
@@ -61,19 +59,21 @@ public class ChatRepository implements IChatRepository {
      * Elimina un chat por su ID.
      *
      * @param id ID del chat a eliminar
-     * @return 
+     * @return
      * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
-    public boolean eliminar(Long id) {
+    public Chat eliminar(Long id) throws RepositoryException {
         try {
             Chat chat = entityManager.find(Chat.class, id);
-            if (chat != null) {
-                entityManager.remove(chat);
-                return true;
-            } else {
+            if (chat == null) {
                 throw new EntityNotFoundException("no se encontro el chat");
             }
+
+            entityManager.remove(chat);
+            return chat;
+        } catch(EntityNotFoundException ex) {
+            throw ex;
         } catch (Exception e) {
             throw new RepositoryException("eliminar", "No se pudo eliminar el chat", e);
         }
@@ -86,10 +86,9 @@ public class ChatRepository implements IChatRepository {
      * @return Chat encontrado o null si no existe
      */
     @Override
-    public Chat buscar(Long id) {
+    public Chat buscar(Long id) throws RepositoryException {
         try {
-            Chat chat = entityManager.find(Chat.class, id);
-            return chat;
+            return entityManager.find(Chat.class, id);
         } catch (Exception e) {
             throw new RepositoryException("buscar", "No se pudo buscar el chat", e);
         }
@@ -98,15 +97,18 @@ public class ChatRepository implements IChatRepository {
     /**
      * Lista todos los chats (máximo 100 registros).
      *
+     * @param limit
+     * @param offset
      * @return Lista de chats
      */
     @Override
-    public List<Chat> listar() {
+    public List<Chat> listar(int limit, int offset) throws RepositoryException {
         try {
             TypedQuery<Chat> query = entityManager.createNamedQuery("Chat.findAll", Chat.class);
-            query.setMaxResults(MAX_RESULTS);
-            List<Chat> chats = query.getResultList();
-            return chats;
+            query.setMaxResults(limit);
+            query.setFirstResult(offset);
+            
+            return query.getResultList();
         } catch (Exception e) {
             throw new RepositoryException("listar", "No se pudo listar los chats", e);
         }
@@ -116,16 +118,19 @@ public class ChatRepository implements IChatRepository {
      * Busca chats por nombre (o parte del nombre).
      *
      * @param nombre Nombre del chat o fragmento
+     * @param limit
+     * @param offset
      * @return Lista de chats que coinciden con el nombre
      */
     @Override
-    public List<Chat> buscarPorNombre(String nombre) {
+    public List<Chat> buscarPorNombre(String nombre, int limit, int offset) throws RepositoryException {
         try {
             TypedQuery<Chat> query = entityManager.createNamedQuery("Chat.findByNombre", Chat.class);
             query.setParameter("nombre", "%" + nombre + "%");
-            query.setMaxResults(MAX_RESULTS);
-            List<Chat> chats = query.getResultList();
-            return chats;
+            query.setMaxResults(limit);
+            query.setFirstResult(offset);
+            
+            return query.getResultList();
         } catch (Exception e) {
             throw new RepositoryException("buscarPorNombre", "No se pudieron buscar los chats por nombre", e);
         }
@@ -135,16 +140,19 @@ public class ChatRepository implements IChatRepository {
      * Busca los chats en los que participa un usuario.
      *
      * @param usuario Usuario participante
+     * @param limit
+     * @param offset
      * @return Lista de chats donde el usuario participa
      */
     @Override
-    public List<Chat> buscarPorParticipante(Usuario usuario) {
+    public List<Chat> buscarPorParticipante(Usuario usuario, int limit, int offset) throws RepositoryException {
         try {
             TypedQuery<Chat> query = entityManager.createNamedQuery("Chat.findByParticipante", Chat.class);
             query.setParameter("usuario", usuario);
-            query.setMaxResults(MAX_RESULTS);
-            List<Chat> chats = query.getResultList();
-            return chats;
+            query.setMaxResults(limit);
+            query.setFirstResult(offset);
+            
+            return query.getResultList();
         } catch (Exception e) {
             throw new RepositoryException("buscarPorParticipante", "No se pudieron buscar los chats por participante", e);
         }

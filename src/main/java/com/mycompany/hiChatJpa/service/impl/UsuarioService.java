@@ -1,21 +1,23 @@
 package com.mycompany.hiChatJpa.service.impl;
 
-import com.mycompany.hiChatJpa.dto.ActualizarUsuarioDTO;
-import com.mycompany.hiChatJpa.dto.LoginDTO;
-import com.mycompany.hiChatJpa.dto.MatchDTO;
-import com.mycompany.hiChatJpa.dto.RegistroDTO;
-import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
+import com.mycompany.hiChatJpa.config.JpaUtil;
+import com.mycompany.hiChatJpa.dto.*;
 import com.mycompany.hiChatJpa.entitys.TipoInteraccion;
 import com.mycompany.hiChatJpa.exceptions.ServiceException;
+import com.mycompany.hiChatJpa.repository.impl.UsuarioRepository;
 import com.mycompany.hiChatJpa.service.IUsuarioService;
+import jakarta.persistence.EntityManager;
 import java.util.List;
-
 
 /**
  * Implementación de la capa de servicio para Usuario
+ *
  * @author gatog
  */
 public class UsuarioService implements IUsuarioService {
+
+    public UsuarioService() {
+    }
 
     @Override
     public UsuarioPerfilDTO iniciarSesion(LoginDTO loginDTO) throws ServiceException {

@@ -15,25 +15,25 @@ import com.mycompany.hiChatJpa.repository.IBloqueoRepository;
  * @author gatog
  */
 public class BloqueoRepository implements IBloqueoRepository {
-    private static final int MAX_RESULTS = 100;
+
     private final EntityManager entityManager;
-    
-    public BloqueoRepository(EntityManager em){
+
+    public BloqueoRepository(EntityManager em) {
         this.entityManager = em;
     }
-    
+
     /**
      * Inserta un nuevo bloqueo en la base de datos.
-     * 
-     * @param b Bloqueo a insertar
-     * @return 
+     *
+     * @param bloqueo Bloqueo a insertar
+     * @return
      * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
-    public boolean insertar(Bloqueo b) {
+    public Bloqueo insertar(Bloqueo bloqueo) throws RepositoryException {
         try {
-            entityManager.persist(b);
-            return true;
+            entityManager.persist(bloqueo);
+            return bloqueo;
         } catch (Exception e) {
             throw new RepositoryException("insertar", "No se pudo insertar el bloqueo", e);
         }
@@ -41,16 +41,15 @@ public class BloqueoRepository implements IBloqueoRepository {
 
     /**
      * Actualiza un bloqueo existente.
-     * 
-     * @param e Bloqueo con los datos actualizados
-     * @return 
+     *
+     * @param bloqueo Bloqueo con los datos actualizados
+     * @return
      * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
-    public boolean actualizar(Bloqueo e) {
+    public Bloqueo actualizar(Bloqueo bloqueo) throws RepositoryException {
         try {
-            entityManager.merge(e);
-            return true;
+            return entityManager.merge(bloqueo);
         } catch (Exception ex) {
             throw new RepositoryException("actualizar", "No se pudo actualizar el bloqueo", ex);
         }
@@ -58,21 +57,23 @@ public class BloqueoRepository implements IBloqueoRepository {
 
     /**
      * Elimina un bloqueo por su ID.
-     * 
+     *
      * @param id ID del bloqueo a eliminar
-     * @return 
+     * @return
      * @throws RepositoryException si ocurre un error en la operación
      */
     @Override
-    public boolean eliminar(Long id) {
+    public Bloqueo eliminar(Long id) throws RepositoryException {
         try {
             Bloqueo bloqueo = entityManager.find(Bloqueo.class, id);
-            if (bloqueo != null) {
-                entityManager.remove(bloqueo);
-                return true;
-            } else {
+            if (bloqueo == null) {
                 throw new EntityNotFoundException("no se encontro el bloqueo");
             }
+
+            entityManager.remove(bloqueo);
+            return bloqueo;
+        } catch (EntityNotFoundException ex) {
+            throw ex;
         } catch (Exception e) {
             throw new RepositoryException("eliminar", "No se pudo eliminar el bloqueo", e);
         }
@@ -80,15 +81,14 @@ public class BloqueoRepository implements IBloqueoRepository {
 
     /**
      * Busca un bloqueo por su ID.
-     * 
+     *
      * @param id ID del bloqueo
      * @return Bloqueo encontrado o null si no existe
      */
     @Override
-    public Bloqueo buscar(Long id) {
+    public Bloqueo buscar(Long id) throws RepositoryException {
         try {
-            Bloqueo bloqueo = entityManager.find(Bloqueo.class, id);
-            return bloqueo;
+            return entityManager.find(Bloqueo.class, id);
         } catch (Exception e) {
             throw new RepositoryException("buscar", "No se pudo buscar el bloqueo", e);
         }
@@ -96,16 +96,19 @@ public class BloqueoRepository implements IBloqueoRepository {
 
     /**
      * Lista todos los bloqueos (máximo 100 registros).
-     * 
+     *
+     * @param limit
+     * @param offset
      * @return Lista de bloqueos
      */
     @Override
-    public List<Bloqueo> listar() {
+    public List<Bloqueo> listar(int limit, int offset) throws RepositoryException {
         try {
             TypedQuery<Bloqueo> query = entityManager.createNamedQuery("Bloqueo.findAll", Bloqueo.class);
-            query.setMaxResults(MAX_RESULTS);
-            List<Bloqueo> bloqueos = query.getResultList();
-            return bloqueos;
+            query.setMaxResults(limit);
+            query.setFirstResult(offset);
+            
+            return query.getResultList();
         } catch (Exception e) {
             throw new RepositoryException("listar", "No se pudo listar los bloqueos", e);
         }
@@ -113,39 +116,45 @@ public class BloqueoRepository implements IBloqueoRepository {
 
     /**
      * Busca los bloqueos realizados por un usuario.
-     * 
+     *
      * @param usuario Usuario bloqueador
+     * @param limit
+     * @param offset
      * @return Lista de bloqueos hechos por el usuario
      */
     @Override
-    public List<Bloqueo> buscarPorBloqueador(Usuario usuario) {
+    public List<Bloqueo> buscarPorBloqueador(Usuario usuario, int limit, int offset) throws RepositoryException {
         try {
             TypedQuery<Bloqueo> query = entityManager.createNamedQuery("Bloqueo.findByBloqueador", Bloqueo.class);
             query.setParameter("bloqueador", usuario);
-            query.setMaxResults(MAX_RESULTS);
-            List<Bloqueo> bloqueos = query.getResultList();
-            return bloqueos;
+            query.setMaxResults(limit);
+            query.setFirstResult(offset);
+            
+            return query.getResultList();
         } catch (Exception e) {
-            throw new RepositoryException("buscarPorBloqueador","No se pudieron buscar los bloqueos por bloqueador", e);
+            throw new RepositoryException("buscarPorBloqueador", "No se pudieron buscar los bloqueos por bloqueador", e);
         }
     }
 
     /**
      * Busca los bloqueos donde un usuario fue bloqueado.
-     * 
+     *
      * @param usuario Usuario bloqueado
+     * @param limit
+     * @param offset
      * @return Lista de bloqueos en los que el usuario fue bloqueado
      */
     @Override
-    public List<Bloqueo> buscarPorBloqueado(Usuario usuario) {
+    public List<Bloqueo> buscarPorBloqueado(Usuario usuario, int limit, int offset) throws RepositoryException {
         try {
             TypedQuery<Bloqueo> query = entityManager.createNamedQuery("Bloqueo.findByBloqueado", Bloqueo.class);
             query.setParameter("bloqueado", usuario);
-            query.setMaxResults(MAX_RESULTS);
-            List<Bloqueo> bloqueos = query.getResultList();
-            return bloqueos;
+            query.setMaxResults(limit);
+            query.setFirstResult(offset);
+            
+            return query.getResultList();
         } catch (Exception e) {
-            throw new RepositoryException("buscarPorBloqueado","No se pudieron buscar los bloqueos por bloqueado", e);
+            throw new RepositoryException("buscarPorBloqueado", "No se pudieron buscar los bloqueos por bloqueado", e);
         }
     }
 }

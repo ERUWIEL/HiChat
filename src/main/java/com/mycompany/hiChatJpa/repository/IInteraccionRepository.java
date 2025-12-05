@@ -13,19 +13,19 @@ import java.util.List;
  */
 public interface IInteraccionRepository {
 
-    boolean insertar(Interaccion interaccion) throws RepositoryException;
+    Interaccion insertar(Interaccion interaccion) throws RepositoryException;
 
-    boolean actualizar(Interaccion interaccion) throws RepositoryException;
+    Interaccion actualizar(Interaccion interaccion) throws RepositoryException;
 
-    boolean eliminar(Long id) throws RepositoryException;
+    Interaccion eliminar(Long id) throws RepositoryException;
 
     Interaccion buscar(Long id) throws RepositoryException;
 
-    List<Interaccion> listar() throws RepositoryException;
+    List<Interaccion> listar(int limit, int offset) throws RepositoryException;
 
-    List<Interaccion> buscarPorEmisor(Usuario usuario) throws RepositoryException;
+    List<Interaccion> buscarPorEmisor(Usuario usuario, int limit, int offset) throws RepositoryException;
 
-    List<Interaccion> buscarPorReceptor(Usuario usuario) throws RepositoryException;
+    List<Interaccion> buscarPorReceptor(Usuario usuario, int limit, int offset) throws RepositoryException;
 
-    List<Interaccion> buscarPorTipo(TipoInteraccion tipo) throws RepositoryException;
+    List<Interaccion> buscarPorTipo(TipoInteraccion tipo, int limit, int offset) throws RepositoryException;
 }

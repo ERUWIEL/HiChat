@@ -13,17 +13,17 @@ import java.util.List;
  */
 public interface IMensajeRepository {
 
-    boolean insertar(Mensaje mensaje) throws RepositoryException;
+    Mensaje insertar(Mensaje mensaje) throws RepositoryException;
 
-    boolean actualizar(Mensaje mensaje) throws RepositoryException;
+    Mensaje actualizar(Mensaje mensaje) throws RepositoryException;
 
-    boolean eliminar(Long id) throws RepositoryException;
+    Mensaje eliminar(Long id) throws RepositoryException;
 
     Mensaje buscar(Long id) throws RepositoryException;
 
-    List<Mensaje> listar() throws RepositoryException;
+    List<Mensaje> listar(int limit, int offset) throws RepositoryException;
 
-    List<Mensaje> buscarPorChat(Chat chat) throws RepositoryException;
+    List<Mensaje> buscarPorChat(Chat chat, int limit, int offset) throws RepositoryException;
 
-    List<Mensaje> buscarNoVistosPorUsuario(Usuario usuario) throws RepositoryException;
+    List<Mensaje> buscarNoVistosPorUsuario(Usuario usuario, int limit, int offset) throws RepositoryException;
 }

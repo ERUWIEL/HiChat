@@ -12,17 +12,17 @@ import java.util.List;
  */
 public interface IBloqueoRepository {
 
-    boolean insertar(Bloqueo bloqueo) throws RepositoryException;
+    Bloqueo insertar(Bloqueo bloqueo) throws RepositoryException;
 
-    boolean actualizar(Bloqueo bloqueo) throws RepositoryException;
+    Bloqueo actualizar(Bloqueo bloqueo) throws RepositoryException;
 
-    boolean eliminar(Long id) throws RepositoryException;
+    Bloqueo eliminar(Long id) throws RepositoryException;
 
     Bloqueo buscar(Long id) throws RepositoryException;
 
-    List<Bloqueo> listar() throws RepositoryException;
+    List<Bloqueo> listar(int limit, int offset) throws RepositoryException;
 
-    List<Bloqueo> buscarPorBloqueador(Usuario usuario) throws RepositoryException;
+    List<Bloqueo> buscarPorBloqueador(Usuario usuario, int limit, int offset) throws RepositoryException;
 
-    List<Bloqueo> buscarPorBloqueado(Usuario usuario) throws RepositoryException;
+    List<Bloqueo> buscarPorBloqueado(Usuario usuario, int limit, int offset) throws RepositoryException;
 }

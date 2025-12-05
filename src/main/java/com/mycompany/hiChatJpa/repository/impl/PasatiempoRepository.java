@@ -1,44 +1,35 @@
 package com.mycompany.hiChatJpa.repository.impl;
 
-import com.mycompany.hiChatJpa.config.JpaUtil;
 import com.mycompany.hiChatJpa.entitys.Pasatiempo;
 import com.mycompany.hiChatJpa.exceptions.EntityNotFoundException;
 import com.mycompany.hiChatJpa.exceptions.RepositoryException;
+import com.mycompany.hiChatJpa.repository.IPasatiempoRepository;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
 import java.util.List;
-import com.mycompany.hiChatJpa.repository.IPasatiempoRepository;
 
-/**
- * Implementación del DAO para la entidad Pasatiempo.
- * Proporciona operaciones CRUD y consultas personalizadas.
- * 
- * @author 
- */
 public class PasatiempoRepository implements IPasatiempoRepository {
 
-    private static final int MAX_RESULTS = 100;
     private final EntityManager entityManager;
-    
-    public PasatiempoRepository(EntityManager em){
+
+    public PasatiempoRepository(EntityManager em) {
         this.entityManager = em;
     }
-    
-    
+
     /**
-     * Inserta un nuevo pasatiempo en la base de datos.
-     * 
-     * @param pasatiempo Pasatiempo a insertar
-     * @return 
-     * @throws RepositoryException si ocurre un error en la operación
+     * Inserta un nuevo pasatiempo.
+     *
+     * @param pasatiempo
+     * @return
      */
     @Override
-    public boolean insertar(Pasatiempo pasatiempo) {
+    public Pasatiempo insertar(Pasatiempo pasatiempo) throws RepositoryException {
         try {
             entityManager.persist(pasatiempo);
-            return true;
+            return pasatiempo;
         } catch (Exception e) {
             throw new RepositoryException("insertar", "No se pudo insertar el pasatiempo", e);
         }
@@ -46,99 +37,91 @@ public class PasatiempoRepository implements IPasatiempoRepository {
 
     /**
      * Actualiza un pasatiempo existente.
-     * 
-     * @param pasatiempo Pasatiempo con los datos actualizados
-     * @return 
-     * @throws RepositoryException si ocurre un error en la operación
+     *
+     * @param pasatiempo
+     * @return
      */
     @Override
-    public boolean actualizar(Pasatiempo pasatiempo) {
+    public Pasatiempo actualizar(Pasatiempo pasatiempo) throws RepositoryException {
         try {
-            entityManager.merge(pasatiempo);
-            return true;
+            return entityManager.merge(pasatiempo);
         } catch (Exception e) {
             throw new RepositoryException("actualizar", "No se pudo actualizar el pasatiempo", e);
         }
     }
 
     /**
-     * Elimina un pasatiempo por su ID.
-     * 
-     * @param id ID del pasatiempo a eliminar
-     * @return 
-     * @throws RepositoryException si ocurre un error en la operación
+     * Elimina un pasatiempo por ID.
+     *
+     * @param id
+     * @return
      */
     @Override
-    public boolean eliminar(Long id) {
+    public Pasatiempo eliminar(Long id) throws RepositoryException {
         try {
             Pasatiempo pasatiempo = entityManager.find(Pasatiempo.class, id);
-            if (pasatiempo != null) {
-                entityManager.remove(pasatiempo);
-                return true;
-            } else {
-                throw new EntityNotFoundException("no se encontro el pasatiempo indicado");
+            if (pasatiempo == null) {
+                throw new EntityNotFoundException("No se encontró el pasatiempo indicado");
             }
+
+            entityManager.remove(pasatiempo);
+            return pasatiempo;
+        } catch (EntityNotFoundException e) {
+            throw e;
         } catch (Exception e) {
             throw new RepositoryException("eliminar", "No se pudo eliminar el pasatiempo", e);
         }
     }
 
     /**
-     * Busca un pasatiempo por su ID.
-     * 
-     * @param id ID del pasatiempo
-     * @return Pasatiempo encontrado o null si no existe
+     * Busca un pasatiempo por ID.
+     *
+     * @param id
+     * @return
      */
     @Override
-    public Pasatiempo buscar(Long id) {
+    public Pasatiempo buscar(Long id) throws RepositoryException {
         try {
-            Pasatiempo pasatiempo = entityManager.find(Pasatiempo.class, id);
-            return pasatiempo;
+            return entityManager.find(Pasatiempo.class, id);
         } catch (Exception e) {
             throw new RepositoryException("buscar", "No se pudo buscar el pasatiempo", e);
         }
     }
 
     /**
-     * Lista todos los pasatiempos (máximo 100 registros).
-     * 
-     * @return Lista de pasatiempos
+     * Busca un pasatiempo por nombre.
+     *
+     * @param nombre
+     * @return
      */
     @Override
-    public List<Pasatiempo> listar() {
+    public Pasatiempo buscarPorNombre(String nombre) throws RepositoryException {
         try {
-            TypedQuery<Pasatiempo> query = entityManager.createNamedQuery("Pasatiempo.findAll", Pasatiempo.class);
-            query.setMaxResults(MAX_RESULTS);
-            List<Pasatiempo> pasatiempos = query.getResultList();
-            return pasatiempos;
+            TypedQuery<Pasatiempo> query = entityManager.createNamedQuery("Pasatiempo.findByNombre", Pasatiempo.class);
+            query.setParameter("nombre", nombre);
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
         } catch (Exception e) {
-            throw new RepositoryException("listar", "No se pudo obtener la lista de pasatiempos", e);
+            throw new RepositoryException("buscarPorNombre", "No se pudo buscar el pasatiempo por nombre", e);
         }
     }
 
     /**
-     * Busca un pasatiempo por su nombre.
-     * 
-     * @param nombre Nombre del pasatiempo
-     * @return Pasatiempo encontrado o null si no existe
+     * Lista pasatiempos con paginación.
+     * @param limit
+     * @param offset
+     * @return 
      */
     @Override
-    public Pasatiempo buscarPorNombre(String nombre) {
+    public List<Pasatiempo> listar(int limit, int offset) throws RepositoryException {
         try {
-            TypedQuery<Pasatiempo> query = entityManager.createNamedQuery("Pasatiempo.findByNombre", Pasatiempo.class);
-            query.setParameter("nombre", nombre);
-            try {
-                Pasatiempo pasatiempo = query.getSingleResult();
-                return pasatiempo;
-            } catch (NoResultException e) {
-                return null;
-            }
+            TypedQuery<Pasatiempo> query = entityManager.createNamedQuery("Pasatiempo.findAll", Pasatiempo.class);
+            query.setMaxResults(limit);
+            query.setFirstResult(offset);
+            return query.getResultList();
         } catch (Exception e) {
-            throw new RepositoryException("buscarPorNombre", "No se pudo buscar el pasatiempo por nombre", e);
-        } finally {
-            if (entityManager != null) {
-                JpaUtil.closeEntityManager();
-            }
+            throw new RepositoryException("listar", "No se pudo obtener la lista de pasatiempos", e);
         }
     }
 }

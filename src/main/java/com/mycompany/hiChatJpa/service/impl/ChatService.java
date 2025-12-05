@@ -1,9 +1,12 @@
 package com.mycompany.hiChatJpa.service.impl;
 
+import com.mycompany.hiChatJpa.config.JpaUtil;
 import com.mycompany.hiChatJpa.dto.ChatConMensajesDTO;
 import com.mycompany.hiChatJpa.entitys.Mensaje;
 import com.mycompany.hiChatJpa.exceptions.ServiceException;
+import com.mycompany.hiChatJpa.repository.impl.ChatRepository;
 import com.mycompany.hiChatJpa.service.IChatService;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 
 /**
@@ -12,7 +15,11 @@ import java.util.List;
  * @author gatog
  */
 public class ChatService implements IChatService {
-
+    
+    public ChatService(){
+    }
+    
+    
     @Override
     public boolean cambiarAliasDelChat(Long chatId, String nuevoNombre) throws ServiceException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

@@ -12,17 +12,17 @@ import java.util.List;
  */
 public interface IMatchRepository {
 
-    boolean insertar(Match match) throws RepositoryException;
+    Match insertar(Match match) throws RepositoryException;
 
-    boolean actualizar(Match match) throws RepositoryException;
+    Match actualizar(Match match) throws RepositoryException;
 
-    boolean eliminar(Long id) throws RepositoryException;
+    Match eliminar(Long id) throws RepositoryException;
 
     Match buscar(Long id) throws RepositoryException;
 
-    List<Match> listar() throws RepositoryException;
+    List<Match> listar(int limit, int offset) throws RepositoryException;
 
-    List<Match> buscarPorUsuarioA(Usuario usuario) throws RepositoryException;
+    List<Match> buscarPorUsuarioA(Usuario usuario, int limit, int offset) throws RepositoryException;
 
-    List<Match> buscarPorUsuarioB(Usuario usuario) throws RepositoryException;
+    List<Match> buscarPorUsuarioB(Usuario usuario, int limit, int offset) throws RepositoryException;
 }

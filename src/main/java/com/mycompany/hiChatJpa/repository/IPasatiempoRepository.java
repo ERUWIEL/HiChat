@@ -11,15 +11,15 @@ import java.util.List;
  */
 public interface IPasatiempoRepository {
 
-    boolean insertar(Pasatiempo pasatiempo) throws RepositoryException;
+    Pasatiempo insertar(Pasatiempo pasatiempo) throws RepositoryException;
 
-    boolean actualizar(Pasatiempo pasatiempo) throws RepositoryException;
+    Pasatiempo actualizar(Pasatiempo pasatiempo) throws RepositoryException;
 
-    boolean eliminar(Long id) throws RepositoryException;
+    Pasatiempo eliminar(Long id) throws RepositoryException;
 
     Pasatiempo buscar(Long id) throws RepositoryException;
 
-    List<Pasatiempo> listar() throws RepositoryException;
-
     Pasatiempo buscarPorNombre(String nombre) throws RepositoryException;
+            
+    List<Pasatiempo> listar(int limit, int offset) throws RepositoryException;
 }
