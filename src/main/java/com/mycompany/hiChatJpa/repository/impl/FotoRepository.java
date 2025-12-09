@@ -33,6 +33,7 @@ public class FotoRepository implements IFotoRepository {
     public Foto insertar(Foto foto) throws RepositoryException {
         try {
             entityManager.persist(foto);
+            entityManager.flush();
             return foto;
         } catch (Exception e) {
             throw new RepositoryException("insertar", "No se pudo insertar la foto", e);

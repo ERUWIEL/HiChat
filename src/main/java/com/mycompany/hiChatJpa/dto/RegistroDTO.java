@@ -19,26 +19,26 @@ public class RegistroDTO {
     private String correoElectronico;
     private String contrasena;
     private LocalDate fechaNacimiento;
+    private String biografia;
     private String carrera;
-    private String genero;
+    
+    private String urlFotoPerfil;
 
-    // Constructor vacío
     public RegistroDTO() {
     }
 
-    // Constructor completo
-    public RegistroDTO(String nombre, String apellidoPaterno, String apellidoMaterno,
-                       String correoElectronico, String contrasena, LocalDate fechaNacimiento,
-                       String carrera, String genero) {
+    public RegistroDTO(String nombre, String apellidoPaterno, String apellidoMaterno, String correoElectronico, String contrasena, LocalDate fechaNacimiento, String biografia, String carrera, String urlFotoPerfil) {
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
         this.correoElectronico = correoElectronico;
         this.contrasena = contrasena;
         this.fechaNacimiento = fechaNacimiento;
+        this.biografia = biografia;
         this.carrera = carrera;
-        this.genero = genero;
+        this.urlFotoPerfil = urlFotoPerfil;
     }
+
 
     // Getters y Setters
     public String getNombre() {
@@ -97,13 +97,22 @@ public class RegistroDTO {
         this.carrera = carrera;
     }
 
-    public String getGenero() {
-        return genero;
+    public String getBiografia() {
+        return biografia;
     }
 
-    public void setGenero(String genero) {
-        this.genero = genero;
+    public void setBiografia(String biografia) {
+        this.biografia = biografia;
     }
+
+    public String getUrlFotoPerfil() {
+        return urlFotoPerfil;
+    }
+
+    public void setUrlFotoPerfil(String urlFotoPerfil) {
+        this.urlFotoPerfil = urlFotoPerfil;
+    }
+    
 
     @Override
     public String toString() {

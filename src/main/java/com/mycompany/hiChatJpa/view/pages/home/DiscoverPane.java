@@ -2,10 +2,9 @@ package com.mycompany.hiChatJpa.view.pages.home;
 
 import com.mycompany.hiChatJpa.config.CloudinaryUtil;
 import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
-import com.mycompany.hiChatJpa.entitys.Usuario;
-import com.mycompany.hiChatJpa.service.IInteraccionService;
+import com.mycompany.hiChatJpa.entitys.TipoInteraccion;
+import com.mycompany.hiChatJpa.exceptions.ServiceException;
 import com.mycompany.hiChatJpa.service.IUsuarioService;
-import com.mycompany.hiChatJpa.service.impl.InteraccionService;
 import com.mycompany.hiChatJpa.service.impl.UsuarioService;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,7 +23,6 @@ public class DiscoverPane extends javax.swing.JPanel {
     private UsuarioPerfilDTO currentUser;
     private UsuarioPerfilDTO loggedUser;
     private final IUsuarioService USUARIO_SERVICE;
-    private final IInteraccionService INTERACCION_SERVICE;
     private Iterator<UsuarioPerfilDTO> PRETENDIENTES;
 
     /**
@@ -37,12 +35,11 @@ public class DiscoverPane extends javax.swing.JPanel {
         initComponents();
         this.loggedUser = usuario;
         this.USUARIO_SERVICE = new UsuarioService();
-        this.INTERACCION_SERVICE = new InteraccionService();
         try {
             this.PRETENDIENTES = USUARIO_SERVICE.listarUsuarios().iterator();
             loadNext();
-        } catch (Exception ex) {
-
+        } catch (ServiceException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "soo sorry :(", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -140,12 +137,13 @@ public class DiscoverPane extends javax.swing.JPanel {
 
     /**
      * metodo que permite dar like ala vez que carga al siguente pretendiente
-     * @param evt 
+     *
+     * @param evt
      */
     private void heartLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_heartLabelMouseClicked
         try {
-            INTERACCION_SERVICE.darLike(loggedUser.getIdUsuario(), currentUser.getIdUsuario());
-        } catch (Exception ex) {
+            USUARIO_SERVICE.registrarInteraccion(loggedUser.getIdUsuario(), currentUser.getIdUsuario(), TipoInteraccion.ME_GUSTA);
+        } catch (ServiceException ex) {
             JOptionPane.showMessageDialog(null, "that action cant be done rn", "soo sorry :(", JOptionPane.INFORMATION_MESSAGE);
         }
         loadNext();
@@ -153,20 +151,21 @@ public class DiscoverPane extends javax.swing.JPanel {
 
     /**
      * metodo que permite dar dislike ala vez que carga al siguente pretendiente
-     * @param evt 
+     *
+     * @param evt
      */
     private void dislikeLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dislikeLabelMouseClicked
         try {
-            INTERACCION_SERVICE.darDislike(loggedUser.getIdUsuario(), currentUser.getIdUsuario());
-        } catch (Exception ex) {
+            USUARIO_SERVICE.registrarInteraccion(loggedUser.getIdUsuario(), currentUser.getIdUsuario(), TipoInteraccion.NO_ME_INTERESA);
+        } catch (ServiceException ex) {
             JOptionPane.showMessageDialog(null, "that action cant be done rn", "soo sorry :(", JOptionPane.INFORMATION_MESSAGE);
         }
         loadNext();
     }//GEN-LAST:event_dislikeLabelMouseClicked
 
-    
     /**
-     * metodo de utileria que cambia la tarjeta de presentacion de los pretendientes
+     * metodo de utileria que cambia la tarjeta de presentacion de los
+     * pretendientes
      */
     private void loadNext() {
         try {

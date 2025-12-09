@@ -1,21 +1,10 @@
 package com.mycompany.hiChatJpa.view;
 
-import com.mycompany.hiChatJpa.view.pages.login.LoginPane;
-import com.mycompany.hiChatJpa.view.pages.restorePassword.RestorePswChangePane;
-import com.mycompany.hiChatJpa.view.pages.restorePassword.RestorePswConfirmUserPane;
-import com.mycompany.hiChatJpa.view.pages.restorePassword.RestorePswUserPane;
-
-import com.mycompany.hiChatJpa.view.pages.signin.SigninBioPane;
-import com.mycompany.hiChatJpa.view.pages.signin.SigninDatePane;
-import com.mycompany.hiChatJpa.view.pages.signin.SigninPane;
-import com.mycompany.hiChatJpa.view.pages.signin.SigninPasswordPane;
-import com.mycompany.hiChatJpa.view.pages.signin.SigninPicturePane;
-
-import java.awt.CardLayout;
 import javax.swing.ImageIcon;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.Color;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  * clase gestora de las ventanas
@@ -24,37 +13,17 @@ import javax.swing.UIManager;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainFrame.class.getName());
-
-    public static final String LOGIN_VIEW = "LOG_IN";
-    public static final String SIGNIN_VIEW = "SIGN_IN";
-    public static final String SIGNIN_DATE_VIEW = "SIGN_IN_DATE";
-    public static final String SIGNIN_PASSWORD_VIEW = "SIGN_IN_PASSWORD";
-    public static final String SIGNIN_BIO_VIEW = "SIGN_IN_BIO";
-    public static final String SIGNIN_PICTURE_VIEW = "SIGN_IN_PICTURE";
-    public static final String RSPSW_VIEW = "RESTORE_PASSWORD";
-    public static final String RSPSW_CONFIRM_USER_VIEW = "RESTORE_PASSWORD_CONFIRMUSER";
-    public static final String RSPSW_CHANGE_VIEW = "RESTORE_PASSWORD_CHANGE";
-
-    private LoginPane loginPane;
-    private SigninPane signinPane;
-    private SigninDatePane signinDatePane;
-    private SigninPasswordPane signinPasswordPane;
-    private SigninBioPane signinBioPane;
-    private SigninPicturePane signinPicturePane;
-    private RestorePswUserPane restorePswPane;
-    private RestorePswConfirmUserPane restorePswUserPane;
-    private RestorePswChangePane restorePswChangePane;
-
+    private final Controller coordinator;
+    
     /**
      * Creates new form frmPrincipal
      */
     public MainFrame() {
         configWindow();
         initComponents();
-        resetViews();
-        setViews();
-        showView(LOGIN_VIEW);
+        
+        coordinator = new Controller(this, contentPanel);
+        coordinator.showLogin();
     }
 
     /**
@@ -92,67 +61,6 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        /* Create and display the form */
-        FlatDarkLaf.setup();
-        java.awt.EventQueue.invokeLater(() -> new MainFrame().setVisible(true));
-    }
-
-    /**
-     * Método público para cambiar de vista
-     *
-     * @param viewName Nombre de la vista a mostrar
-     */
-    public final void showView(String viewName) {
-        System.out.println("mostrando " + viewName);
-        if (LOGIN_VIEW.equals(viewName)) {
-            resetViews();
-        }
-
-        CardLayout cl = (CardLayout) contentPanel.getLayout();
-        cl.show(contentPanel, viewName);
-    }
-
-    /**
-     * metodo publico que permite refrescar todas las ventanas
-     */
-    public final void resetViews() {
-        System.out.println("reiniciando instancias");
-        contentPanel.removeAll();
-        loginPane = new LoginPane(this, contentPanel);
-        signinPane = new SigninPane(this);
-        signinDatePane = new SigninDatePane(this);
-        signinPasswordPane = new SigninPasswordPane(this);
-        signinBioPane = new SigninBioPane(this);
-        signinPicturePane = new SigninPicturePane(this);
-        restorePswPane = new RestorePswUserPane(this);
-        restorePswUserPane = new RestorePswConfirmUserPane(this);
-        restorePswChangePane = new RestorePswChangePane(this);
-
-        setViews();
-        contentPanel.revalidate();
-        contentPanel.repaint();
-    }
-
-    /**
      * metodo que permite personalizar la aparencia de la ventana en el sistema
      */
     private void configWindow() {
@@ -167,25 +75,9 @@ public class MainFrame extends javax.swing.JFrame {
             } else {
                 System.err.println("No se encontró el ícono");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            System.out.println("no se pudo configurar la ventana " + e.getMessage());
         }
-    }
-
-    /**
-     * metodo que permite agregar instancias de los paneles al cardlayout
-     */
-    private void setViews() {
-        //inicializacion de las ventanas
-        contentPanel.add(loginPane, LOGIN_VIEW);
-        contentPanel.add(signinPane, SIGNIN_VIEW);
-        contentPanel.add(signinDatePane, SIGNIN_DATE_VIEW);
-        contentPanel.add(signinPasswordPane, SIGNIN_PASSWORD_VIEW);
-        contentPanel.add(signinBioPane, SIGNIN_BIO_VIEW);
-        contentPanel.add(signinPicturePane, SIGNIN_PICTURE_VIEW);
-        contentPanel.add(restorePswPane, RSPSW_VIEW);
-        contentPanel.add(restorePswUserPane, RSPSW_CONFIRM_USER_VIEW);
-        contentPanel.add(restorePswChangePane, RSPSW_CHANGE_VIEW);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

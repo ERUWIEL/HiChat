@@ -33,6 +33,7 @@ public class MatchRepository implements IMatchRepository {
     public Match insertar(Match match) {
         try {
             entityManager.persist(match);
+            entityManager.flush();
             return match;
         } catch (Exception e) {
             throw new RepositoryException("insertar", "No se pudo insertar el match", e);

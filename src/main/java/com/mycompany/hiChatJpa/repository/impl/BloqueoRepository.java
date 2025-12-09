@@ -33,6 +33,7 @@ public class BloqueoRepository implements IBloqueoRepository {
     public Bloqueo insertar(Bloqueo bloqueo) throws RepositoryException {
         try {
             entityManager.persist(bloqueo);
+            entityManager.flush();
             return bloqueo;
         } catch (Exception e) {
             throw new RepositoryException("insertar", "No se pudo insertar el bloqueo", e);

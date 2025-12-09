@@ -1,7 +1,6 @@
-
 package com.mycompany.hiChatJpa.view.pages.restorePassword;
 
-import com.mycompany.hiChatJpa.view.MainFrame;
+import com.mycompany.hiChatJpa.view.Controller;
 
 /**
  *
@@ -9,14 +8,15 @@ import com.mycompany.hiChatJpa.view.MainFrame;
  */
 public class RestorePswUserPane extends javax.swing.JPanel {
 
-    private final MainFrame FATHER;
-    
+    private Controller controller;
+
     /**
      * Creates new form SigninPane
-     * @param frame
+     *
+     * @param controller
      */
-    public RestorePswUserPane(MainFrame frame) {
-        this.FATHER  =  frame;
+    public RestorePswUserPane(Controller controller) {
+        this.controller = controller;
         initComponents();
     }
 
@@ -259,15 +259,15 @@ public class RestorePswUserPane extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void returnButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_returnButtonMouseClicked
-        FATHER.showView(MainFrame.LOGIN_VIEW);
+        // login
     }//GEN-LAST:event_returnButtonMouseClicked
 
     private void logInLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logInLabelMouseClicked
-        FATHER.showView(MainFrame.LOGIN_VIEW);
+        // login
     }//GEN-LAST:event_logInLabelMouseClicked
 
     private void continueLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_continueLabelMouseClicked
-        FATHER.showView(MainFrame.RSPSW_CONFIRM_USER_VIEW);
+        // continuar
     }//GEN-LAST:event_continueLabelMouseClicked
 
 

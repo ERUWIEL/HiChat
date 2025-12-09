@@ -35,6 +35,7 @@ public class UsuarioRepository implements IUsuarioRepository {
     public Usuario insertar(Usuario usuario) throws RepositoryException {
         try {
             entityManager.persist(usuario);
+            entityManager.flush();
             return usuario;
         } catch (Exception e) {
             throw new RepositoryException("insertar", "no se pudo insertar el usuario", e);

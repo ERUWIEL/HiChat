@@ -1,16 +1,9 @@
 package com.mycompany.hiChatJpa.view.pages.login;
 
 import com.mycompany.hiChatJpa.dto.LoginDTO;
-import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
-import com.mycompany.hiChatJpa.entitys.Usuario;
-import com.mycompany.hiChatJpa.service.IUsuarioService;
-import com.mycompany.hiChatJpa.service.impl.UsuarioService;
-import com.mycompany.hiChatJpa.view.MainFrame;
+import com.mycompany.hiChatJpa.view.Controller;
 import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
-import com.mycompany.hiChatJpa.view.pages.home.HomePane;
-import java.awt.CardLayout;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 /**
  *
@@ -18,21 +11,15 @@ import javax.swing.JPanel;
  */
 public class LoginPane extends javax.swing.JPanel {
 
-    private final JPanel CONTENT_PANE;
-    private final MainFrame FATHER;
-    private final IUsuarioService USUARIO_SERVICE;
+    private Controller coordinator;
 
     /**
      * Creates new form LoginPane
      *
-     * @param father
-     * @param content
+     * @param coordinator
      */
-    public LoginPane(MainFrame father, JPanel content) {
-        this.FATHER = father;
-        this.CONTENT_PANE = content;
-        this.USUARIO_SERVICE = new UsuarioService();
-
+    public LoginPane(Controller coordinator) {
+        this.coordinator = coordinator;
         initComponents();
     }
 
@@ -183,30 +170,26 @@ public class LoginPane extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void signUpLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signUpLabelMouseClicked
-        FATHER.showView(MainFrame.SIGNIN_VIEW);
+        // logica para mostrar el signin
     }//GEN-LAST:event_signUpLabelMouseClicked
 
     private void forgotPasswordLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_forgotPasswordLabelMouseClicked
-        FATHER.showView(MainFrame.RSPSW_VIEW);
+        // logica para mostrar el restore password
     }//GEN-LAST:event_forgotPasswordLabelMouseClicked
 
     private void signInLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signInLabelMouseClicked
         String email = userInputPane.getText();
         String password = passwordInputPane.getText();
-        
+
         // Crear LoginDTO en lugar de Usuario
         LoginDTO loginDTO = new LoginDTO(email, password);
 
         try {
-            // Retorna UsuarioPerfilDTO en lugar de Usuario
-            UsuarioPerfilDTO userMatched = USUARIO_SERVICE.iniciarSesion(loginDTO);
-            CONTENT_PANE.add(new HomePane(FATHER, userMatched), "HOME_VIEW");
-            CardLayout cl = (CardLayout) CONTENT_PANE.getLayout();
-            cl.show(CONTENT_PANE, "HOME_VIEW");
+            // logica para iniciar sesion
         } catch (Exception ex) {
             System.out.println(ex.getCause());
             System.out.println(ex.getMessage());
-            JOptionPane.showMessageDialog(FATHER, "email or password dont match with a real user", "login error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "email or password dont match with a real user", "login error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_signInLabelMouseClicked
 

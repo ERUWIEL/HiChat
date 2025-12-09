@@ -1,7 +1,6 @@
-
 package com.mycompany.hiChatJpa.view.pages.signin;
 
-import com.mycompany.hiChatJpa.view.MainFrame;
+import com.mycompany.hiChatJpa.view.Controller;
 import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
 
 /**
@@ -10,14 +9,14 @@ import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
  */
 public class SigninPane extends javax.swing.JPanel {
 
-    private final MainFrame FATHER;
+    private Controller controller;
     
     /**
      * Creates new form SigninPane
-     * @param frame
+     * @param controller
      */
-    public SigninPane(MainFrame frame) {
-        this.FATHER  =  frame;
+    public SigninPane(Controller controller) {
+        this.controller = controller;
         initComponents();
     }
 
@@ -322,15 +321,15 @@ public class SigninPane extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void returnButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_returnButtonMouseClicked
-        FATHER.showView(MainFrame.LOGIN_VIEW);
+        // logica para regresar al login
     }//GEN-LAST:event_returnButtonMouseClicked
 
     private void logInLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logInLabelMouseClicked
-        FATHER.showView(MainFrame.LOGIN_VIEW);
+        // logica para regresar al login
     }//GEN-LAST:event_logInLabelMouseClicked
 
     private void continueLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_continueLabelMouseClicked
-        FATHER.showView(MainFrame.SIGNIN_DATE_VIEW);
+        // loggica para avanzar
     }//GEN-LAST:event_continueLabelMouseClicked
 
 

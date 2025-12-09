@@ -22,7 +22,6 @@ public interface IUsuarioService {
      *
      * @param loginDTO Usuario con correo y contraseña
      * @return UsuarioPerfilDTO autenticado
-     * @throws Exception si las credenciales son inválidas
      */
     UsuarioPerfilDTO iniciarSesion(LoginDTO loginDTO) throws ServiceException;
 

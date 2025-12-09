@@ -1,8 +1,7 @@
 package com.mycompany.hiChatJpa.view.pages.home;
 
 import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
-import com.mycompany.hiChatJpa.entitys.Usuario;
-import com.mycompany.hiChatJpa.view.MainFrame;
+import com.mycompany.hiChatJpa.view.Controller;
 import java.awt.CardLayout;
 
 /**
@@ -11,18 +10,18 @@ import java.awt.CardLayout;
  */
 public class HomePane extends javax.swing.JPanel {
 
-    private final MainFrame FATHER;
+    private final Controller controller;
     private final UsuarioPerfilDTO user;
     private String currentStatus;
 
     /**
      * Creates new form HomePane
      *
-     * @param frame
+     * @param controller
      * @param user
      */
-    public HomePane(MainFrame frame, UsuarioPerfilDTO user) {
-        this.FATHER = frame;
+    public HomePane(Controller controller, UsuarioPerfilDTO user) {
+        this.controller = controller;
         this.user = user;
         initComponents();
         
@@ -167,7 +166,7 @@ public class HomePane extends javax.swing.JPanel {
     }//GEN-LAST:event_profileLabelMouseClicked
 
     private void settingsLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_settingsLabelMouseClicked
-        FATHER.showView(MainFrame.LOGIN_VIEW);
+        // login
     }//GEN-LAST:event_settingsLabelMouseClicked
 
     public final void showInternView() {

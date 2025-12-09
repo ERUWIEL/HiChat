@@ -33,6 +33,7 @@ public class InteraccionRepository implements IInteraccionRepository {
     public Interaccion insertar(Interaccion interaccion) throws RepositoryException {
         try {
             entityManager.persist(interaccion);
+            entityManager.flush();
             return interaccion;
         } catch (Exception e) {
             throw new RepositoryException("insertar", "No se pudo insertar la interacción", e);

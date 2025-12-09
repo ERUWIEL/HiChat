@@ -29,6 +29,7 @@ public class PasatiempoRepository implements IPasatiempoRepository {
     public Pasatiempo insertar(Pasatiempo pasatiempo) throws RepositoryException {
         try {
             entityManager.persist(pasatiempo);
+            entityManager.flush();
             return pasatiempo;
         } catch (Exception e) {
             throw new RepositoryException("insertar", "No se pudo insertar el pasatiempo", e);

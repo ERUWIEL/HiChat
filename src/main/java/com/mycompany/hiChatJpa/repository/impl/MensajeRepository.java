@@ -22,6 +22,7 @@ public class MensajeRepository implements IMensajeRepository {
     public Mensaje insertar(Mensaje mensaje) throws RepositoryException {
         try {
             entityManager.persist(mensaje);
+            entityManager.flush();
             return mensaje;
         } catch (Exception e) {
             throw new RepositoryException("insertar", "No se pudo insertar el mensaje", e);

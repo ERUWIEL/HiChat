@@ -33,6 +33,7 @@ public class ChatRepository implements IChatRepository {
     public Chat insertar(Chat chat) throws RepositoryException {
         try {
             entityManager.persist(chat);
+            entityManager.flush();
             return chat;
         } catch (Exception e) {
             throw new RepositoryException("insertar", "No se pudo insertar el chat", e);

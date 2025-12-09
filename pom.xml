@@ -59,7 +59,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
-        <exec.mainClass>com.mycompany.hiChatJpa.view.MainFrame</exec.mainClass>
+        <exec.mainClass>com.mycompany.hiChatJpa.App</exec.mainClass>
     </properties>
     <name>HiChat</name>
 </project>
