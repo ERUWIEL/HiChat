@@ -1,6 +1,8 @@
 package com.mycompany.hiChatJpa.view.pages.restorePassword;
 
 import com.mycompany.hiChatJpa.view.Controller;
+import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -8,7 +10,7 @@ import com.mycompany.hiChatJpa.view.Controller;
  */
 public class RestorePswUserPane extends javax.swing.JPanel {
 
-    private Controller controller;
+    private final Controller controller;
 
     /**
      * Creates new form SigninPane
@@ -40,8 +42,8 @@ public class RestorePswUserPane extends javax.swing.JPanel {
         stepIndicatorLabel = new javax.swing.JLabel();
         findUserLabel = new javax.swing.JLabel();
         dataPane = new javax.swing.JPanel();
-        usernameLabel = new javax.swing.JLabel();
-        textFieldPanel1 = new com.mycompany.hiChatJpa.view.components.TextFieldPanel();
+        userEmailLabel = new javax.swing.JLabel();
+        userEmailTxt = new TextFieldPanel(TextFieldPanel.EMAIL_REGEX,"invalid email format");
         continuePane = new com.mycompany.hiChatJpa.view.components.PanelRound();
         continueLabel = new javax.swing.JLabel();
         messageLabel = new javax.swing.JLabel();
@@ -146,12 +148,14 @@ public class RestorePswUserPane extends javax.swing.JPanel {
         dataPane.setOpaque(false);
         dataPane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        usernameLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
-        usernameLabel.setForeground(new java.awt.Color(204, 204, 204));
-        usernameLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        usernameLabel.setText("Email or Username");
-        dataPane.add(usernameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 360, 20));
-        dataPane.add(textFieldPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
+        userEmailLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        userEmailLabel.setForeground(new java.awt.Color(204, 204, 204));
+        userEmailLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        userEmailLabel.setText("Email");
+        dataPane.add(userEmailLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 360, 20));
+
+        userEmailTxt.setMessage("enter your email");
+        dataPane.add(userEmailTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
 
         continuePane.setBackground(new java.awt.Color(108, 43, 238));
         continuePane.setRoundBottomLeft(25);
@@ -259,15 +263,23 @@ public class RestorePswUserPane extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void returnButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_returnButtonMouseClicked
-        // login
+        controller.showLogin();
     }//GEN-LAST:event_returnButtonMouseClicked
 
     private void logInLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logInLabelMouseClicked
-        // login
+        controller.showLogin();
     }//GEN-LAST:event_logInLabelMouseClicked
 
     private void continueLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_continueLabelMouseClicked
-        // continuar
+        
+        String email = userEmailTxt.getText();
+        
+        if(email.trim().isEmpty() || email.equals(userEmailTxt.getDefaultString()) || userEmailTxt.isInvalidInput()) {
+            JOptionPane.showMessageDialog(null, "email cant be empty", "input error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        controller.rstpAvanzarAConfirmarUsuario(email, true);
     }//GEN-LAST:event_continueLabelMouseClicked
 
 
@@ -286,8 +298,8 @@ public class RestorePswUserPane extends javax.swing.JPanel {
     private javax.swing.JLabel returnButton;
     private javax.swing.JLabel stepIndicatorLabel;
     private javax.swing.JPanel stepsPane;
-    private com.mycompany.hiChatJpa.view.components.TextFieldPanel textFieldPanel1;
     private javax.swing.JLabel tittleLabel;
-    private javax.swing.JLabel usernameLabel;
+    private javax.swing.JLabel userEmailLabel;
+    private com.mycompany.hiChatJpa.view.components.TextFieldPanel userEmailTxt;
     // End of variables declaration//GEN-END:variables
 }

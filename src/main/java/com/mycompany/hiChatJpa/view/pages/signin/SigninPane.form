@@ -416,7 +416,8 @@
             </Component>
             <Component class="com.mycompany.hiChatJpa.view.components.TextFieldPanel" name="userSecondLastNameTxt">
               <Properties>
-                <Property name="message" type="java.lang.String" value="enter your second lastname (optional)"/>
+                <Property name="enabled" type="boolean" value="false"/>
+                <Property name="message" type="java.lang.String" value="enter your second lastname"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new TextFieldPanel(TextFieldPanel.NAME_REGEX, &quot;invalid second lastname format&quot;)"/>

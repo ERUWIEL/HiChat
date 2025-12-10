@@ -216,7 +216,8 @@ public class SigninPane extends javax.swing.JPanel {
         userSecondLastNameLabel.setText("second last name");
         dataPane.add(userSecondLastNameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 360, 20));
 
-        userSecondLastNameTxt.setMessage("enter your second lastname (optional)");
+        userSecondLastNameTxt.setEnabled(false);
+        userSecondLastNameTxt.setMessage("enter your second lastname");
         dataPane.add(userSecondLastNameTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, -1, -1));
 
         continuePane.setBackground(new java.awt.Color(108, 43, 238));
@@ -344,12 +345,9 @@ public class SigninPane extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "last name cant be empty", "input error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        if (userSecondLastNameTxt.isInvalidInput()) {
+        if (lastName.trim().isEmpty() || userSecondLastNameTxt.isInvalidInput() || secondLastName.equals(userSecondLastNameTxt.getDefaultString())) {
             JOptionPane.showMessageDialog(null, "second lastname cant be empty", "input error", JOptionPane.ERROR_MESSAGE);
             return;
-        }
-        if (secondLastName.equals(userSecondLastNameTxt.getDefaultString())) {
-            secondLastName = "";
         }
 
         controller.signinAvanzarAFechaNacimiento(name, lastName, secondLastName, true);

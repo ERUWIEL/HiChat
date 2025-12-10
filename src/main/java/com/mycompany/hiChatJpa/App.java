@@ -1,6 +1,7 @@
 package com.mycompany.hiChatJpa;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import com.mycompany.hiChatJpa.service.impl.UsuarioService;
 import com.mycompany.hiChatJpa.view.MainFrame;
 
 /**

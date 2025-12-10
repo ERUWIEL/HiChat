@@ -27,7 +27,6 @@ public class UsuarioService implements IUsuarioService {
     public UsuarioService() {
     }
 
-    // HOT FIX
     /**
      * metodo que permite al usuario hacer el login
      *
@@ -570,25 +569,22 @@ public class UsuarioService implements IUsuarioService {
 
             em = JpaUtil.getEntityManager();
             UsuarioRepository usuarioRepo = new UsuarioRepository(em);
-            InteraccionRepository interaccionRepo = new InteraccionRepository(em);
 
             Usuario usuarioActual = usuarioRepo.buscar(idUsuarioActual);
             if (usuarioActual == null) {
                 throw new EntityNotFoundException("Usuario no encontrado");
             }
 
-            // Obtener las interacciones recibidas de tipo ME_GUSTA
-            List<Interaccion> interaccionesRecibidas = interaccionRepo.buscarPorReceptor(usuarioActual, 1000, 0);
+            List<Usuario> pretendientes = usuarioRepo.buscarPretendientes(idUsuarioActual, 50, 0);
 
-            List<UsuarioPerfilDTO> pretendientes = interaccionesRecibidas.stream()
-                    .filter(i -> i.getTipo() == TipoInteraccion.ME_GUSTA)
-                    .map(i -> convertirAUsuarioPerfilDTO(i.getUsuarioEmisor()))
+            return pretendientes.stream()
+                    .map(this::convertirAUsuarioPerfilDTO)
                     .collect(Collectors.toList());
 
-            return pretendientes;
-
+        } catch (EntityNotFoundException | ServiceException e) {
+            throw e;
         } catch (Exception e) {
-            throw new ServiceException("mostrarPretendientes", "Error al obtener pretendientes", e);
+            throw new ServiceException("mostrarPretendientes","Error al obtener pretendientes", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();
@@ -596,6 +592,12 @@ public class UsuarioService implements IUsuarioService {
         }
     }
 
+    
+    
+    
+    
+    
+    
     @Override
     public List<MatchDTO> mostrarMatches(Long idUsuario) throws ServiceException {
         EntityManager em = null;

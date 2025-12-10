@@ -255,7 +255,7 @@ public class SigninBioPane extends javax.swing.JPanel {
         userMayorTxt.setMessage("enter your major (Ej. Engenier)");
         dataPane.add(userMayorTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
 
-        userBiographyTxt.setMessage("enter something creative! (optional btw)");
+        userBiographyTxt.setMessage("enter something creative! (not optional btw)");
         dataPane.add(userBiographyTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
 
         javax.swing.GroupLayout backgroundPaneLayout = new javax.swing.GroupLayout(backgroundPane);
@@ -330,12 +330,9 @@ public class SigninBioPane extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "major cant be empty", "input error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        if (userMayorTxt.isInvalidInput() ) {
+        if (biography.trim().isEmpty() || biography.equals(userBiographyTxt.getDefaultString()) || userBiographyTxt.isInvalidInput() ) {
             JOptionPane.showMessageDialog(null, "biography cant be to long relax", "input error", JOptionPane.ERROR_MESSAGE);
             return;
-        }
-        if (biography.trim().isEmpty() || biography.equals(userBiographyTxt.getDefaultString())) {
-            biography = "";
         }
         
         controller.signinAvanzarAFotoPerfil(biography, mayor, true);

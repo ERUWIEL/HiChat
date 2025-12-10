@@ -1,6 +1,8 @@
 package com.mycompany.hiChatJpa.view.pages.restorePassword;
 
 import com.mycompany.hiChatJpa.view.Controller;
+import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -8,7 +10,7 @@ import com.mycompany.hiChatJpa.view.Controller;
  */
 public class RestorePswChangePane extends javax.swing.JPanel {
 
-    private Controller controller;
+    private final Controller controller;
 
     /**
      * Creates new form SigninPane
@@ -44,10 +46,10 @@ public class RestorePswChangePane extends javax.swing.JPanel {
         messageLabel = new javax.swing.JLabel();
         logInLabel = new javax.swing.JLabel();
         dataPane = new javax.swing.JPanel();
-        usernameLabel1 = new javax.swing.JLabel();
-        textFieldPanel1 = new com.mycompany.hiChatJpa.view.components.TextFieldPanel();
-        usernameLabel2 = new javax.swing.JLabel();
-        textFieldPanel2 = new com.mycompany.hiChatJpa.view.components.TextFieldPanel();
+        userPasswordConfirmedLabel = new javax.swing.JLabel();
+        userPasswordConfirmedTxt = new TextFieldPanel(TextFieldPanel.PASSWORD_REGEX, "too long password");
+        userPasswordLabel = new javax.swing.JLabel();
+        userPasswordTxt = new TextFieldPanel(TextFieldPanel.PASSWORD_REGEX, "too long password");
 
         setPreferredSize(new java.awt.Dimension(400, 600));
 
@@ -198,19 +200,23 @@ public class RestorePswChangePane extends javax.swing.JPanel {
         dataPane.setOpaque(false);
         dataPane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        usernameLabel1.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
-        usernameLabel1.setForeground(new java.awt.Color(204, 204, 204));
-        usernameLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        usernameLabel1.setText("Confirm password");
-        dataPane.add(usernameLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, 350, 20));
-        dataPane.add(textFieldPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, -1));
+        userPasswordConfirmedLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        userPasswordConfirmedLabel.setForeground(new java.awt.Color(204, 204, 204));
+        userPasswordConfirmedLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        userPasswordConfirmedLabel.setText("Confirm password");
+        dataPane.add(userPasswordConfirmedLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, 350, 20));
 
-        usernameLabel2.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
-        usernameLabel2.setForeground(new java.awt.Color(204, 204, 204));
-        usernameLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        usernameLabel2.setText("New password");
-        dataPane.add(usernameLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 350, 20));
-        dataPane.add(textFieldPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
+        userPasswordConfirmedTxt.setMessage("confirm your new password");
+        dataPane.add(userPasswordConfirmedTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, -1, -1));
+
+        userPasswordLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        userPasswordLabel.setForeground(new java.awt.Color(204, 204, 204));
+        userPasswordLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        userPasswordLabel.setText("New password");
+        dataPane.add(userPasswordLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 350, 20));
+
+        userPasswordTxt.setMessage("enter your new password");
+        dataPane.add(userPasswordTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
 
         javax.swing.GroupLayout backgroundPaneLayout = new javax.swing.GroupLayout(backgroundPane);
         backgroundPane.setLayout(backgroundPaneLayout);
@@ -266,15 +272,31 @@ public class RestorePswChangePane extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void returnButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_returnButtonMouseClicked
-        // regresar
+        controller.rstpAvanzarAConfirmarUsuario(null, false);
     }//GEN-LAST:event_returnButtonMouseClicked
 
     private void logInLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logInLabelMouseClicked
-        // login
+        controller.showLogin();
     }//GEN-LAST:event_logInLabelMouseClicked
 
     private void continueLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_continueLabelMouseClicked
-        // login final
+        String password = userPasswordTxt.getText();
+        String confirmedPassword = userPasswordConfirmedTxt.getText();
+
+        if (password.isEmpty() || password.equals(userPasswordTxt.getDefaultString()) || userPasswordTxt.isInvalidInput()) {
+            JOptionPane.showMessageDialog(null, "password cant be empty", "input error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (confirmedPassword.isEmpty() || confirmedPassword.equals(userPasswordConfirmedTxt.getDefaultString()) || userPasswordConfirmedTxt.isInvalidInput()) {
+            JOptionPane.showMessageDialog(null, "please confirm your password", "input error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (!password.equals(confirmedPassword)) {
+            JOptionPane.showMessageDialog(null, "the passwords dont match", "input error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        controller.finalizarRestorePassword(password);
     }//GEN-LAST:event_continueLabelMouseClicked
 
 
@@ -292,11 +314,11 @@ public class RestorePswChangePane extends javax.swing.JPanel {
     private javax.swing.JLabel messageLabel;
     private javax.swing.JLabel returnButton;
     private javax.swing.JPanel stepsPane;
-    private com.mycompany.hiChatJpa.view.components.TextFieldPanel textFieldPanel1;
-    private com.mycompany.hiChatJpa.view.components.TextFieldPanel textFieldPanel2;
     private javax.swing.JLabel tittleLabel;
+    private javax.swing.JLabel userPasswordConfirmedLabel;
+    private com.mycompany.hiChatJpa.view.components.TextFieldPanel userPasswordConfirmedTxt;
+    private javax.swing.JLabel userPasswordLabel;
+    private com.mycompany.hiChatJpa.view.components.TextFieldPanel userPasswordTxt;
     private javax.swing.JLabel usernameLabel;
-    private javax.swing.JLabel usernameLabel1;
-    private javax.swing.JLabel usernameLabel2;
     // End of variables declaration//GEN-END:variables
 }

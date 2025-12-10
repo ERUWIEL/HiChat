@@ -6,6 +6,8 @@ import com.mycompany.hiChatJpa.entitys.TipoInteraccion;
 import com.mycompany.hiChatJpa.exceptions.ServiceException;
 import com.mycompany.hiChatJpa.service.IUsuarioService;
 import com.mycompany.hiChatJpa.service.impl.UsuarioService;
+import java.awt.HeadlessException;
+import java.awt.Image;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
@@ -36,7 +38,7 @@ public class DiscoverPane extends javax.swing.JPanel {
         this.loggedUser = usuario;
         this.USUARIO_SERVICE = new UsuarioService();
         try {
-            this.PRETENDIENTES = USUARIO_SERVICE.listarUsuarios().iterator();
+            this.PRETENDIENTES = USUARIO_SERVICE.mostrarPretendientes(loggedUser.getIdUsuario()).iterator();
             loadNext();
         } catch (ServiceException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "soo sorry :(", JOptionPane.ERROR_MESSAGE);
@@ -174,6 +176,8 @@ public class DiscoverPane extends javax.swing.JPanel {
             changeImg();
         } catch (NoSuchElementException ex) {
             this.userCard.setVisible(false);
+            this.dislikePanel.setVisible(false);
+            this.likePane.setVisible(false);
             JOptionPane.showMessageDialog(null, "it seems like theres nobody to judge", "soo sorry :(", JOptionPane.INFORMATION_MESSAGE);
         }
     }
@@ -182,16 +186,94 @@ public class DiscoverPane extends javax.swing.JPanel {
      * metodo de utileria que cambia la foto del perfil mostrado
      */
     private void changeImg() {
+        String rutaFoto = currentUser.getUrlFotoPerfil();
+
         try {
-            String transformedURL = CloudinaryUtil.getInstance().generarUrlTransformada("hichat/perfiles/usuario_1", 360, 360);
-            URL url = new URL(transformedURL);
-            ImageIcon icono = new ImageIcon(url);
-            imgLabel.setIcon(icono);
-        } catch (MalformedURLException e) {
-            System.out.println("Error al cargar imagen: " + e.getMessage());
+            ImageIcon iconOriginal;
+            if (rutaFoto.startsWith("/")) {
+                java.net.URL iconURL = getClass().getResource(rutaFoto);
+                if (iconURL == null) {
+                    System.err.println("⚠️ No se encontró el recurso: " + rutaFoto);
+                    cargarImagenPorDefecto();
+                    return;
+                }
+                iconOriginal = new ImageIcon(iconURL);
+
+            } else if (rutaFoto.startsWith("http://") || rutaFoto.startsWith("https://")) {
+                try {
+                    URL url = new URL(rutaFoto);
+                    iconOriginal = new ImageIcon(url);
+                    if (iconOriginal.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
+                        System.err.println("⚠️ Error al cargar imagen desde URL");
+                        cargarImagenPorDefecto();
+                        return;
+                    }
+
+                } catch (MalformedURLException e) {
+                    cargarImagenPorDefecto();
+                    return;
+                }
+            } else {
+                iconOriginal = new ImageIcon(rutaFoto);
+            }
+
+            // Redimensionar la imagen
+            int maxAncho = 380 - 20;
+            int maxAlto = 358 - 20;
+
+            int anchoOriginal = iconOriginal.getIconWidth();
+            int altoOriginal = iconOriginal.getIconHeight();
+
+            if (anchoOriginal <= 0 || altoOriginal <= 0) {
+                cargarImagenPorDefecto();
+                return;
+            }
+
+            double escalaAncho = (double) maxAncho / anchoOriginal;
+            double escalaAlto = (double) maxAlto / altoOriginal;
+            double escala = Math.min(escalaAncho, escalaAlto);
+
+            int nuevoAncho = (int) (anchoOriginal * escala);
+            int nuevoAlto = (int) (altoOriginal * escala);
+
+            Image imgEscalada = iconOriginal.getImage().getScaledInstance(nuevoAncho, nuevoAlto, Image.SCALE_SMOOTH);
+
+            imgLabel.setIcon(new ImageIcon(imgEscalada));
+            imgLabel.setText("");
+
+        } catch (Exception e) {
+            cargarImagenPorDefecto();
         }
     }
 
+    /**
+     * Carga la imagen por defecto cuando falla la carga de la foto del usuario
+     */
+    private void cargarImagenPorDefecto() {
+        try {
+            java.net.URL iconURL = getClass().getResource("/icons/default-picture.png");
+
+            if (iconURL != null) {
+                ImageIcon iconOriginal = new ImageIcon(iconURL);
+                int maxAncho = 380 - 20;
+                int maxAlto = 358 - 20;
+
+                Image imgEscalada = iconOriginal.getImage().getScaledInstance(maxAncho, maxAlto, Image.SCALE_SMOOTH);
+
+                imgLabel.setIcon(new ImageIcon(imgEscalada));
+                imgLabel.setText("");
+            } else {
+                imgLabel.setIcon(null);
+                imgLabel.setText("Sin foto");
+            }
+
+        } catch (Exception e) {
+            imgLabel.setIcon(null);
+            imgLabel.setText("Sin foto");
+        }
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel dislikeLabel;
     private com.mycompany.hiChatJpa.view.components.PanelRound dislikePanel;

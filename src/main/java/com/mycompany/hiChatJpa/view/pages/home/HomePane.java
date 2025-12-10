@@ -45,7 +45,7 @@ public class HomePane extends javax.swing.JPanel {
 
         backgroundPane = new javax.swing.JPanel();
         tittleLabel = new javax.swing.JLabel();
-        settingsLabel = new javax.swing.JLabel();
+        logoutLabel = new javax.swing.JLabel();
         contentPane = new javax.swing.JPanel();
         dashboard = new javax.swing.JPanel();
         discoverLabel = new javax.swing.JLabel();
@@ -62,15 +62,15 @@ public class HomePane extends javax.swing.JPanel {
         tittleLabel.setText("Welcome!  " + user.getNombre());
         backgroundPane.add(tittleLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, 240, 60));
 
-        settingsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        settingsLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/white-settings.png"))); // NOI18N
-        settingsLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        settingsLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+        logoutLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        logoutLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/red-logout.png"))); // NOI18N
+        logoutLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        logoutLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                settingsLabelMouseClicked(evt);
+                logoutLabelMouseClicked(evt);
             }
         });
-        backgroundPane.add(settingsLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 0, 40, 60));
+        backgroundPane.add(logoutLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 0, 40, 60));
 
         contentPane.setBackground(new java.awt.Color(204, 255, 102));
         contentPane.setLayout(new java.awt.CardLayout());
@@ -165,9 +165,9 @@ public class HomePane extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_profileLabelMouseClicked
 
-    private void settingsLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_settingsLabelMouseClicked
-        // login
-    }//GEN-LAST:event_settingsLabelMouseClicked
+    private void logoutLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutLabelMouseClicked
+        controller.cerrarSesion();
+    }//GEN-LAST:event_logoutLabelMouseClicked
 
     public final void showInternView() {
         CardLayout cl = (CardLayout) contentPane.getLayout();
@@ -187,9 +187,9 @@ public class HomePane extends javax.swing.JPanel {
     private javax.swing.JPanel contentPane;
     private javax.swing.JPanel dashboard;
     private javax.swing.JLabel discoverLabel;
+    private javax.swing.JLabel logoutLabel;
     private javax.swing.JLabel matchLabel;
     private javax.swing.JLabel profileLabel;
-    private javax.swing.JLabel settingsLabel;
     private javax.swing.JLabel tittleLabel;
     // End of variables declaration//GEN-END:variables
 }

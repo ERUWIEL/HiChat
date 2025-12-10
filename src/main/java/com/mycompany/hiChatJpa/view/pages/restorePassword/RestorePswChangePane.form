@@ -363,7 +363,7 @@
             <Property name="useNullLayout" type="boolean" value="false"/>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="usernameLabel1">
+            <Component class="javax.swing.JLabel" name="userPasswordConfirmedLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Sans Unicode" size="14" style="0"/>
@@ -380,14 +380,20 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="com.mycompany.hiChatJpa.view.components.TextFieldPanel" name="textFieldPanel1">
+            <Component class="com.mycompany.hiChatJpa.view.components.TextFieldPanel" name="userPasswordConfirmedTxt">
+              <Properties>
+                <Property name="message" type="java.lang.String" value="confirm your new password"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new TextFieldPanel(TextFieldPanel.PASSWORD_REGEX, &quot;too long password&quot;)"/>
+              </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                   <AbsoluteConstraints x="30" y="140" width="-1" height="-1"/>
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="usernameLabel2">
+            <Component class="javax.swing.JLabel" name="userPasswordLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Sans Unicode" size="14" style="0"/>
@@ -404,7 +410,13 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="com.mycompany.hiChatJpa.view.components.TextFieldPanel" name="textFieldPanel2">
+            <Component class="com.mycompany.hiChatJpa.view.components.TextFieldPanel" name="userPasswordTxt">
+              <Properties>
+                <Property name="message" type="java.lang.String" value="enter your new password"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new TextFieldPanel(TextFieldPanel.PASSWORD_REGEX, &quot;too long password&quot;)"/>
+              </AuxValues>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                   <AbsoluteConstraints x="30" y="30" width="-1" height="-1"/>

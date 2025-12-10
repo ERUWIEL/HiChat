@@ -1,6 +1,8 @@
 package com.mycompany.hiChatJpa.view.pages.restorePassword;
 
 import com.mycompany.hiChatJpa.view.Controller;
+import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -8,7 +10,7 @@ import com.mycompany.hiChatJpa.view.Controller;
  */
 public class RestorePswConfirmUserPane extends javax.swing.JPanel {
 
-    private Controller controller;
+    private final Controller controller;
 
     /**
      * Creates new form SigninPane
@@ -44,8 +46,10 @@ public class RestorePswConfirmUserPane extends javax.swing.JPanel {
         messageLabel = new javax.swing.JLabel();
         logInLabel = new javax.swing.JLabel();
         dataPane = new javax.swing.JPanel();
-        usernameLabel = new javax.swing.JLabel();
-        textFieldPanel1 = new com.mycompany.hiChatJpa.view.components.TextFieldPanel();
+        userNameLabel = new javax.swing.JLabel();
+        userNameTxt = new TextFieldPanel(TextFieldPanel.NAME_REGEX, "invalid name format");
+        userLastnameLabel = new javax.swing.JLabel();
+        userLastnameTxt = new TextFieldPanel(TextFieldPanel.NAME_REGEX, "invalid name format");
 
         setPreferredSize(new java.awt.Dimension(400, 600));
 
@@ -196,12 +200,23 @@ public class RestorePswConfirmUserPane extends javax.swing.JPanel {
         dataPane.setOpaque(false);
         dataPane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        usernameLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
-        usernameLabel.setForeground(new java.awt.Color(204, 204, 204));
-        usernameLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        usernameLabel.setText("Full name");
-        dataPane.add(usernameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 360, 20));
-        dataPane.add(textFieldPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
+        userNameLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        userNameLabel.setForeground(new java.awt.Color(204, 204, 204));
+        userNameLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        userNameLabel.setText("Name");
+        dataPane.add(userNameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 360, 20));
+
+        userNameTxt.setMessage("enter your name");
+        dataPane.add(userNameTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
+
+        userLastnameLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        userLastnameLabel.setForeground(new java.awt.Color(204, 204, 204));
+        userLastnameLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        userLastnameLabel.setText("Lastname");
+        dataPane.add(userLastnameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 360, 20));
+
+        userLastnameTxt.setMessage("enter your lastname");
+        dataPane.add(userLastnameTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, -1));
 
         javax.swing.GroupLayout backgroundPaneLayout = new javax.swing.GroupLayout(backgroundPane);
         backgroundPane.setLayout(backgroundPaneLayout);
@@ -234,8 +249,8 @@ public class RestorePswConfirmUserPane extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(findUserLabel)
                 .addGap(30, 30, 30)
-                .addComponent(dataPane, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 182, Short.MAX_VALUE)
+                .addComponent(dataPane, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                 .addComponent(continuePane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(backgroundPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -257,15 +272,28 @@ public class RestorePswConfirmUserPane extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void returnButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_returnButtonMouseClicked
-        // regresar
+        controller.showRestorePassword();
     }//GEN-LAST:event_returnButtonMouseClicked
 
     private void logInLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logInLabelMouseClicked
-        // login
+        controller.showLogin();
     }//GEN-LAST:event_logInLabelMouseClicked
 
     private void continueLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_continueLabelMouseClicked
-        // continuar
+
+        String name = userNameTxt.getText();
+        String lastName = userLastnameTxt.getText();
+
+        if (name.trim().isEmpty() || name.equals(userNameTxt.getDefaultString()) || userNameTxt.isInvalidInput()) {
+            JOptionPane.showMessageDialog(null, "name cant be empty", "input error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (lastName.trim().isEmpty() || lastName.equals(userLastnameTxt.getDefaultString()) || userLastnameTxt.isInvalidInput()) {
+            JOptionPane.showMessageDialog(null, "last name cant be empty", "input error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        controller.rstpAvanzarACambiarPassword(name, lastName);
     }//GEN-LAST:event_continueLabelMouseClicked
 
 
@@ -284,8 +312,10 @@ public class RestorePswConfirmUserPane extends javax.swing.JPanel {
     private javax.swing.JLabel returnButton;
     private javax.swing.JLabel stepIndicatorLabel;
     private javax.swing.JPanel stepsPane;
-    private com.mycompany.hiChatJpa.view.components.TextFieldPanel textFieldPanel1;
     private javax.swing.JLabel tittleLabel;
-    private javax.swing.JLabel usernameLabel;
+    private javax.swing.JLabel userLastnameLabel;
+    private com.mycompany.hiChatJpa.view.components.TextFieldPanel userLastnameTxt;
+    private javax.swing.JLabel userNameLabel;
+    private com.mycompany.hiChatJpa.view.components.TextFieldPanel userNameTxt;
     // End of variables declaration//GEN-END:variables
 }

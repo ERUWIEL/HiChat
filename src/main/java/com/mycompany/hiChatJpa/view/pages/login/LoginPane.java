@@ -1,6 +1,5 @@
 package com.mycompany.hiChatJpa.view.pages.login;
 
-import com.mycompany.hiChatJpa.dto.LoginDTO;
 import com.mycompany.hiChatJpa.view.Controller;
 import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
 import javax.swing.JOptionPane;
@@ -36,10 +35,10 @@ public class LoginPane extends javax.swing.JPanel {
         tittleLabel = new javax.swing.JLabel();
         descriptionLabel = new javax.swing.JLabel();
         dataPane = new javax.swing.JPanel();
-        usernameLabel = new javax.swing.JLabel();
-        userInputPane = new TextFieldPanel(TextFieldPanel.EMAIL_REGEX, "invalid type of email");
-        passwordLabel = new javax.swing.JLabel();
-        passwordInputPane = new TextFieldPanel(TextFieldPanel.PASSWORD_REGEX, "invalid password format to looong");
+        userEmailLabel = new javax.swing.JLabel();
+        userEmailTxt = new TextFieldPanel(TextFieldPanel.EMAIL_REGEX, "invalid type of email");
+        userPasswordLabel = new javax.swing.JLabel();
+        userPasswordTxt = new TextFieldPanel(TextFieldPanel.PASSWORD_REGEX, "invalid password format to looong");
         forgotPasswordLabel = new javax.swing.JLabel();
         actionsPane = new javax.swing.JPanel();
         signInPane = new com.mycompany.hiChatJpa.view.components.PanelRound();
@@ -67,23 +66,23 @@ public class LoginPane extends javax.swing.JPanel {
         dataPane.setOpaque(false);
         dataPane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        usernameLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
-        usernameLabel.setForeground(new java.awt.Color(204, 204, 204));
-        usernameLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        usernameLabel.setText("Email");
-        dataPane.add(usernameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 360, 20));
+        userEmailLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        userEmailLabel.setForeground(new java.awt.Color(204, 204, 204));
+        userEmailLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        userEmailLabel.setText("Email");
+        dataPane.add(userEmailLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 360, 20));
 
-        userInputPane.setMessage("enter your email");
-        dataPane.add(userInputPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+        userEmailTxt.setMessage("enter your email");
+        dataPane.add(userEmailTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
 
-        passwordLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
-        passwordLabel.setForeground(new java.awt.Color(204, 204, 204));
-        passwordLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        passwordLabel.setText("Password");
-        dataPane.add(passwordLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 85, 360, 20));
+        userPasswordLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        userPasswordLabel.setForeground(new java.awt.Color(204, 204, 204));
+        userPasswordLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        userPasswordLabel.setText("Password");
+        dataPane.add(userPasswordLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 85, 360, 20));
 
-        passwordInputPane.setMessage("enter your password");
-        dataPane.add(passwordInputPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
+        userPasswordTxt.setMessage("enter your password");
+        dataPane.add(userPasswordTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
 
         forgotPasswordLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 14)); // NOI18N
         forgotPasswordLabel.setForeground(new java.awt.Color(189, 147, 249));
@@ -178,17 +177,19 @@ public class LoginPane extends javax.swing.JPanel {
     }//GEN-LAST:event_forgotPasswordLabelMouseClicked
 
     private void signInLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signInLabelMouseClicked
-        String email = userInputPane.getText();
-        String password = passwordInputPane.getText();
+        String email = userEmailTxt.getText();
+        String password = userPasswordTxt.getText();
 
-        // Crear LoginDTO en lugar de Usuario
-        LoginDTO loginDTO = new LoginDTO(email, password);
-
-        try {
-            // logica para iniciar sesion
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "email or password dont match with a real user", "login error", JOptionPane.ERROR_MESSAGE);
+        if (email.trim().isEmpty() || email.equals(userEmailTxt.getDefaultString()) || userEmailTxt.isInvalidInput()) {
+            JOptionPane.showMessageDialog(null, "email cant be empty", "input error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+        if (password.trim().isEmpty() || password.equals(userPasswordTxt.getDefaultString()) || userPasswordTxt.isInvalidInput()) {
+            JOptionPane.showMessageDialog(null, "password name cant be empty", "input error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        controller.finalizarLogin(email, password);
     }//GEN-LAST:event_signInLabelMouseClicked
 
 
@@ -199,13 +200,13 @@ public class LoginPane extends javax.swing.JPanel {
     private javax.swing.JLabel descriptionLabel;
     private javax.swing.JLabel forgotPasswordLabel;
     private javax.swing.JLabel messageLabel;
-    private com.mycompany.hiChatJpa.view.components.TextFieldPanel passwordInputPane;
-    private javax.swing.JLabel passwordLabel;
     private javax.swing.JLabel signInLabel;
     private com.mycompany.hiChatJpa.view.components.PanelRound signInPane;
     private javax.swing.JLabel signUpLabel;
     private javax.swing.JLabel tittleLabel;
-    private com.mycompany.hiChatJpa.view.components.TextFieldPanel userInputPane;
-    private javax.swing.JLabel usernameLabel;
+    private javax.swing.JLabel userEmailLabel;
+    private com.mycompany.hiChatJpa.view.components.TextFieldPanel userEmailTxt;
+    private javax.swing.JLabel userPasswordLabel;
+    private com.mycompany.hiChatJpa.view.components.TextFieldPanel userPasswordTxt;
     // End of variables declaration//GEN-END:variables
 }

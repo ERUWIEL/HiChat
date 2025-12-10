@@ -152,10 +152,52 @@ public class UsuarioRepository implements IUsuarioRepository {
             query.setParameter("apellidoPaterno", apellidoPaterno);
             query.setMaxResults(limit);
             query.setFirstResult(offset);
-            
+
             return query.getResultList();
         } catch (Exception e) {
             throw new RepositoryException("buscarPorNombreCompleto", "no se pudo buscar usuarios por nombre", e);
+        }
+    }
+
+    /**
+     * consulta que lista a los posibles pretendientes
+     * @param idUsuarioActual
+     * @param limit
+     * @param offset
+     * @return
+     * @throws RepositoryException 
+     */
+    public List<Usuario> buscarPretendientes(Long idUsuarioActual, int limit, int offset) throws RepositoryException {
+        try {
+            String jpql
+                    = "SELECT u FROM Usuario u "
+                    + "WHERE u.idUsuario <> :idUsuarioActual "
+                    + "AND u.idUsuario NOT IN ("
+                    + "    SELECT b.usuarioBloqueado.idUsuario "
+                    + "    FROM Bloqueo b "
+                    + "    WHERE b.usuarioBloqueador.idUsuario = :idUsuarioActual"
+                    + ") "
+                    + "AND u.idUsuario NOT IN ("
+                    + "    SELECT b.usuarioBloqueador.idUsuario "
+                    + "    FROM Bloqueo b "
+                    + "    WHERE b.usuarioBloqueado.idUsuario = :idUsuarioActual"
+                    + ") "
+                    + "AND u.idUsuario NOT IN ("
+                    + "    SELECT i.usuarioReceptor.idUsuario "
+                    + "    FROM Interaccion i "
+                    + "    WHERE i.usuarioEmisor.idUsuario = :idUsuarioActual"
+                    + ") "
+                    + "ORDER BY FUNCTION('RAND')";
+
+            TypedQuery<Usuario> query = entityManager.createQuery(jpql, Usuario.class);
+            query.setParameter("idUsuarioActual", idUsuarioActual);
+            query.setMaxResults(limit);
+            query.setFirstResult(offset);
+
+            return query.getResultList();
+
+        } catch (Exception e) {
+            throw new RepositoryException("buscarPretendientes", "Error al buscar pretendientes", e);
         }
     }
 }
