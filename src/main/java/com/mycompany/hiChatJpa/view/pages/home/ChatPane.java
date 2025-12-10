@@ -1,20 +1,46 @@
-
 package com.mycompany.hiChatJpa.view.pages.home;
 
+import com.mycompany.hiChatJpa.dto.ChatConMensajesDTO;
+import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
+import com.mycompany.hiChatJpa.service.IChatService;
+import com.mycompany.hiChatJpa.service.impl.ChatService;
+import com.mycompany.hiChatJpa.view.components.ChatRegistroPanel;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.util.List;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  *
  * @author gatog
  */
 public class ChatPane extends javax.swing.JPanel {
-    
+
+    private final UsuarioPerfilDTO loggedUser;
+    private final IChatService CHAT_SERVICE;
+
     /**
      * Creates new form LoginPane
+     *
      * @param panel
+     * @param usuario
      */
-    public ChatPane(JPanel panel) {
+    public ChatPane(JPanel panel, UsuarioPerfilDTO usuario) {
+        this.loggedUser = usuario;
+        this.CHAT_SERVICE = new ChatService();
         initComponents();
+
+        panelLista = new JPanel(new GridLayout(0, 1));
+
+        
+        //cargarChats();
+
+        JPanel container = new JPanel(new BorderLayout());
+        container.add(panelLista, BorderLayout.NORTH);
+        JScrollPane scrollPane = new JScrollPane(container);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(15);
+        add(scrollPane, BorderLayout.CENTER);
     }
 
     /**
@@ -26,42 +52,53 @@ public class ChatPane extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tittleLabel = new javax.swing.JLabel();
-        panelRound1 = new com.mycompany.hiChatJpa.view.components.PanelRound();
+        panelLista = new javax.swing.JPanel();
+        label = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(22, 16, 34));
         setPreferredSize(new java.awt.Dimension(400, 600));
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setLayout(new java.awt.BorderLayout());
 
-        tittleLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 18)); // NOI18N
-        tittleLabel.setForeground(new java.awt.Color(255, 255, 255));
-        tittleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        tittleLabel.setText("option not supported yet");
-        add(tittleLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 148, 270, 40));
+        panelLista.setOpaque(false);
 
-        panelRound1.setBackground(new java.awt.Color(0, 102, 204));
-        panelRound1.setRoundBottomLeft(100);
-        panelRound1.setRoundBottomRight(100);
-        panelRound1.setRoundTopLeft(100);
-        panelRound1.setRoundTopRight(100);
+        label.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 24)); // NOI18N
+        label.setForeground(new java.awt.Color(255, 255, 255));
+        label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        label.setText("Option not supported");
 
-        javax.swing.GroupLayout panelRound1Layout = new javax.swing.GroupLayout(panelRound1);
-        panelRound1.setLayout(panelRound1Layout);
-        panelRound1Layout.setHorizontalGroup(
-            panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 290, Short.MAX_VALUE)
+        javax.swing.GroupLayout panelListaLayout = new javax.swing.GroupLayout(panelLista);
+        panelLista.setLayout(panelListaLayout);
+        panelListaLayout.setHorizontalGroup(
+            panelListaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelListaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(label, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                .addContainerGap())
         );
-        panelRound1Layout.setVerticalGroup(
-            panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
+        panelListaLayout.setVerticalGroup(
+            panelListaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelListaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(label, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        add(panelRound1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 140, 290, 60));
+        add(panelLista, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cargarChats() {
+
+        List<ChatConMensajesDTO> chats = CHAT_SERVICE.cargarChatsDelUsuario(loggedUser.getIdUsuario());
+
+        chats.forEach(c -> {
+            panelLista.add(new ChatRegistroPanel(c));
+        });
+
+         panelLista.revalidate();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.mycompany.hiChatJpa.view.components.PanelRound panelRound1;
-    private javax.swing.JLabel tittleLabel;
+    private javax.swing.JLabel label;
+    private javax.swing.JPanel panelLista;
     // End of variables declaration//GEN-END:variables
 }

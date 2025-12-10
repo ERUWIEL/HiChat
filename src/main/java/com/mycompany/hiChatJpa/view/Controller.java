@@ -294,11 +294,44 @@ public class Controller {
             loginPane = new LoginPane(this);
             contentPanel.add(loginPane, LOGIN_VIEW);
         }
+        
+        if (signinPane != null) {
+            contentPanel.remove(signinPane);
+            contentPanel.remove(signinDatePane);
+            contentPanel.remove(signinPasswordPane);
+            contentPanel.remove(signinBioPane);
+            contentPanel.remove(signinPicturePane);
+            
+            signinPane = new SigninPane(this);
+            signinDatePane = new SigninDatePane(this);
+            signinPasswordPane = new SigninPasswordPane(this);
+            signinBioPane = new SigninBioPane(this);
+            signinPicturePane = new SigninPicturePane(this);
+            
+            contentPanel.add(signinPane, SIGNIN_VIEW);
+            contentPanel.add(signinDatePane, SIGNIN_DATE_VIEW);
+            contentPanel.add(signinPasswordPane, SIGNIN_PASSWORD_VIEW);
+            contentPanel.add(signinBioPane, SIGNIN_BIO_VIEW);
+            contentPanel.add(signinPicturePane, SIGNIN_PICTURE_VIEW);
+        }
+        
+        if (restorePswPane != null){
+            contentPanel.remove(restorePswPane);
+            contentPanel.remove(restorePswUserPane);
+            contentPanel.remove(restorePswChangePane);
+            
+            restorePswPane = new RestorePswUserPane(this);
+            restorePswUserPane = new RestorePswConfirmUserPane(this);
+            restorePswChangePane = new RestorePswChangePane(this);
+            
+            contentPanel.add(restorePswPane, RSPSW_VIEW);
+            contentPanel.add(restorePswUserPane, RSPSW_CONFIRM_USER_VIEW);
+            contentPanel.add(restorePswChangePane, RSPSW_CHANGE_VIEW);
+        }
+        
+        
         contentPanel.revalidate();
         contentPanel.repaint();
     }
 
-    private void limpiarSignin() {
-
-    }
 }
