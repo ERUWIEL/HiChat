@@ -33,6 +33,8 @@ public class DiscoverPane extends javax.swing.JPanel {
      */
     public DiscoverPane(JPanel panel, UsuarioPerfilDTO usuario) {
         initComponents();
+        this.saltyMessageLabel.setVisible(false);
+        
         this.loggedUser = usuario;
         this.USUARIO_SERVICE = new UsuarioService();
         try {
@@ -52,6 +54,7 @@ public class DiscoverPane extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        saltyMessageLabel = new javax.swing.JLabel();
         likePane = new com.mycompany.hiChatJpa.view.components.PanelRound();
         heartLabel = new javax.swing.JLabel();
         dislikePanel = new com.mycompany.hiChatJpa.view.components.PanelRound();
@@ -63,6 +66,11 @@ public class DiscoverPane extends javax.swing.JPanel {
         setBackground(new java.awt.Color(22, 16, 34));
         setPreferredSize(new java.awt.Dimension(400, 600));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        saltyMessageLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 24)); // NOI18N
+        saltyMessageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        saltyMessageLabel.setText("Try In Other Time");
+        add(saltyMessageLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 480));
 
         likePane.setBackground(new java.awt.Color(55, 65, 81));
         likePane.setRoundBottomLeft(360);
@@ -118,7 +126,7 @@ public class DiscoverPane extends javax.swing.JPanel {
             .addGroup(userCardLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(imgLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(165, 165, 165))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, userCardLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -176,7 +184,7 @@ public class DiscoverPane extends javax.swing.JPanel {
             this.userCard.setVisible(false);
             this.dislikePanel.setVisible(false);
             this.likePane.setVisible(false);
-            JOptionPane.showMessageDialog(null, "it seems like theres nobody to judge", "soo sorry :(", JOptionPane.INFORMATION_MESSAGE);
+            this.saltyMessageLabel.setVisible(true);
         }
     }
 
@@ -278,6 +286,7 @@ public class DiscoverPane extends javax.swing.JPanel {
     private javax.swing.JLabel heartLabel;
     private javax.swing.JLabel imgLabel;
     private com.mycompany.hiChatJpa.view.components.PanelRound likePane;
+    private javax.swing.JLabel saltyMessageLabel;
     private javax.swing.JPanel userCard;
     private javax.swing.JLabel username;
     // End of variables declaration//GEN-END:variables
