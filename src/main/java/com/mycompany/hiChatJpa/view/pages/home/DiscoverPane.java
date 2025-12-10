@@ -1,12 +1,10 @@
 package com.mycompany.hiChatJpa.view.pages.home;
 
-import com.mycompany.hiChatJpa.config.CloudinaryUtil;
 import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
 import com.mycompany.hiChatJpa.entitys.TipoInteraccion;
 import com.mycompany.hiChatJpa.exceptions.ServiceException;
 import com.mycompany.hiChatJpa.service.IUsuarioService;
 import com.mycompany.hiChatJpa.service.impl.UsuarioService;
-import java.awt.HeadlessException;
 import java.awt.Image;
 import java.net.MalformedURLException;
 import java.net.URL;

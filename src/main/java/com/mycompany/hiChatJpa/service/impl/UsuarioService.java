@@ -592,12 +592,6 @@ public class UsuarioService implements IUsuarioService {
         }
     }
 
-    
-    
-    
-    
-    
-    
     @Override
     public List<MatchDTO> mostrarMatches(Long idUsuario) throws ServiceException {
         EntityManager em = null;

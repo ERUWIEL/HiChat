@@ -26,7 +26,7 @@ public class HomePane extends javax.swing.JPanel {
         initComponents();
         
         contentPane.add(new DiscoverPane(contentPane, user), "DISCOVER");
-        contentPane.add(new MatchPane(contentPane), "MATCH");
+        contentPane.add(new MatchPane(contentPane, user), "MATCH");
         contentPane.add(new ChatPane(contentPane), "CHAT");
         contentPane.add(new ProfilePane(contentPane,user), "PROFILE");
 

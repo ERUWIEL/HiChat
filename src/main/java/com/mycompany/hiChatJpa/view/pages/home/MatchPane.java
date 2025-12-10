@@ -1,20 +1,48 @@
-
 package com.mycompany.hiChatJpa.view.pages.home;
 
+import com.mycompany.hiChatJpa.dto.MatchDTO;
+import com.mycompany.hiChatJpa.dto.UsuarioPerfilDTO;
+import com.mycompany.hiChatJpa.service.IUsuarioService;
+import com.mycompany.hiChatJpa.service.impl.UsuarioService;
+import com.mycompany.hiChatJpa.view.components.MatchRegistroPanel;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.util.List;
+import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  *
  * @author gatog
  */
 public class MatchPane extends javax.swing.JPanel {
-    
+
+    private UsuarioPerfilDTO loggedUser;
+    private final IUsuarioService USUARIO_SERVICE;
+
     /**
      * Creates new form LoginPane
+     *
      * @param panel
+     * @param usuario
      */
-    public MatchPane(JPanel panel) {
+    public MatchPane(JPanel panel, UsuarioPerfilDTO usuario) {
+        this.loggedUser = usuario;
+        this.USUARIO_SERVICE = new UsuarioService();
         initComponents();
+
+        saltyMessageLabel.setVisible(false);
+
+        panelLista = new JPanel(new GridLayout(0, 1));
+        
+        cargarMatches();
+        
+        JPanel container = new JPanel(new BorderLayout());
+        container.add(panelLista, BorderLayout.NORTH);
+        JScrollPane scrollPane = new JScrollPane(container);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(15);
+        add(scrollPane, BorderLayout.CENTER);
     }
 
     /**
@@ -26,22 +54,49 @@ public class MatchPane extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        panelLista = new javax.swing.JPanel();
+        saltyMessageLabel = new javax.swing.JLabel();
+
         setBackground(new java.awt.Color(22, 16, 34));
         setPreferredSize(new java.awt.Dimension(400, 600));
+        setLayout(new java.awt.BorderLayout());
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        panelLista.setOpaque(false);
+
+        saltyMessageLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 1, 18)); // NOI18N
+        saltyMessageLabel.setForeground(new java.awt.Color(255, 255, 255));
+        saltyMessageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        saltyMessageLabel.setText("Woop Woop Try Harder : (");
+
+        javax.swing.GroupLayout panelListaLayout = new javax.swing.GroupLayout(panelLista);
+        panelLista.setLayout(panelListaLayout);
+        panelListaLayout.setHorizontalGroup(
+            panelListaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(saltyMessageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 480, Short.MAX_VALUE)
+        panelListaLayout.setVerticalGroup(
+            panelListaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(saltyMessageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
         );
+
+        add(panelLista, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cargarMatches() {        
+        List<MatchDTO> matches = USUARIO_SERVICE.mostrarMatches(loggedUser.getIdUsuario());
+        if(matches == null) {
+            saltyMessageLabel.setVisible(true);
+            return;
+        }
+        
+        matches.forEach(p -> {
+            panelLista.add(new MatchRegistroPanel(p));
+        });
+         panelLista.revalidate();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel panelLista;
+    private javax.swing.JLabel saltyMessageLabel;
     // End of variables declaration//GEN-END:variables
 }
