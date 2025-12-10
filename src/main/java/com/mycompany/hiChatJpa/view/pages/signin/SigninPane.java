@@ -2,6 +2,7 @@ package com.mycompany.hiChatJpa.view.pages.signin;
 
 import com.mycompany.hiChatJpa.view.Controller;
 import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -9,10 +10,11 @@ import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
  */
 public class SigninPane extends javax.swing.JPanel {
 
-    private Controller controller;
-    
+    private final Controller controller;
+
     /**
      * Creates new form SigninPane
+     *
      * @param controller
      */
     public SigninPane(Controller controller) {
@@ -321,15 +323,36 @@ public class SigninPane extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void returnButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_returnButtonMouseClicked
-        // logica para regresar al login
+        controller.showLogin();
     }//GEN-LAST:event_returnButtonMouseClicked
 
     private void logInLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logInLabelMouseClicked
-        // logica para regresar al login
+        controller.showLogin();
     }//GEN-LAST:event_logInLabelMouseClicked
 
     private void continueLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_continueLabelMouseClicked
-        // loggica para avanzar
+
+        String name = userNameTxt.getText();
+        String lastName = userLastNameTxt.getText();
+        String secondLastName = userSecondLastNameTxt.getText();
+
+        if (name.trim().isEmpty() || name.equals(userNameTxt.getDefaultString()) || userNameTxt.isInvalidInput()) {
+            JOptionPane.showMessageDialog(null, "name cant be empty", "input error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (lastName.trim().isEmpty() || lastName.equals(userLastNameTxt.getDefaultString()) || userLastNameTxt.isInvalidInput()) {
+            JOptionPane.showMessageDialog(null, "last name cant be empty", "input error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (userSecondLastNameTxt.isInvalidInput()) {
+            JOptionPane.showMessageDialog(null, "second lastname cant be empty", "input error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (secondLastName.equals(userSecondLastNameTxt.getDefaultString())) {
+            secondLastName = "";
+        }
+
+        controller.signinAvanzarAFechaNacimiento(name, lastName, secondLastName, true);
     }//GEN-LAST:event_continueLabelMouseClicked
 
 

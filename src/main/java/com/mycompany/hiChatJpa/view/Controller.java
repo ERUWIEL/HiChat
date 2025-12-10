@@ -1,6 +1,10 @@
 package com.mycompany.hiChatJpa.view;
 
 import com.mycompany.hiChatJpa.dto.RegistroDTO;
+import com.mycompany.hiChatJpa.service.IChatService;
+import com.mycompany.hiChatJpa.service.IUsuarioService;
+import com.mycompany.hiChatJpa.service.impl.ChatService;
+import com.mycompany.hiChatJpa.service.impl.UsuarioService;
 
 import com.mycompany.hiChatJpa.view.pages.login.LoginPane;
 import com.mycompany.hiChatJpa.view.pages.restorePassword.*;
@@ -35,15 +39,20 @@ public class Controller {
     private RestorePswUserPane restorePswPane;
     private RestorePswConfirmUserPane restorePswUserPane;
     private RestorePswChangePane restorePswChangePane;
+    
+    
+    //instancias de service
+    private IUsuarioService usuarioService = new UsuarioService();
+    private IChatService chatService = new ChatService();
 
     // variables temporales DTO
     private RegistroDTO usuarioEnCreacion;
 
-    
     /**
      * metodo constructor de la clase
+     *
      * @param mainFrame
-     * @param contentPanel 
+     * @param contentPanel
      */
     public Controller(MainFrame mainFrame, JPanel contentPanel) {
         this.mainFrame = mainFrame;
@@ -85,38 +94,84 @@ public class Controller {
     }
 
     // Flujo controlado del Sigin
+    /**
+     * metodo que permite visualizar y controlar el signin
+     */
     public void showSignin() {
         usuarioEnCreacion = new RegistroDTO();
         cardLayout.show(contentPanel, SIGNIN_VIEW);
     }
 
-    public void avanzarAFechaNacimiento(String nombre, String email) {
-        usuarioEnCreacion.setNombre(nombre);
-        usuarioEnCreacion.setCorreoElectronico(email);
+    /**
+     * metodo que permite visualizar y controlar la vista de signin fecha
+     *
+     * @param nombre
+     * @param apellidoPaterno
+     * @param apellidoMaterno
+     * @param writteInfo
+     */
+    public void signinAvanzarAFechaNacimiento(String nombre, String apellidoPaterno, String apellidoMaterno, boolean writteInfo) {
+        if (writteInfo) {
+            usuarioEnCreacion.setNombre(nombre);
+            usuarioEnCreacion.setApellidoPaterno(apellidoPaterno);
+            usuarioEnCreacion.setApellidoMaterno(apellidoMaterno);
+        }
+
         cardLayout.show(contentPanel, SIGNIN_DATE_VIEW);
     }
 
-    public void avanzarAPassword(LocalDate fechaNacimiento) {
-        usuarioEnCreacion.setFechaNacimiento(fechaNacimiento);
+    /**
+     * metodo que permite visualizar y controlar la vista de signin password
+     *
+     * @param fechaNacimiento
+     * @param correoElectronico
+     * @param writteInfo
+     */
+    public void signinAvanzarAPassword(LocalDate fechaNacimiento, String correoElectronico, boolean writteInfo) {
+        if (writteInfo) {
+            usuarioEnCreacion.setFechaNacimiento(fechaNacimiento);
+            usuarioEnCreacion.setCorreoElectronico(correoElectronico);
+        }
+        
         cardLayout.show(contentPanel, SIGNIN_PASSWORD_VIEW);
     }
 
-    public void avanzarABiografia(String password) {
-        usuarioEnCreacion.setContrasena(password);
+    /**
+     * metodo que permite visualizar y controlar la vista de signin biografia
+     * @param password
+     * @param writteInfo 
+     */
+    public void signinAvanzarABiografia(String password, boolean writteInfo) {
+        if(writteInfo){
+            usuarioEnCreacion.setContrasena(password);
+        }
+        
         cardLayout.show(contentPanel, SIGNIN_BIO_VIEW);
     }
 
-    public void avanzarAFotoPerfil(String biografia) {
-        usuarioEnCreacion.setBiografia(biografia);
+    /**
+     * metodo que permite visualizar y controlar la vista de signin foto
+     * @param biografia
+     * @param carrera
+     * @param writteInfo 
+     */
+    public void signinAvanzarAFotoPerfil(String biografia, String carrera, boolean writteInfo) {
+        if (writteInfo) {
+            usuarioEnCreacion.setBiografia(biografia);
+            usuarioEnCreacion.setCarrera(carrera);
+        }
         cardLayout.show(contentPanel, SIGNIN_PICTURE_VIEW);
     }
 
-    public void finalizarSignin(String rutaFoto) {
-        usuarioEnCreacion.setUrlFotoPerfil(rutaFoto);
+    public void finalizarSignin(String rutaFotoTemporal) {
+        usuarioEnCreacion.setRutaFotoTemporal(rutaFotoTemporal);
         guardarUsuario(usuarioEnCreacion);
         showLogin();
     }
 
+    
+    
+    
     // Flujo controlado del restorePsd
     public void showRestorePassword() {
         cardLayout.show(contentPanel, RSPSW_VIEW);
@@ -134,15 +189,14 @@ public class Controller {
         cardLayout.show(contentPanel, RSPSW_CHANGE_VIEW);
     }
 
-    
-    
     // metodos de utileria y persistencia
     private void limpiarDatosTemporales() {
         usuarioEnCreacion = null;
     }
 
     private void guardarUsuario(RegistroDTO usuario) {
-        
+        usuarioService.registrarUsuario(usuario);
+        System.out.println("usuario agregado " + usuario.getNombre());
     }
 
     public RegistroDTO getUsuarioEnCreacion() {

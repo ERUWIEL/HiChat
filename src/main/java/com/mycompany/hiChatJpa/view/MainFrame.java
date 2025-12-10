@@ -13,7 +13,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    private final Controller coordinator;
+    private final Controller controller;
     
     /**
      * Creates new form frmPrincipal
@@ -22,8 +22,8 @@ public class MainFrame extends javax.swing.JFrame {
         configWindow();
         initComponents();
         
-        coordinator = new Controller(this, contentPanel);
-        coordinator.showLogin();
+        controller = new Controller(this, contentPanel);
+        controller.showLogin();
     }
 
     /**

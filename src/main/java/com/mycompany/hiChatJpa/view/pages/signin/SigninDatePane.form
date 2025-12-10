@@ -421,7 +421,7 @@
             <Property name="useNullLayout" type="boolean" value="false"/>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="usernameLabel1">
+            <Component class="javax.swing.JLabel" name="userEmailLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Sans Unicode" size="14" style="0"/>
@@ -438,7 +438,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="com.mycompany.hiChatJpa.view.components.TextFieldPanel" name="textFieldPanel1">
+            <Component class="com.mycompany.hiChatJpa.view.components.TextFieldPanel" name="userEmailTxt">
               <Properties>
                 <Property name="message" type="java.lang.String" value="enter your email"/>
               </Properties>
@@ -451,7 +451,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="usernameLabel2">
+            <Component class="javax.swing.JLabel" name="userBirthdayLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Sans Unicode" size="14" style="0"/>
@@ -468,7 +468,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="com.mycompany.hiChatJpa.view.components.TextFieldPanel" name="textFieldPanel2">
+            <Component class="com.mycompany.hiChatJpa.view.components.TextFieldPanel" name="userBirthdayTxt">
               <Properties>
                 <Property name="message" type="java.lang.String" value="enter your date (AAAA-MM-DD)"/>
               </Properties>

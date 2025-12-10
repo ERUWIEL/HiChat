@@ -28,7 +28,6 @@ public class UsuarioService implements IUsuarioService {
     }
 
     // HOT FIX
-    
     /**
      * metodo que permite al usuario hacer el login
      *
@@ -66,9 +65,10 @@ public class UsuarioService implements IUsuarioService {
 
     /**
      * metodo que permite registrar a un nuevo usuario
+     *
      * @param registroDTO
      * @return
-     * @throws ServiceException 
+     * @throws ServiceException
      */
     @Override
     public boolean registrarUsuario(RegistroDTO registroDTO) throws ServiceException {
@@ -80,10 +80,10 @@ public class UsuarioService implements IUsuarioService {
 
             Usuario usuarioExistente = usuarioRepo.buscarPorCorreo(registroDTO.getCorreoElectronico());
             if (usuarioExistente != null) {
-                throw new DuplicateEntityException("este correo electronico ya se encuentra registrado");
+                throw new DuplicateEntityException("el correo electronico ya se encuentra asociado a una cuenta");
             }
 
-            // registro sin foto de perfil
+            // usuario sin foto primero
             Usuario nuevoUsuario = new Usuario.Builder()
                     .nombre(registroDTO.getNombre())
                     .apellidoPaterno(registroDTO.getApellidoPaterno())
@@ -99,25 +99,35 @@ public class UsuarioService implements IUsuarioService {
             usuarioRepo.insertar(nuevoUsuario);
             JpaUtil.commitTransaction();
 
-            // seteo dela imagen en cloudinary
-            if (registroDTO.getUrlFotoPerfil() != null && !registroDTO.getUrlFotoPerfil().isEmpty()) {
+            String urlFotoPerfil;
+            CloudinaryUtil cloudinary = CloudinaryUtil.getInstance();
+            if (registroDTO.getRutaFotoTemporal() != null && !registroDTO.getRutaFotoTemporal().isEmpty()) {
                 try {
-                    CloudinaryUtil cloudinary = CloudinaryUtil.getInstance();
-                    String urlFoto = cloudinary.subirFotoPerfil(registroDTO.getUrlFotoPerfil(), nuevoUsuario.getIdUsuario());
-
-                    // actualizacion del usuario con su imagen
-                    JpaUtil.beginTransaction();
-                    nuevoUsuario.setUrlFotoPerfil(urlFoto);
-                    usuarioRepo.actualizar(nuevoUsuario);
-                    JpaUtil.commitTransaction();
+                    urlFotoPerfil = cloudinary.subirFotoPerfil(registroDTO.getRutaFotoTemporal(), nuevoUsuario.getIdUsuario());
                 } catch (IOException e) {
-                    throw e;
+                    urlFotoPerfil = cloudinary.obtenerUrlFotoDefault();
                 }
+
+            } else {
+                urlFotoPerfil = cloudinary.obtenerUrlFotoDefault();
             }
 
+            JpaUtil.beginTransaction();
+            nuevoUsuario.setUrlFotoPerfil(urlFotoPerfil);
+            usuarioRepo.actualizar(nuevoUsuario);
+            JpaUtil.commitTransaction();
             return true;
-        } catch (Exception ex) {
-            throw new ServiceException("registrarUsuario", "no fue posible registrar al usuario", ex);
+
+        } catch (DuplicateEntityException | ServiceException e) {
+            if (em != null) {
+                JpaUtil.rollbackTransaction();
+            }
+            throw e;
+        } catch (Exception e) {
+            if (em != null) {
+                JpaUtil.rollbackTransaction();
+            }
+            throw new ServiceException("registrarUsuario", "Error al registrar usuario", e);
         } finally {
             if (em != null) {
                 JpaUtil.closeEntityManager();
@@ -163,12 +173,6 @@ public class UsuarioService implements IUsuarioService {
         }
     }
 
-    
-    
-    
-    
-    
-    
     @Override
     public boolean registrarInteraccion(Long idEmisor, Long idReceptor, TipoInteraccion tipo) throws ServiceException {
         EntityManager em = null;
@@ -647,7 +651,6 @@ public class UsuarioService implements IUsuarioService {
             }
         }
     }
-
 
     private void validarLoginDTO(LoginDTO dto) throws ServiceException {
         if (dto == null) {

@@ -11,15 +11,15 @@ import javax.swing.JOptionPane;
  */
 public class LoginPane extends javax.swing.JPanel {
 
-    private Controller coordinator;
+    private final Controller controller;
 
     /**
      * Creates new form LoginPane
      *
-     * @param coordinator
+     * @param controller
      */
-    public LoginPane(Controller coordinator) {
-        this.coordinator = coordinator;
+    public LoginPane(Controller controller) {
+        this.controller = controller;
         initComponents();
     }
 
@@ -170,11 +170,11 @@ public class LoginPane extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void signUpLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signUpLabelMouseClicked
-        // logica para mostrar el signin
+        controller.showSignin();
     }//GEN-LAST:event_signUpLabelMouseClicked
 
     private void forgotPasswordLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_forgotPasswordLabelMouseClicked
-        // logica para mostrar el restore password
+        controller.showRestorePassword();
     }//GEN-LAST:event_forgotPasswordLabelMouseClicked
 
     private void signInLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_signInLabelMouseClicked
@@ -187,8 +187,6 @@ public class LoginPane extends javax.swing.JPanel {
         try {
             // logica para iniciar sesion
         } catch (Exception ex) {
-            System.out.println(ex.getCause());
-            System.out.println(ex.getMessage());
             JOptionPane.showMessageDialog(null, "email or password dont match with a real user", "login error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_signInLabelMouseClicked

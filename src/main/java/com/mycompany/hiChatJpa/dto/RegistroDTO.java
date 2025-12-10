@@ -23,6 +23,7 @@ public class RegistroDTO {
     private String carrera;
     
     private String urlFotoPerfil;
+    private String rutaFotoTemporal;
 
     public RegistroDTO() {
     }
@@ -111,6 +112,14 @@ public class RegistroDTO {
 
     public void setUrlFotoPerfil(String urlFotoPerfil) {
         this.urlFotoPerfil = urlFotoPerfil;
+    }
+
+    public String getRutaFotoTemporal() {
+        return rutaFotoTemporal;
+    }
+
+    public void setRutaFotoTemporal(String rutaFotoTemporal) {
+        this.rutaFotoTemporal = rutaFotoTemporal;
     }
     
 

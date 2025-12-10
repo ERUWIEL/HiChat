@@ -2,6 +2,7 @@ package com.mycompany.hiChatJpa.view.pages.signin;
 
 import com.mycompany.hiChatJpa.view.Controller;
 import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -9,10 +10,11 @@ import com.mycompany.hiChatJpa.view.components.TextFieldPanel;
  */
 public class SigninBioPane extends javax.swing.JPanel {
 
-    private Controller controller;
-    
+    private final Controller controller;
+
     /**
      * Creates new form SigninPane
+     *
      * @param controller
      */
     public SigninBioPane(Controller controller) {
@@ -46,10 +48,10 @@ public class SigninBioPane extends javax.swing.JPanel {
         messageLabel = new javax.swing.JLabel();
         logInLabel = new javax.swing.JLabel();
         dataPane = new javax.swing.JPanel();
-        usernameLabel1 = new javax.swing.JLabel();
-        usernameLabel2 = new javax.swing.JLabel();
-        textFieldPanel2 = new TextFieldPanel(TextFieldPanel.NAME_REGEX, "invalid major format");
-        textFieldPanel1 = new TextFieldPanel(TextFieldPanel.BIOGRAPHY_REGEX, "STOP YAPPING!! to long biography");
+        userBiographyLabel = new javax.swing.JLabel();
+        userMayorLabel = new javax.swing.JLabel();
+        userMayorTxt = new TextFieldPanel(TextFieldPanel.NAME_REGEX, "invalid major format");
+        userBiographyTxt = new TextFieldPanel(TextFieldPanel.BIOGRAPHY_REGEX, "STOP YAPPING!! to long biography");
 
         setPreferredSize(new java.awt.Dimension(400, 600));
 
@@ -238,23 +240,23 @@ public class SigninBioPane extends javax.swing.JPanel {
         dataPane.setOpaque(false);
         dataPane.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        usernameLabel1.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
-        usernameLabel1.setForeground(new java.awt.Color(204, 204, 204));
-        usernameLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        usernameLabel1.setText("biography");
-        dataPane.add(usernameLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 360, 20));
+        userBiographyLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        userBiographyLabel.setForeground(new java.awt.Color(204, 204, 204));
+        userBiographyLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        userBiographyLabel.setText("biography");
+        dataPane.add(userBiographyLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 360, 20));
 
-        usernameLabel2.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
-        usernameLabel2.setForeground(new java.awt.Color(204, 204, 204));
-        usernameLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        usernameLabel2.setText("Major");
-        dataPane.add(usernameLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 360, 20));
+        userMayorLabel.setFont(new java.awt.Font("Lucida Sans Unicode", 0, 14)); // NOI18N
+        userMayorLabel.setForeground(new java.awt.Color(204, 204, 204));
+        userMayorLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        userMayorLabel.setText("Major");
+        dataPane.add(userMayorLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 360, 20));
 
-        textFieldPanel2.setMessage("enter your major (Ej. Engenier)");
-        dataPane.add(textFieldPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+        userMayorTxt.setMessage("enter your major (Ej. Engenier)");
+        dataPane.add(userMayorTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
 
-        textFieldPanel1.setMessage("enter something creative!");
-        dataPane.add(textFieldPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
+        userBiographyTxt.setMessage("enter something creative! (optional btw)");
+        dataPane.add(userBiographyTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
 
         javax.swing.GroupLayout backgroundPaneLayout = new javax.swing.GroupLayout(backgroundPane);
         backgroundPane.setLayout(backgroundPaneLayout);
@@ -312,15 +314,31 @@ public class SigninBioPane extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void returnButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_returnButtonMouseClicked
-        // regresar
+        controller.signinAvanzarAPassword(null, null, false);
     }//GEN-LAST:event_returnButtonMouseClicked
 
     private void logInLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logInLabelMouseClicked
-        // login
+        controller.showLogin();
     }//GEN-LAST:event_logInLabelMouseClicked
 
     private void continueLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_continueLabelMouseClicked
-        // avanzar
+        
+        String mayor = userMayorTxt.getText();
+        String biography = userBiographyTxt.getText();
+        
+        if (mayor.trim().isEmpty() || mayor.equals(userMayorTxt.getDefaultString()) || userMayorTxt.isInvalidInput() ) {
+            JOptionPane.showMessageDialog(null, "major cant be empty", "input error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (userMayorTxt.isInvalidInput() ) {
+            JOptionPane.showMessageDialog(null, "biography cant be to long relax", "input error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (biography.trim().isEmpty() || biography.equals(userBiographyTxt.getDefaultString())) {
+            biography = "";
+        }
+        
+        controller.signinAvanzarAFotoPerfil(biography, mayor, true);
     }//GEN-LAST:event_continueLabelMouseClicked
 
 
@@ -340,11 +358,11 @@ public class SigninBioPane extends javax.swing.JPanel {
     private javax.swing.JLabel messageLabel;
     private javax.swing.JLabel returnButton;
     private javax.swing.JPanel stepsPane;
-    private com.mycompany.hiChatJpa.view.components.TextFieldPanel textFieldPanel1;
-    private com.mycompany.hiChatJpa.view.components.TextFieldPanel textFieldPanel2;
     private javax.swing.JLabel tittleLabel;
+    private javax.swing.JLabel userBiographyLabel;
+    private com.mycompany.hiChatJpa.view.components.TextFieldPanel userBiographyTxt;
+    private javax.swing.JLabel userMayorLabel;
+    private com.mycompany.hiChatJpa.view.components.TextFieldPanel userMayorTxt;
     private javax.swing.JLabel usernameLabel;
-    private javax.swing.JLabel usernameLabel1;
-    private javax.swing.JLabel usernameLabel2;
     // End of variables declaration//GEN-END:variables
 }

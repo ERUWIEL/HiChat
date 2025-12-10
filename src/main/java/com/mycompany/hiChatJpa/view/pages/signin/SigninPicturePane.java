@@ -1,6 +1,13 @@
 package com.mycompany.hiChatJpa.view.pages.signin;
 
 import com.mycompany.hiChatJpa.view.Controller;
+import java.awt.HeadlessException;
+import java.awt.Image;
+import java.io.File;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -8,15 +15,18 @@ import com.mycompany.hiChatJpa.view.Controller;
  */
 public class SigninPicturePane extends javax.swing.JPanel {
 
-    private Controller controller;
-    
+    private final Controller controller;
+    private File fotoSeleccionada;
+
     /**
      * Creates new form SigninPane
+     *
      * @param controller
      */
     public SigninPicturePane(Controller controller) {
         this.controller = controller;
         initComponents();
+        mostrarPreview("/icons/default-picture.png");
     }
 
     /**
@@ -45,6 +55,7 @@ public class SigninPicturePane extends javax.swing.JPanel {
         messageLabel = new javax.swing.JLabel();
         logInLabel = new javax.swing.JLabel();
         picturePane = new com.mycompany.hiChatJpa.view.components.PanelRound();
+        jLabel1 = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(400, 600));
 
@@ -230,20 +241,27 @@ public class SigninPicturePane extends javax.swing.JPanel {
         });
 
         picturePane.setBackground(new java.awt.Color(47, 35, 72));
-        picturePane.setRoundBottomLeft(360);
-        picturePane.setRoundBottomRight(360);
-        picturePane.setRoundTopLeft(360);
-        picturePane.setRoundTopRight(360);
+        picturePane.setRoundBottomLeft(50);
+        picturePane.setRoundBottomRight(50);
+        picturePane.setRoundTopLeft(50);
+        picturePane.setRoundTopRight(50);
+        picturePane.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                picturePaneMouseClicked(evt);
+            }
+        });
+
+        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout picturePaneLayout = new javax.swing.GroupLayout(picturePane);
         picturePane.setLayout(picturePaneLayout);
         picturePaneLayout.setHorizontalGroup(
             picturePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 275, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
         );
         picturePaneLayout.setVerticalGroup(
             picturePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 255, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout backgroundPaneLayout = new javax.swing.GroupLayout(backgroundPane);
@@ -306,17 +324,65 @@ public class SigninPicturePane extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void returnButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_returnButtonMouseClicked
-        // regresar
+        controller.signinAvanzarABiografia(null, false);
     }//GEN-LAST:event_returnButtonMouseClicked
 
     private void logInLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logInLabelMouseClicked
-        // login
+        controller.showLogin();
     }//GEN-LAST:event_logInLabelMouseClicked
 
     private void continueLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_continueLabelMouseClicked
-        // avanzar
+        String rutaFoto = (fotoSeleccionada != null) ? fotoSeleccionada.getAbsolutePath() : null;
+        controller.finalizarSignin(rutaFoto);
     }//GEN-LAST:event_continueLabelMouseClicked
 
+    private void picturePaneMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_picturePaneMouseClicked
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Imágenes (JPG, PNG, GIF)", "jpg", "jpeg", "png", "gif"));
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        int resultado = fileChooser.showOpenDialog(this);
+
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            fotoSeleccionada = fileChooser.getSelectedFile();
+            mostrarPreview(fotoSeleccionada.getAbsolutePath());
+        }
+    }//GEN-LAST:event_picturePaneMouseClicked
+
+    private void mostrarPreview(String rutaFoto) {
+        try {
+            ImageIcon iconOriginal;
+            if (rutaFoto.startsWith("/")) {
+                java.net.URL iconURL = getClass().getResource(rutaFoto);
+
+                if (iconURL == null) {
+                    JOptionPane.showMessageDialog(this, "No se encontró la imagen: " + rutaFoto, "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                iconOriginal = new ImageIcon(iconURL);
+            } else {
+                iconOriginal = new ImageIcon(rutaFoto);
+            }
+
+            int maxAncho = 275 - 10;
+            int maxAlto = 255 - 10;
+            int anchoOriginal = iconOriginal.getIconWidth();
+            int altoOriginal = iconOriginal.getIconHeight();
+
+            double escalaAncho = (double) maxAncho / anchoOriginal;
+            double escalaAlto = (double) maxAlto / altoOriginal;
+            double escala = Math.min(escalaAncho, escalaAlto);
+
+            int nuevoAncho = (int) (anchoOriginal * escala);
+            int nuevoAlto = (int) (altoOriginal * escala);
+
+            Image imgEscalada = iconOriginal.getImage().getScaledInstance(nuevoAncho, nuevoAlto, Image.SCALE_SMOOTH);
+
+            jLabel1.setIcon(new ImageIcon(imgEscalada));
+
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar la imagen: " + e.getMessage(), "Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel backgroundPane;
@@ -329,6 +395,7 @@ public class SigninPicturePane extends javax.swing.JPanel {
     private com.mycompany.hiChatJpa.view.components.PanelRound continuePane;
     private javax.swing.JLabel createAccountLabel;
     private javax.swing.JPanel headerPane;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel logInLabel;
     private javax.swing.JLabel messageLabel;
     private com.mycompany.hiChatJpa.view.components.PanelRound picturePane;

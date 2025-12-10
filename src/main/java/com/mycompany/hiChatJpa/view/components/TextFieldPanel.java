@@ -19,6 +19,8 @@ public class TextFieldPanel extends javax.swing.JPanel {
     private String regex;
     private String errorMessage;
     private String message = "default message";
+    
+    private boolean invalidFormat = true;
 
     /**
      * Creates new form TextFieldPanel
@@ -124,10 +126,12 @@ public class TextFieldPanel extends javax.swing.JPanel {
                     this.inputBorderPane.setBackground(Color.GREEN);
                     errorDescriptionLabel.setVisible(false);
                     inputTxt.setForeground(Color.WHITE);
+                    invalidFormat = false;
                 }else {
                     this.inputBorderPane.setBackground(Color.RED);
                     inputTxt.setForeground(Color.RED);
                     errorDescriptionLabel.setVisible(true);
+                    invalidFormat = true;
                 }
             }
         }
@@ -143,6 +147,14 @@ public class TextFieldPanel extends javax.swing.JPanel {
     public void setMessage(String message) {
         this.message = message;
         this.inputTxt.setText(message);
+    }
+    
+    public boolean isInvalidInput(){
+        return this.invalidFormat;
+    }
+    
+    public String getDefaultString() {
+        return this.message;
     }
     
     public String getText(){

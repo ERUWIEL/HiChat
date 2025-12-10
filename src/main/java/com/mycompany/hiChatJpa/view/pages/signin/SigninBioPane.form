@@ -424,7 +424,7 @@
             <Property name="useNullLayout" type="boolean" value="false"/>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="usernameLabel1">
+            <Component class="javax.swing.JLabel" name="userBiographyLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Sans Unicode" size="14" style="0"/>
@@ -441,7 +441,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JLabel" name="usernameLabel2">
+            <Component class="javax.swing.JLabel" name="userMayorLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Lucida Sans Unicode" size="14" style="0"/>
@@ -458,7 +458,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="com.mycompany.hiChatJpa.view.components.TextFieldPanel" name="textFieldPanel2">
+            <Component class="com.mycompany.hiChatJpa.view.components.TextFieldPanel" name="userMayorTxt">
               <Properties>
                 <Property name="message" type="java.lang.String" value="enter your major (Ej. Engenier)"/>
               </Properties>
@@ -471,9 +471,9 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="com.mycompany.hiChatJpa.view.components.TextFieldPanel" name="textFieldPanel1">
+            <Component class="com.mycompany.hiChatJpa.view.components.TextFieldPanel" name="userBiographyTxt">
               <Properties>
-                <Property name="message" type="java.lang.String" value="enter something creative!"/>
+                <Property name="message" type="java.lang.String" value="enter something creative! (optional btw)"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new TextFieldPanel(TextFieldPanel.BIOGRAPHY_REGEX, &quot;STOP YAPPING!! to long biography&quot;)"/>
